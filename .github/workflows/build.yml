@@ -12,10 +12,23 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-      - run: npm install
+          registry-url: https://npm.pkg.github.com/
+          scope: "@aem-design"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
+      - name: run install
+        run: |
+          npm install
       - name: get logs if failure
         run: |
           cd /home/runner/.npm/_logs
           cat * */*
         if: failure()
-      - run: npm test
+      - name: run tests
+        run: |
+          npm test
+      - name: publish package
+        run: |
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
