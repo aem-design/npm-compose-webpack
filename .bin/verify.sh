@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 package_name=$(node -p "require('./package.json').name")
 package_ver=$(node -p "require('./package.json').version")
@@ -11,7 +11,7 @@ view_out_length=${#view_out}
 
 # If the 'view_out_length' is zero, it means the defined version hasn't been published
 # yet to the registry.
-if [[ $view_out_length == 0 ]]; then
+if [ $view_out_length == 0 ]; then
   echo "Release doesn't exist yet, publishing to GPR..."
   echo ""
 
@@ -21,7 +21,7 @@ if [[ $view_out_length == 0 ]]; then
   echo ""
 
   pack_status=$?
-  if [[ $pack_status != 0 ]]; then
+  if [ $pack_status != 0 ]; then
     echo "Unable to verify package for ${package_name}, 'npm pack' was not successful!"
     exit 1
   fi
