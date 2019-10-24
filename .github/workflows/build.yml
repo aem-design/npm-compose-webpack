@@ -26,10 +26,6 @@ jobs:
           cd /home/runner/.npm/_logs
           cat * */*
         if: failure()
-      - name: show .npmrc
-        run: |
-          cat /home/runner/work/_temp/.npmrc
-        if: failure()
       - name: run tests
         run: |
           npm test
