@@ -24,6 +24,13 @@ jobs:
           cd /home/runner/.npm/_logs
           cat * */*
         if: failure()
+      - name: get logs if failure
+        run: |
+          cd /home/runner/.npm/_logs
+          cat * */*
+          cd /home/runner/work/_temp/
+          cat * */*
+        if: failure()
       - name: run tests
         run: |
           npm test
