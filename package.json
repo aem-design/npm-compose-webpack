@@ -1,0 +1,28 @@
+{
+  "author": "Chris Shaw <me@cshaw.xyz>",
+  "description": "Webpack configuration and helpers for the AEM.Design compose module",
+  "engines": {
+    "node": ">=8"
+  },
+  "license": "MIT",
+  "name": "@aem-design/compose-webpack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aem-design/aemdesign-npm.git"
+  },
+  "scripts": {
+    "publish-npm": "npm publish --access public --ignore-scripts --@aem-design:registry='https://registry.npmjs.org'"
+  },
+  "version": "1.0.0",
+  "devDependencies": {
+    "chalk": "^2.4.2",
+    "dotenv": "^8.2.0",
+    "figlet": "^1.2.4",
+    "ts-node": "^8.4.1",
+    "webpack-format-messages": "^2.0.5",
+    "xml2js": "^0.4.22"
+  },
+  "dependencies": {
+    "@aem-design/compose-support": "1.0.0"
+  }
+}

@@ -1,2 +1,2 @@
-# npm-compose-webpack
-Webpack configuration and helpers for the AEM.Design compose module
+# AEM.Design Compose Webpack
+Webpack configuration and helpers for the AEM.Design compose module.
