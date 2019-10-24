@@ -19,6 +19,8 @@ jobs:
       - name: run install
         run: |
           npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
       - name: get logs if failure
         run: |
           cd /home/runner/.npm/_logs
