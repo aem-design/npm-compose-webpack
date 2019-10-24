@@ -39,7 +39,7 @@ jobs:
           npm test
       
       - name: Verify package
-        run: sh .bin/verify.sh
+        run: .bin/verify.sh
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
       
@@ -57,7 +57,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git checkout master
           git tag -a v${package_ver} -m "Release ${package_ver}"
-          git commit -m "Publish new release" -a
+          git commit -m "Publish new release v${package_ver}" -a
       
       - name: Push changes
         uses: ad-m/github-push-action@master
