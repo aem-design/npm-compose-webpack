@@ -15,7 +15,7 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@aem-design"
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
       - name: run install
         run: |
           npm install
@@ -31,4 +31,4 @@ jobs:
         run: |
           npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
