@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import webpack = require('webpack')
+import webpack from 'webpack'
 
 const nodeModulesPath = resolve(process.cwd(), 'node_modules')
 

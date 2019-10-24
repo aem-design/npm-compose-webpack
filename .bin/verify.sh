@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 package_name=$(node -p "require('./package.json').name")
 package_ver=$(node -p "require('./package.json').version")
@@ -25,6 +25,8 @@ if [[ $view_out_length == 0 ]]; then
     echo "Unable to verify package for ${package_name}, 'npm pack' was not successful!"
     exit 1
   fi
+
+  echo "Package version ${package_ver} has been verified and can be published."
 else
   echo "Release already found in the registry, automatic publishing cannot be completed for v${package_ver}"
   exit 1

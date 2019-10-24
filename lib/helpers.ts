@@ -24,6 +24,7 @@ const xmlParser: xml2js.Parser = new xml2js.Parser()
  *
  * @private
  * @param {string} filePath Path to load the Maven configuration
+ * @return {string}
  */
 function getMavenConfigurationFromFile(filePath: string): string {
   if (mavenConfigs[filePath]) {
@@ -36,6 +37,7 @@ function getMavenConfigurationFromFile(filePath: string): string {
 /**
  * Gets the Maven configuration from the file system and returns the value requested.
  *
+ * @param {MavenConfig} config Maven configuration
  * @return {string} Found value or the given `fallback`
  */
 export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: propPath, pom }: MavenConfig<R>): R {
