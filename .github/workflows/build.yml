@@ -13,4 +13,9 @@ jobs:
         with:
           node-version: '10.x'
       - run: npm install
+      - name: get logs if failure
+        run: |
+          cd /home/runner/.npm/_logs
+          cat * */*
+        if: failure()
       - run: npm test
