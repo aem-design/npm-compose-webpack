@@ -1,43 +1,47 @@
-name: build
+name: verify
 
-on: [push]
+on:
+  pull_request:
+    branches-ignore:
+      - master
+  push:
+    branches-ignore:
+      - master
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      
+      - name: Setup Node.js v10.x
+        uses: actions/setup-node@v1
         with:
           node-version: '10.x'
           registry-url: https://npm.pkg.github.com/
           scope: "@aem-design"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
-      - name: run install
+      
+      - name: Install dependencies
         run: |
           npm install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
-      - name: get logs if failure
+      
+      - name: Get logs if failure
         run: |
           cd /home/runner/.npm/_logs
           cat * */*
         if: failure()
-      - name: run tests
+      
+      - name: Run tests
         run: |
           npm test
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '10.x'
-          registry-url: https://npm.pkg.github.com/
-          scope: "@aem-design"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: publish package
-        run: |
-          npm publish
+      
+      - name: Verify package
+        run: .bin/verify.sh
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}

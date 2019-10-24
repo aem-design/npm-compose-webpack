@@ -1,0 +1,64 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      
+      - name: Setup Node.js v10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+          registry-url: https://npm.pkg.github.com/
+          scope: "@aem-design"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
+      
+      - name: Install dependencies
+        run: |
+          npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
+      
+      - name: Get logs if failure
+        run: |
+          cd /home/runner/.npm/_logs
+          cat * */*
+        if: failure()
+      
+      - name: Run tests
+        run: |
+          npm test
+      
+      - name: Verify package
+        run: sh .bin/verify.sh
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
+      
+      - name: Publish package
+        run: |
+          echo "Publishing to... $(npm config get registry)"
+          npm publish --access public --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
+      
+      - name: Tag new version
+        run: |
+          package_ver=$(node -p "require('./package.json').version")
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -s -a v${package_ver} -m "Release ${package_ver}"
+          git commit -m "Publish new release" -a
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

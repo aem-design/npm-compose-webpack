@@ -62,11 +62,21 @@ const configuration: Configuration = {
 
 const configKeys = Object.values(ConfigurationType)
 
+/**
+ * Environment configuration for Webpack.
+ * @var {Environment}
+ */
 export let environment: Environment = {
   mode    : 'development',
   project : null,
 }
 
+/**
+ * Retrieve a stored configuration value by the given `key`.
+ *
+ * @param {ConfigurationType} key Configuration key
+ * @return {*}
+ */
 export function getConfiguration<T extends ConfigurationType, R extends Configuration[T]>(key: T): R {
   if (!configKeys.includes(key)) {
     throw new ReferenceError(`Unable to get configuration for ${key} as it isn't a valid configuration key. Avaliable configuration keys to use are:\n${configKeys.join(', ')}\n`)
@@ -75,6 +85,13 @@ export function getConfiguration<T extends ConfigurationType, R extends Configur
   return configuration[key] as R
 }
 
+/**
+ * Store a new `value` for the given `key`.
+ *
+ * @param {ConfigurationType} key Configuration key
+ * @param {*} value Configuration value
+ * @return {void}
+ */
 export function setConfiguration<T extends ConfigurationType, V extends Configuration[T]>(key: T, value: V): void {
   if (!configKeys.includes(key)) {
     throw new ReferenceError(`Unable to set configuration for ${key} as it isn't a valid configuration key. Avaliable configuration keys to use are:\n${configKeys.join(', ')}\n`)
@@ -87,6 +104,7 @@ export function setConfiguration<T extends ConfigurationType, V extends Configur
  * Stores our current Webpack configuration and environment variables.
  *
  * @param {webpack.ParserOptions} env Webpack environment configuration
+ * @return {void}
  */
 export function setupEnvironment(env: webpack.ParserOptions): void {
   environment = {
@@ -103,22 +121,50 @@ export function setupEnvironment(env: webpack.ParserOptions): void {
   }
 }
 
+/**
+ * Determines if the current mode is for development.
+ *
+ * @param {*} obj Value to pass back
+ * @return {*}
+ */
 export function ifDev(obj: any) {
   return getIfUtils(environment).ifDevelopment(obj)
 }
 
+/**
+ * Determines if the current mode is for production.
+ *
+ * @param {*} obj Value to pass back
+ * @return {*}
+ */
 export function ifProd(obj: any) {
   return getIfUtils(environment).ifProduction(obj)
 }
 
+/**
+ * Retrieve the project configuration.
+ *
+ * @return {Project}
+ */
 export function getProjectConfiguration(): Project {
   return projects[environment.project]
 }
 
+/**
+ * Retrieve the project path for the given `path` key.
+ *
+ * @param {ConfigurationType} path Key of the path
+ * @return {string}
+ */
 export function getProjectPath<T extends ConfigurationType>(path: T): string {
   return resolve(getConfiguration(path), environment.project)
 }
 
+/**
+ * Retrieves the Maven configuration values we need.
+ * 
+ * @return {MavenConfigMap}
+ */
 export function getMavenConfiguration(): MavenConfigMap {
   return {
     appsPath: getMavenConfigurationValueByPath<string>({
@@ -141,6 +187,10 @@ export function getMavenConfiguration(): MavenConfigMap {
   }
 }
 
+/**
+ * Default projects map for core and styleguide (DLS).
+ * @var {ProjectMap}
+ */
 export const projects: ProjectMap = {
   core: {
     outputName: 'app',
