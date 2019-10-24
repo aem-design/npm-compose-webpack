@@ -10,7 +10,7 @@
     "type": "git",
     "url": "https://github.com/aem-design/aemdesign-npm.git"
   },
-  "version": "1.1.0",
+  "version": "1.1.1",
   "dependencies": {
     "@aem-design/compose-support": "1.0.0",
     "@types/copy-webpack-plugin": "^5.0.0",

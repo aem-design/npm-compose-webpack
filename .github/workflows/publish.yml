@@ -43,13 +43,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
       
-      - name: Publish package
-        run: |
-          echo "Publishing to... $(npm config get registry)"
-          npm publish --access public --ignore-scripts
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
-      
       - name: Tag new version
         run: |
           package_ver=$(node -p "require('./package.json').version")
@@ -58,6 +51,13 @@ jobs:
           git checkout master
           git tag -a v${package_ver} -m "Release ${package_ver}"
           git commit -m "Publish new release v${package_ver}" -a
+      
+      - name: Publish package
+        run: |
+          echo "Publishing to... $(npm config get registry)"
+          npm publish --access public --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
       
       - name: Push changes
         uses: ad-m/github-push-action@master
