@@ -24,5 +24,8 @@
   },
   "dependencies": {
     "@aem-design/compose-support": "1.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^3.6.4"
   }
 }
