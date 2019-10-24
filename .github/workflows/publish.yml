@@ -50,7 +50,6 @@ jobs:
           git config --local user.name "GitHub Action"
           git checkout master
           git tag -a v${package_ver} -m "Release ${package_ver}"
-          git commit -m "Publish new release v${package_ver}" -a
       
       - name: Publish package
         run: |
