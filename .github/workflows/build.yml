@@ -12,8 +12,6 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-          registry-url: https://npm.pkg.github.com/
-          scope: "@aem-design"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: run install
@@ -27,10 +25,15 @@ jobs:
       - name: run tests
         run: |
           npm test
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+          registry-url: https://npm.pkg.github.com/
+          scope: "@aem-design"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: publish package
         run: |
           npm publish
-        with:
-          registry-url: https://npm.pkg.github.com/
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
