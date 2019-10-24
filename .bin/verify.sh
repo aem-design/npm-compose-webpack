@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
+set -e
+set -o pipefail
 
 package_name=$(node -p "require('./package.json').name")
 package_ver=$(node -p "require('./package.json').version")
