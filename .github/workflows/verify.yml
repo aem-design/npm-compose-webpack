@@ -42,6 +42,6 @@ jobs:
           npm test
       
       - name: Verify package
-        run: .bin/verify.sh
+        run: npm pack --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
