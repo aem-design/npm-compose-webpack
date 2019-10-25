@@ -1,6 +1,6 @@
 # AEM.Design Compose Webpack
 
-[![publish_status](https://github.com/aem-design/npm-compose-webpack/workflows/build/badge.svg)](https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build)
+[![publish_status](https://github.com/aem-design/npm-compose-webpack/workflows/Build/badge.svg)](https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build)
 [![github license](https://img.shields.io/github/license/aem-design/npm-compose-webpack)](https://github.com/aem-design/npm-compose-webpack) 
 [![github issues](https://img.shields.io/github/issues/aem-design/npm-compose-webpack)](https://github.com/aem-design/npm-compose-webpack) 
 [![github last commit](https://img.shields.io/github/last-commit/aem-design/npm-compose-webpack)](https://github.com/aem-design/npm-compose-webpack) 
