@@ -12,39 +12,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v1
       
-      - name: Setup Node.js v10.x
+      - name: Setup Node.js for https://registry.npmjs.org
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-          registry-url: https://npm.pkg.github.com/
-          scope: '@aem-design'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
-      
+          registry-url: 'https://registry.npmjs.org'
+          
       - name: Install dependencies
-        run: |
-          npm install
+        run: npm install
+
+      - name: Publish package to NPM
+        run: npm publish --access public --ignore-scripts
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
-      - name: Get logs if failure
-        run: |
-          cd /home/runner/.npm/_logs
-          cat * */*
-        if: failure()
+      - name: Setup Node.js for https://npm.pkg.github.com
+        uses: actions/setup-node@v1
+        with:
+          registry-url: 'https://npm.pkg.github.com'
       
-      - name: Run tests
-        run: |
-          npm test
-      
-      - name: Verify package
-        run: .bin/verify.sh
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
-      
-      - name: Publish package
-        run: |
-          echo "Publishing to... $(npm config get registry)"
-          npm publish --access public --ignore-scripts
+      - name: Publish package to GPR
+        run: npm publish --access public --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
