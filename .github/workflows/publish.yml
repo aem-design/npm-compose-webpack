@@ -1,9 +1,6 @@
 name: publish
 
-on:
-  push:
-    branches:
-      - master
+on: [published]
 
 jobs:
   build:
@@ -18,7 +15,7 @@ jobs:
         with:
           node-version: '10.x'
           registry-url: https://npm.pkg.github.com/
-          scope: "@aem-design"
+          scope: '@aem-design'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
       
@@ -43,22 +40,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
       
-      - name: Tag new version
-        run: |
-          package_ver=$(node -p "require('./package.json').version")
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git checkout master
-          git tag -a v${package_ver} -m "Release ${package_ver}"
-      
       - name: Publish package
         run: |
           echo "Publishing to... $(npm config get registry)"
           npm publish --access public --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
-      
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
