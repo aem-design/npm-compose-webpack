@@ -63,12 +63,62 @@ const configuration: Configuration = {
 const configKeys = Object.values(ConfigurationType)
 
 /**
+ * Default projects map for core and styleguide (DLS).
+ * @var {ProjectMap}
+ */
+export const projects: ProjectMap = {
+  core: {
+    outputName: 'app',
+
+    hmr: {
+      footer: {
+        mapToOutput : [],
+        outputName  : 'clientlibs-footer',
+      },
+
+      header: {
+        mapToOutput : ['../../clientlibs-header/js/vendorlib/common'],
+        outputName  : 'clientlibs-header',
+      },
+    },
+
+    entryFile: {
+      js   : 'app.ts',
+      sass : 'app.scss',
+    },
+
+    additionalEntries: {
+      '../../clientlibs-header/js/vendorlib/common': [
+        './core/js/vendor.ts',
+        'es6-promise/auto',
+        'classlist.js',
+        'picturefill',
+        'bootstrap/js/dist/util',
+        'bootstrap/js/dist/collapse',
+        'bootstrap/js/dist/dropdown',
+      ],
+    },
+  },
+
+  styleguide: {
+    outputName: 'styleguide',
+
+    entryFile: {
+      js   : 'styleguide.ts',
+      sass : 'styleguide.scss',
+    },
+
+    additionalEntries: {},
+  },
+}
+
+/**
  * Environment configuration for Webpack.
  * @var {Environment}
  */
 export let environment: Environment = {
   mode    : 'development',
-  project : null,
+  project : '',
 }
 
 /**
@@ -127,7 +177,7 @@ export function setupEnvironment(env: webpack.ParserOptions): void {
  * @param {*} obj Value to pass back
  * @return {*}
  */
-export function ifDev(obj: any) {
+export function ifDev(obj: any): any {
   return getIfUtils(environment).ifDevelopment(obj)
 }
 
@@ -137,7 +187,7 @@ export function ifDev(obj: any) {
  * @param {*} obj Value to pass back
  * @return {*}
  */
-export function ifProd(obj: any) {
+export function ifProd(obj: any): any {
   return getIfUtils(environment).ifProduction(obj)
 }
 
@@ -162,7 +212,7 @@ export function getProjectPath<T extends ConfigurationType>(path: T): string {
 
 /**
  * Retrieves the Maven configuration values we need.
- * 
+ *
  * @return {MavenConfigMap}
  */
 export function getMavenConfiguration(): MavenConfigMap {
@@ -185,54 +235,4 @@ export function getMavenConfiguration(): MavenConfigMap {
       pom    : configuration[ConfigurationType.MAVEN_PROJECT],
     }),
   }
-}
-
-/**
- * Default projects map for core and styleguide (DLS).
- * @var {ProjectMap}
- */
-export const projects: ProjectMap = {
-  core: {
-    outputName: 'app',
-
-    hmr: {
-      footer: {
-        mapToOutput : [],
-        outputName  : 'clientlibs-footer',
-      },
-
-      header: {
-        mapToOutput : ['../../clientlibs-header/js/vendorlib/common'],
-        outputName  : 'clientlibs-header',
-      },
-    },
-
-    entryFile: {
-      js   : 'app.ts',
-      sass : 'app.scss',
-    },
-
-    additionalEntries: {
-      '../../clientlibs-header/js/vendorlib/common': [
-        './core/js/vendor.ts',
-        'es6-promise/auto',
-        'classlist.js',
-        'picturefill',
-        'bootstrap/js/dist/util',
-        'bootstrap/js/dist/collapse',
-        'bootstrap/js/dist/dropdown',
-      ],
-    },
-  },
-
-  styleguide: {
-    outputName: 'styleguide',
-
-    entryFile: {
-      js   : 'styleguide.ts',
-      sass : 'styleguide.scss',
-    },
-
-    additionalEntries: {},
-  },
 }

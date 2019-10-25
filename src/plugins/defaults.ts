@@ -21,7 +21,7 @@ import {
   getProjectPath,
 
   ifProd,
-} from '../lib/config'
+} from '../config'
 
 import ComposeMessages from './messages'
 

@@ -4,7 +4,7 @@ import webpack from 'webpack'
 
 export default (env: webpack.ParserOptions, options: {
   sassLoader?: { [key: string]: any };
-  sassOptions?: sass.Options,
+  sassOptions?: sass.Options;
 } = {}): webpack.RuleSetUseItem[] => ([
   {
     loader: 'css-loader',

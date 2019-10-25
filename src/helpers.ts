@@ -41,7 +41,7 @@ function getMavenConfigurationFromFile(filePath: string): string {
  * @return {string} Found value or the given `fallback`
  */
 export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: propPath, pom }: MavenConfig<R>): R {
-  let value: R = null
+  let value!: R
 
   xmlParser.parseString(getMavenConfigurationFromFile(pom), (_: any, { project }: any) => {
     const properties = project.properties[0]

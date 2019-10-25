@@ -26,8 +26,8 @@ import {
 
 import EntryConfiguration from './entry'
 
-import loaders from '../loaders'
-import plugins from '../plugins'
+import loaders from './loaders'
+import plugins from './plugins'
 
 const {
   appsPath,
@@ -45,6 +45,10 @@ export default () => {
 
   const env = dotEnv.parsed
 
+  if (!env) {
+    return
+  }
+
   /**
    * Ensure 'tsconfig-paths-webpack-plugin' doesn't try to use the project file we supplied to
    * 'ts-node' to parse our webpack configuration code.
@@ -54,9 +58,10 @@ export default () => {
   /**
    * Support banner
    */
-  console.log(figlet.textSync(process.env.BANNER_TEXT, {
-    font: process.env.BANNER_FONT as figlet.Fonts,
-  }))
+  console.log(figlet.textSync(
+    process.env.BANNER_TEXT as string,
+    process.env.BANNER_FONT as figlet.Fonts,
+  ))
 
   /**
    * General output
@@ -149,7 +154,7 @@ export default () => {
               flagHMR ? {
                 loader: 'style-loader',
               } : { loader: MiniCssExtractPlugin.loader },
-              ...loaders.css(env),
+              ...loaders.css(webpackEnv),
             ],
           },
           {
@@ -165,7 +170,7 @@ export default () => {
                   sourceMap : true,
                 },
               },
-              ...loaders.css(env, {
+              ...loaders.css(webpackEnv, {
                 sassOptions: {
                   data         : `@import 'setup';`,
                   includePaths : [resolve(projectPathSource, 'scss')],
@@ -180,7 +185,7 @@ export default () => {
               {
                 loader: MiniCssExtractPlugin.loader,
               },
-              ...loaders.css(env),
+              ...loaders.css(webpackEnv),
             ],
           },
           {
@@ -188,7 +193,7 @@ export default () => {
             test   : /\.(png|jpg|gif|eot|ttf|svg|woff|woff2)$/,
 
             options: {
-              context  : `src/${env.project}`,
+              context  : `src/${webpackEnv.project}`,
               emitFile : flagDev,
               name     : '[path][name].[ext]',
 
@@ -211,7 +216,7 @@ export default () => {
               },
             ],
           },
-          ...loaders.js(env),
+          ...loaders.js(webpackEnv),
         ],
       },
 

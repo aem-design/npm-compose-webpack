@@ -4,7 +4,7 @@ import webpack from 'webpack'
 const nodeModulesPath = resolve(process.cwd(), 'node_modules')
 
 export default (env: webpack.ParserOptions, options: {
-  configFile?: string,
+  configFile?: string;
 } = {}): webpack.RuleSetRule[] => ([
   {
     exclude : [nodeModulesPath],

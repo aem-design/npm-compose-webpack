@@ -1,5 +1,5 @@
-name-template: 'v$NEXT_PATCH_VERSION 🌈'
-tag-template: 'v$NEXT_PATCH_VERSION'
+branches:
+  - master
 categories:
   - title: '🚀 Features'
     labels:
@@ -12,8 +12,10 @@ categories:
       - 'bug'
   - title: '🧰 Maintenance'
     label: 'chore'
-change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+  - title: 'Dependency Updates'
+    label: 'dependency update'
+change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
 template: |
-  ## Changes
+  ### Changes
 
   $CHANGES

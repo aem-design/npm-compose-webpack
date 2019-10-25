@@ -17,7 +17,7 @@ export default class ComposeMessages implements webpack.Plugin {
     return process.stdout.write('\x1B[2J\x1B[3J\x1B[H\x1Bc')
   }
 
-  private printError(message: string, errors: string[], warning: boolean = false) {
+  private printError(message: string, errors: string[], warning = false) {
     const errorMessage = `${message}
 
     ${errors.join('')}`
@@ -47,9 +47,11 @@ export default class ComposeMessages implements webpack.Plugin {
         return this.printError(chalk.yellow(`Compiled ${this.name} with warnings.`), messages.warnings, true)
       }
 
-      const compileTime = (stats.endTime - stats.startTime) / 1e3
+      if (stats.endTime && stats.startTime) {
+        const compileTime = (stats.endTime - stats.startTime) / 1e3
 
-      logger.info(chalk.green(`Completed ${this.name} in ${compileTime}s!`))
+        logger.info(chalk.green(`Completed ${this.name} in ${compileTime}s!`))
+      }
     }
 
     if (compiler.hooks !== void 0) {

@@ -8,10 +8,7 @@ import {
   Project,
 } from './config'
 
-// Internal
-let project: Project = null
-
-function getHMRConfiguration(): webpack.Entry {
+function getHMRConfiguration(project: Project): webpack.Entry {
   const additionalEntries = {
     footer: [],
     header: [],
@@ -44,10 +41,10 @@ function getHMRConfiguration(): webpack.Entry {
 }
 
 export default (flagHMR: boolean): webpack.Entry => {
-  project = getProjectConfiguration()
+  const project = getProjectConfiguration()
 
   if (flagHMR) {
-    return getHMRConfiguration()
+    return getHMRConfiguration(project)
   }
 
   return {

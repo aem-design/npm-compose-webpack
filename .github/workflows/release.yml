@@ -1,4 +1,4 @@
-name: release
+name: Draft New Release
 
 on:
   push:
@@ -6,7 +6,8 @@ on:
       - master
 
 jobs:
-  build:
+  draft_new_release:
+    name: Draft new release
     runs-on: ubuntu-latest
 
     steps:

@@ -1,37 +1,44 @@
-name: publish
+name: Publish Latest Release
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - v*
 
 jobs:
-  build:
+  publish_to_npm:
+    name: Publish to NPM
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
       
-      - name: Setup Node.js for https://registry.npmjs.org
+      - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
           registry-url: 'https://registry.npmjs.org'
-          
-      - name: Install dependencies
-        run: npm install
 
-      - name: Publish package to NPM
+      - name: Publish package
         run: npm publish --access public --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  
+  publish_to_gpr:
+    name: Publish to GPR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
       
-      - name: Setup Node.js for https://npm.pkg.github.com
+      - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           registry-url: 'https://npm.pkg.github.com'
       
-      - name: Publish package to GPR
+      - name: Publish package
         run: npm publish --access public --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}

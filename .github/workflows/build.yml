@@ -1,15 +1,17 @@
-name: verify
+name: Build
 
 on:
   pull_request:
     branches-ignore:
+      - develop
       - master
   push:
-    branches-ignore:
-      - master
+    branches:
+      - develop
 
 jobs:
   build:
+    name: Verify build and tests
     runs-on: ubuntu-latest
 
     steps:
@@ -26,10 +28,18 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
       
       - name: Install dependencies
-        run: |
-          npm install
+        run: npm install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
+      
+      - name: Lint our source code
+        run: npm run lint
+      
+      - name: Compile TypeScript
+        run: npm run build
+      
+      - name: Run tests
+        run: npm test
       
       - name: Get logs if failure
         run: |
@@ -37,11 +47,5 @@ jobs:
           cat * */*
         if: failure()
       
-      - name: Run tests
-        run: |
-          npm test
-      
-      - name: Verify package
+      - name: Ensure NPM can package everything up
         run: npm pack --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
