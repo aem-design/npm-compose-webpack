@@ -8,5 +8,8 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# Locks
+package-lock.json
+
 # Output of 'npm pack'
 *.tgz
