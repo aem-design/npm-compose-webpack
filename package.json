@@ -23,7 +23,7 @@
       "pre-commit": "npm run build"
     }
   },
-  "version": "1.1.1",
+  "version": "1.2.0",
   "dependencies": {
     "@aem-design/compose-support": "1.0.1",
     "@babel/core": "^7.6.4",
