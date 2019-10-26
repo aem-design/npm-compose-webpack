@@ -1,5 +1,6 @@
 import webpack from 'webpack';
-import { ConfigurationType } from '@type/enum';
+import { ConfigurationType } from './@types/enum';
+import { Project } from './@types/interface';
 export { ConfigurationType, Project };
 /**
  * Sets the required projects map. If none are supplied, the default map will be used instead.

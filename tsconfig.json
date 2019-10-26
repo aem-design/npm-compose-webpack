@@ -14,12 +14,6 @@
     "noEmit": false,
     "noImplicitAny": false,
     "outDir": "./lib",
-
-    "paths": {
-      "@type/*": [
-        "./src/@types/*"
-      ]
-    },
     
     "rootDir": "./src",
     "strict": true,

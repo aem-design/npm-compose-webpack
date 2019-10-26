@@ -3,7 +3,8 @@ import webpack from 'webpack'
 
 import { logger } from '@aem-design/compose-support'
 
-import { ConfigurationType } from '@type/enum'
+import { ConfigurationType } from './@types/enum'
+import { Project } from './@types/interface'
 
 import { getMavenConfigurationValueByPath } from './helpers'
 

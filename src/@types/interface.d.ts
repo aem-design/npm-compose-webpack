@@ -1,6 +1,6 @@
 import webpack from 'webpack'
 
-import { ConfigurationType } from '@type/enum'
+import { ConfigurationType } from './enum'
 
 declare global {
   interface Configuration {
@@ -11,12 +11,12 @@ declare global {
     [ConfigurationType.PATH_PUBLIC_AEM]: string;
     [ConfigurationType.PATH_SOURCE]: string;
   }
-  
+
   interface Environment extends webpack.ParserOptions {
     mode: 'development' | 'production';
     project: string;
   }
-  
+
   interface MavenConfigMap {
     authorPort: number;
     appsPath: string;
@@ -29,16 +29,16 @@ declare global {
     path: string;
     pom: string;
   }
-  
+
   interface SavedMavenConfig {
     [key: string]: string;
   }
-  
+
   interface ProjectMap {
     [project: string]: Project;
   }
-  
-  export interface Project {
+
+  interface Project {
     additionalEntries?: {
       [entry: string]: string[];
     };
@@ -59,3 +59,5 @@ declare global {
     projects?: ProjectMap;
   }
 }
+
+export { Project }
