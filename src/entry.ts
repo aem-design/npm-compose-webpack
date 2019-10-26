@@ -9,33 +9,38 @@ import {
 } from './config'
 
 function getHMRConfiguration(project: Project): webpack.Entry {
-  const additionalEntries = {
+  const mappedEntries = {
     footer: [],
     header: [],
   }
 
-  for (const key of Object.keys(additionalEntries)) {
-    const additionalEntryKeys = Object.keys(project.additionalEntries)
-      .filter((x) => project.hmr[key].mapToOutput.indexOf(x) !== -1)
+  const additionalEntries = project.additionalEntries
+  const fileMap           = project.fileMap
 
-    for (const entryKey of additionalEntryKeys) {
-      additionalEntries[key] = [
-        ...additionalEntries[key],
-        ...project.additionalEntries[entryKey],
-      ]
+  if (additionalEntries && fileMap) {
+    for (const key of Object.keys(mappedEntries)) {
+      const additionalEntryKeys = Object.keys(additionalEntries)
+        .filter((x) => fileMap[key].indexOf(x) !== -1)
+
+      for (const entryKey of additionalEntryKeys) {
+        mappedEntries[key] = [
+          ...mappedEntries[key],
+          ...additionalEntries[entryKey],
+        ]
+      }
     }
   }
 
   return {
-    [project.hmr.footer.outputName]: [
+    'clientlibs-footer': [
       `./${environment.project}/js/${project.entryFile.js}`,
       `./${environment.project}/scss/${project.entryFile.sass}`,
-      ...additionalEntries.footer,
+      ...mappedEntries.footer,
     ],
 
-    [project.hmr.header.outputName]: [
+    'clientlibs-header': [
       './hmr/empty.css',
-      ...additionalEntries.header,
+      ...mappedEntries.header,
     ],
   }
 }

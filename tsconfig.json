@@ -1,24 +1,43 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-
+    "baseUrl": ".",
+    "declaration": true,
+    "esModuleInterop": true,
+    
     "lib": [
       "dom",
       "dom.iterable",
       "es6"
     ],
-    
+
+    "module": "commonjs",
+    "noEmit": false,
+    "noImplicitAny": false,
     "outDir": "./lib",
+
+    "paths": {
+      "@type/*": [
+        "./src/@types/*"
+      ]
+    },
+    
     "rootDir": "./src",
     "strict": true,
-    "noImplicitAny": false,
-    "esModuleInterop": true
+    "target": "es6",
+
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types"
+    ]
   },
 
-  "includes": [
-    "src/**/*.ts"
+  "exclude": [
+    "lib",
+    "node_modules",
+    "**/*.test.ts"
   ],
-  
-  "exclude": ["node_modules", "**/*.test.ts"]
+
+  "includes": [
+    "**/*.ts"
+  ]
 }

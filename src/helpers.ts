@@ -4,16 +4,9 @@ import { resolve } from 'path'
 import { get } from 'lodash'
 import xml2js from 'xml2js'
 
-interface MavenConfig<R> {
-  fallback?: R;
-  parser?: (value: any) => R;
-  path: string;
-  pom: string;
-}
+import { getIfUtils } from 'webpack-config-utils'
 
-interface SavedMavenConfig {
-  [key: string]: string;
-}
+import { environment } from './config'
 
 // Internal
 const mavenConfigs: SavedMavenConfig = {}
@@ -54,4 +47,24 @@ export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: pr
   })
 
   return value
+}
+
+/**
+ * Determines if the current mode is for development.
+ *
+ * @param {*} obj Value to pass back
+ * @return {*}
+ */
+export function ifDev(obj: any): any {
+  return getIfUtils(environment).ifDevelopment(obj)
+}
+
+/**
+ * Determines if the current mode is for production.
+ *
+ * @param {*} obj Value to pass back
+ * @return {*}
+ */
+export function ifProd(obj: any): any {
+  return getIfUtils(environment).ifProduction(obj)
 }

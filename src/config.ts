@@ -1,48 +1,16 @@
 import { resolve } from 'path'
 import webpack from 'webpack'
 
-import { getIfUtils } from 'webpack-config-utils'
-
 import { logger } from '@aem-design/compose-support'
+
+import { ConfigurationType } from '@type/enum'
 
 import { getMavenConfigurationValueByPath } from './helpers'
 
-export enum ConfigurationType {
-  MAVEN_PARENT = 'maven.parent',
-  MAVEN_PROJECT = 'maven.project',
-  PATH_CLIENTLIBS = 'paths.clientlibs',
-  PATH_PUBLIC = 'paths.public',
-  PATH_PUBLIC_AEM = 'paths.public.aem',
-  PATH_SOURCE = 'paths.source',
-}
+import { defaultProjects } from './defaults'
 
-export interface Configuration {
-  [ConfigurationType.MAVEN_PARENT]: string;
-  [ConfigurationType.MAVEN_PROJECT]: string;
-  [ConfigurationType.PATH_CLIENTLIBS]: string | false;
-  [ConfigurationType.PATH_PUBLIC]: string;
-  [ConfigurationType.PATH_PUBLIC_AEM]: string;
-  [ConfigurationType.PATH_SOURCE]: string;
-}
-
-export interface Environment extends webpack.ParserOptions {
-  mode: 'development' | 'production';
-  project: string;
-}
-
-export interface MavenConfigMap {
-  authorPort: number;
-  appsPath: string;
-  sharedAppsPath: string;
-}
-
-export interface ProjectMap {
-  [project: string]: Project;
-}
-
-export interface Project {
-  [key: string]: any;
-}
+// Ensure our types get generated
+export { ConfigurationType, Project }
 
 // Internal
 const workingDirectory = process.cwd()
@@ -62,54 +30,19 @@ const configuration: Configuration = {
 
 const configKeys = Object.values(ConfigurationType)
 
+let projects: ProjectMap = {}
+
 /**
- * Default projects map for core and styleguide (DLS).
- * @var {ProjectMap}
+ * Sets the required projects map. If none are supplied, the default map will be used instead.
+ *
+ * @param {ProjectMap} incomingProjects User defined projects to watch and build
  */
-export const projects: ProjectMap = {
-  core: {
-    outputName: 'app',
-
-    hmr: {
-      footer: {
-        mapToOutput : [],
-        outputName  : 'clientlibs-footer',
-      },
-
-      header: {
-        mapToOutput : ['../../clientlibs-header/js/vendorlib/common'],
-        outputName  : 'clientlibs-header',
-      },
-    },
-
-    entryFile: {
-      js   : 'app.ts',
-      sass : 'app.scss',
-    },
-
-    additionalEntries: {
-      '../../clientlibs-header/js/vendorlib/common': [
-        './core/js/vendor.ts',
-        'es6-promise/auto',
-        'classlist.js',
-        'picturefill',
-        'bootstrap/js/dist/util',
-        'bootstrap/js/dist/collapse',
-        'bootstrap/js/dist/dropdown',
-      ],
-    },
-  },
-
-  styleguide: {
-    outputName: 'styleguide',
-
-    entryFile: {
-      js   : 'styleguide.ts',
-      sass : 'styleguide.scss',
-    },
-
-    additionalEntries: {},
-  },
+export function setProjects(incomingProjects: ProjectMap) {
+  if (!incomingProjects || Object.keys(incomingProjects).length === 0) {
+    projects = defaultProjects
+  } else {
+    projects = incomingProjects
+  }
 }
 
 /**
@@ -169,26 +102,6 @@ export function setupEnvironment(env: webpack.ParserOptions): void {
     logger.error('Specify a project when running webpack eg --env.project="core"')
     process.exit(1)
   }
-}
-
-/**
- * Determines if the current mode is for development.
- *
- * @param {*} obj Value to pass back
- * @return {*}
- */
-export function ifDev(obj: any): any {
-  return getIfUtils(environment).ifDevelopment(obj)
-}
-
-/**
- * Determines if the current mode is for production.
- *
- * @param {*} obj Value to pass back
- * @return {*}
- */
-export function ifProd(obj: any): any {
-  return getIfUtils(environment).ifProduction(obj)
 }
 
 /**

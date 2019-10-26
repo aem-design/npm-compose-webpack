@@ -11,56 +11,42 @@ import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 
 import { logger } from '@aem-design/compose-support'
 
-import {
-  ConfigurationType,
+import { ConfigurationType } from '@type/enum'
 
+import {
   getConfiguration,
   getMavenConfiguration,
   getProjectPath,
 
-  ifDev,
-
   setConfiguration,
+  setProjects,
   setupEnvironment,
 } from './config'
 
 import EntryConfiguration from './entry'
 
+import { ifDev } from './helpers'
+
 import loaders from './loaders'
 import plugins from './plugins'
 
-const {
-  appsPath,
-  authorPort,
-  sharedAppsPath,
-} = getMavenConfiguration()
-
-export default () => {
+export default (configuration: WebpackConfiguration = {}) => {
   const dotEnv = dotenv.config()
+  const env    = dotEnv.parsed
 
-  if (dotEnv.error) {
+  if (dotEnv.error || !env) {
     logger.error("Failed to parse '.env' configuration due to an error!\n", dotEnv.error)
     process.exit(1)
-  }
 
-  const env = dotEnv.parsed
-
-  if (!env) {
     return
   }
-
-  /**
-   * Ensure 'tsconfig-paths-webpack-plugin' doesn't try to use the project file we supplied to
-   * 'ts-node' to parse our webpack configuration code.
-   */
-  delete process.env.TS_NODE_PROJECT
 
   /**
    * Support banner
    */
   console.log(figlet.textSync(
-    process.env.BANNER_TEXT as string,
-    process.env.BANNER_FONT as figlet.Fonts,
+    env.BANNER_TEXT,
+    env.BANNER_FONT as figlet.Fonts,
   ))
 
   /**
@@ -72,9 +58,18 @@ export default () => {
   /**
    * Ensure our Maven config values are valid before continuing on...
    */
+  const { appsPath, authorPort, sharedAppsPath   } = getMavenConfiguration()
+
   if (!(authorPort || appsPath || sharedAppsPath)) {
     logger.error('Unable to continue due to missing or invalid Maven configuration values!')
     process.exit(1)
+  }
+
+  /**
+   * Set any user-defined projects.
+   */
+  if (configuration.projects) {
+    setProjects(configuration.projects)
   }
 
   logger.info(chalk.bold('Maven configuration'))

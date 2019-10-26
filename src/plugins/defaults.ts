@@ -19,9 +19,9 @@ import {
 
   getConfiguration,
   getProjectPath,
-
-  ifProd,
 } from '../config'
+
+import { ifProd } from '../helpers'
 
 import ComposeMessages from './messages'
 
