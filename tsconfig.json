@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "declaration": true,
     "esModuleInterop": true,
-    
+    "isolatedModules": true,
+
     "lib": [
       "dom",
       "dom.iterable",
@@ -11,27 +13,21 @@
     ],
 
     "module": "commonjs",
-    "noEmit": false,
+    "moduleResolution": "node",
     "noImplicitAny": false,
-    "outDir": "./lib",
-    
-    "rootDir": "./src",
+    "outDir": "./dist",
+    "skipLibCheck": true,
     "strict": true,
     "target": "es6",
-
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/@types"
-    ]
   },
 
   "exclude": [
-    "lib",
+    "dist",
     "node_modules",
     "**/*.test.ts"
   ],
 
-  "includes": [
-    "**/*.ts"
+  "include": [
+    "src"
   ]
 }

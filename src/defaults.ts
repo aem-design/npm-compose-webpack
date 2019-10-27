@@ -1,8 +1,10 @@
+import * as Types from './ast'
+
 /**
  * Default projects map for core and styleguide (DLS).
  * @var {ProjectMap}
  */
-export const defaultProjects: ProjectMap = {
+export const defaultProjects: Types.ProjectMap = {
   core: {
     outputName: 'app',
 

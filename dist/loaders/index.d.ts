@@ -12,3 +12,4 @@ declare const _default: {
     }) => import("webpack").RuleSetRule[];
 };
 export default _default;
+//# sourceMappingURL=index.d.ts.map

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "isolatedModules": false
+  },
+
+  "exclude": [
+    "**/*.test.ts"
+  ],
+
+  "extends": "./tsconfig"
+}

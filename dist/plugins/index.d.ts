@@ -6,3 +6,4 @@ declare const _default: {
     ComposeMessages: typeof ComposeMessages;
 };
 export default _default;
+//# sourceMappingURL=index.d.ts.map

@@ -1,14 +1,14 @@
 import webpack from 'webpack'
 
+import * as Types from './ast'
+
 import {
   environment,
 
   getProjectConfiguration,
-
-  Project,
 } from './config'
 
-function getHMRConfiguration(project: Project): webpack.Entry {
+function getHMRConfiguration(project: Types.Project): webpack.Entry {
   const mappedEntries = {
     footer: [],
     header: [],

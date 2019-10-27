@@ -8,3 +8,4 @@ export default class ComposeMessages implements webpack.Plugin {
     private printError;
     apply(compiler: webpack.Compiler): void;
 }
+//# sourceMappingURL=messages.d.ts.map

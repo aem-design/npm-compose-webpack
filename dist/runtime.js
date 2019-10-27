@@ -2,6 +2,13 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const chalk_1 = __importDefault(require("chalk"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -12,7 +19,7 @@ const optimize_css_assets_webpack_plugin_1 = __importDefault(require("optimize-c
 const terser_webpack_plugin_1 = __importDefault(require("terser-webpack-plugin"));
 const tsconfig_paths_webpack_plugin_1 = __importDefault(require("tsconfig-paths-webpack-plugin"));
 const compose_support_1 = require("@aem-design/compose-support");
-const enum_1 = require("./@types/enum");
+const Types = __importStar(require("./ast"));
 const config_1 = require("./config");
 const entry_1 = __importDefault(require("./entry"));
 const helpers_1 = require("./helpers");
@@ -65,18 +72,18 @@ exports.default = (configuration = {}) => {
         const flagHMR = webpackEnv.hmr === true;
         const project = webpackEnv.project;
         if (!flagHMR) {
-            config_1.setConfiguration(enum_1.ConfigurationType.PATH_CLIENTLIBS, `${sharedAppsPath}/${appsPath}/clientlibs/${project}/`);
-            config_1.setConfiguration(enum_1.ConfigurationType.PATH_PUBLIC_AEM, `/etc.clientlibs/${appsPath}/clientlibs/${project}/`);
+            config_1.setConfiguration(Types.ConfigurationType.PATH_CLIENTLIBS, `${sharedAppsPath}/${appsPath}/clientlibs/${project}/`);
+            config_1.setConfiguration(Types.ConfigurationType.PATH_PUBLIC_AEM, `/etc.clientlibs/${appsPath}/clientlibs/${project}/`);
         }
         // Webpack configuration
-        const clientLibsPath = config_1.getConfiguration(enum_1.ConfigurationType.PATH_CLIENTLIBS);
+        const clientLibsPath = config_1.getConfiguration(Types.ConfigurationType.PATH_CLIENTLIBS);
         const entry = entry_1.default(flagHMR);
         const mode = flagDev ? 'development' : 'production';
-        const projectPathPublic = config_1.getProjectPath(enum_1.ConfigurationType.PATH_PUBLIC);
-        const projectPathSource = config_1.getProjectPath(enum_1.ConfigurationType.PATH_SOURCE);
-        const publicPath = config_1.getConfiguration(enum_1.ConfigurationType.PATH_PUBLIC);
-        const publicPathAEM = config_1.getConfiguration(enum_1.ConfigurationType.PATH_PUBLIC_AEM);
-        const sourcePath = config_1.getConfiguration(enum_1.ConfigurationType.PATH_SOURCE);
+        const projectPathPublic = config_1.getProjectPath(Types.ConfigurationType.PATH_PUBLIC);
+        const projectPathSource = config_1.getProjectPath(Types.ConfigurationType.PATH_SOURCE);
+        const publicPath = config_1.getConfiguration(Types.ConfigurationType.PATH_PUBLIC);
+        const publicPathAEM = config_1.getConfiguration(Types.ConfigurationType.PATH_PUBLIC_AEM);
+        const sourcePath = config_1.getConfiguration(Types.ConfigurationType.PATH_SOURCE);
         compose_support_1.logger.info(chalk_1.default.bold('Webpack Configuration'));
         compose_support_1.logger.info('---------------------');
         compose_support_1.logger.info(chalk_1.default.bold('Compilation Mode    :'), mode);

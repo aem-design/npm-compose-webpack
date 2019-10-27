@@ -2,6 +2,13 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("path");
 const webpack_1 = __importDefault(require("webpack"));
@@ -14,15 +21,16 @@ const mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plug
 const stylelint_webpack_plugin_1 = __importDefault(require("stylelint-webpack-plugin"));
 const vue_loader_1 = require("vue-loader");
 const webpack_bundle_analyzer_1 = require("webpack-bundle-analyzer");
+const Types = __importStar(require("../ast"));
 const config_1 = require("../config");
 const helpers_1 = require("../helpers");
 const messages_1 = __importDefault(require("./messages"));
 exports.ComposeMessages = messages_1.default;
 exports.default = () => {
-    const clientLibsPath = config_1.getConfiguration(config_1.ConfigurationType.PATH_CLIENTLIBS);
-    const publicPath = config_1.getConfiguration(config_1.ConfigurationType.PATH_PUBLIC);
+    const clientLibsPath = config_1.getConfiguration(Types.ConfigurationType.PATH_CLIENTLIBS);
+    const publicPath = config_1.getConfiguration(Types.ConfigurationType.PATH_PUBLIC);
     const projectName = config_1.environment.project;
-    const sourcePath = config_1.getProjectPath(config_1.ConfigurationType.PATH_SOURCE);
+    const sourcePath = config_1.getProjectPath(Types.ConfigurationType.PATH_SOURCE);
     return webpack_config_utils_1.removeEmpty([
         /**
          * When enabled, we clean up our public directory for the current project so we are using old

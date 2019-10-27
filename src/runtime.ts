@@ -11,7 +11,7 @@ import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 
 import { logger } from '@aem-design/compose-support'
 
-import { ConfigurationType } from './@types/enum'
+import * as Types from './ast'
 
 import {
   getConfiguration,
@@ -30,7 +30,7 @@ import { ifDev } from './helpers'
 import loaders from './loaders'
 import plugins from './plugins'
 
-export default (configuration: WebpackConfiguration = {}) => {
+export default (configuration: Types.WebpackConfiguration = {}) => {
   const dotEnv = dotenv.config()
   const env    = dotEnv.parsed
 
@@ -92,25 +92,25 @@ export default (configuration: WebpackConfiguration = {}) => {
 
     if (!flagHMR) {
       setConfiguration(
-        ConfigurationType.PATH_CLIENTLIBS,
+        Types.ConfigurationType.PATH_CLIENTLIBS,
         `${sharedAppsPath}/${appsPath}/clientlibs/${project}/`,
       )
 
       setConfiguration(
-        ConfigurationType.PATH_PUBLIC_AEM,
+        Types.ConfigurationType.PATH_PUBLIC_AEM,
         `/etc.clientlibs/${appsPath}/clientlibs/${project}/`,
       )
     }
 
     // Webpack configuration
-    const clientLibsPath    = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
+    const clientLibsPath    = getConfiguration(Types.ConfigurationType.PATH_CLIENTLIBS)
     const entry             = EntryConfiguration(flagHMR)
     const mode              = flagDev ? 'development' : 'production'
-    const projectPathPublic = getProjectPath(ConfigurationType.PATH_PUBLIC)
-    const projectPathSource = getProjectPath(ConfigurationType.PATH_SOURCE)
-    const publicPath        = getConfiguration(ConfigurationType.PATH_PUBLIC)
-    const publicPathAEM     = getConfiguration(ConfigurationType.PATH_PUBLIC_AEM)
-    const sourcePath        = getConfiguration(ConfigurationType.PATH_SOURCE)
+    const projectPathPublic = getProjectPath(Types.ConfigurationType.PATH_PUBLIC)
+    const projectPathSource = getProjectPath(Types.ConfigurationType.PATH_SOURCE)
+    const publicPath        = getConfiguration(Types.ConfigurationType.PATH_PUBLIC)
+    const publicPathAEM     = getConfiguration(Types.ConfigurationType.PATH_PUBLIC_AEM)
+    const sourcePath        = getConfiguration(Types.ConfigurationType.PATH_SOURCE)
 
     logger.info(chalk.bold('Webpack Configuration'))
     logger.info('---------------------')

@@ -7,3 +7,4 @@ declare const _default: (env: webpack.ParserOptions, options?: {
     sassOptions?: sass.Options | undefined;
 }) => webpack.RuleSetUseItem[];
 export default _default;
+//# sourceMappingURL=css.d.ts.map

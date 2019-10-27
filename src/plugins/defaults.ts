@@ -12,9 +12,9 @@ import StyleLintPlugin from 'stylelint-webpack-plugin'
 import { VueLoaderPlugin } from 'vue-loader'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
-import {
-  ConfigurationType,
+import * as Types from '../ast'
 
+import {
   environment,
 
   getConfiguration,
@@ -30,10 +30,10 @@ export {
 }
 
 export default (): webpack.Plugin[] => {
-  const clientLibsPath = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
-  const publicPath     = getConfiguration(ConfigurationType.PATH_PUBLIC)
+  const clientLibsPath = getConfiguration(Types.ConfigurationType.PATH_CLIENTLIBS)
+  const publicPath     = getConfiguration(Types.ConfigurationType.PATH_PUBLIC)
   const projectName    = environment.project
-  const sourcePath     = getProjectPath(ConfigurationType.PATH_SOURCE)
+  const sourcePath     = getProjectPath(Types.ConfigurationType.PATH_SOURCE)
 
   return removeEmpty<webpack.Plugin>([
 
