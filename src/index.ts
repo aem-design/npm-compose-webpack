@@ -3,6 +3,7 @@ import figlet from 'figlet'
 import { get as _get } from 'lodash'
 import { relative, resolve } from 'path'
 import webpack from 'webpack'
+import webpackDevServer from 'webpack-dev-server'
 
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
@@ -75,7 +76,7 @@ export default (
   /**
    * Begin Webpack!!
    */
-  return (webpackEnv: webpack.ParserOptions): webpack.Configuration => {
+  return (webpackEnv: webpack.ParserOptions): webpack.Configuration & webpackDevServer.Configuration => {
     const environment = setupEnvironment({
       ...webpackEnv,
     })
