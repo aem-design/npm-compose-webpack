@@ -1,6 +1,6 @@
 import webpack from 'webpack'
 
-import * as Types from './ast'
+import * as Types from '../types/index'
 
 import {
   environment,

@@ -1,36 +1,29 @@
 "use strict";
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("path");
 const compose_support_1 = require("@aem-design/compose-support");
-const Types = __importStar(require("./ast"));
+const enum_1 = require("./enum");
 const helpers_1 = require("./helpers");
 const defaults_1 = require("./defaults");
 // Internal
 const workingDirectory = process.cwd();
 const configurationDefaults = {
-    [Types.ConfigurationType.MAVEN_PARENT]: path_1.resolve(workingDirectory, '../pom.xml'),
-    [Types.ConfigurationType.MAVEN_PROJECT]: path_1.resolve(workingDirectory, './pom.xml'),
-    [Types.ConfigurationType.PATH_CLIENTLIBS]: false,
-    [Types.ConfigurationType.PATH_PUBLIC]: path_1.resolve(workingDirectory, 'public'),
-    [Types.ConfigurationType.PATH_PUBLIC_AEM]: '/',
-    [Types.ConfigurationType.PATH_SOURCE]: path_1.resolve(workingDirectory, 'src'),
+    [enum_1.ConfigurationType.MAVEN_PARENT]: path_1.resolve(workingDirectory, '../pom.xml'),
+    [enum_1.ConfigurationType.MAVEN_PROJECT]: path_1.resolve(workingDirectory, './pom.xml'),
+    [enum_1.ConfigurationType.PATH_CLIENTLIBS]: false,
+    [enum_1.ConfigurationType.PATH_PUBLIC]: path_1.resolve(workingDirectory, 'public'),
+    [enum_1.ConfigurationType.PATH_PUBLIC_AEM]: '/',
+    [enum_1.ConfigurationType.PATH_SOURCE]: path_1.resolve(workingDirectory, 'src'),
 };
 const configuration = Object.assign({}, configurationDefaults);
-const configKeys = Object.values(Types.ConfigurationType);
+const configKeys = Object.values(enum_1.ConfigurationType);
 let projects = {};
 /**
  * Sets the required projects map. If none are supplied, the default map will be used instead.
  *
  * @param {ProjectMap} incomingProjects User defined projects to watch and build
  */
-function setProjects(incomingProjects) {
+function setProjects(incomingProjects = null) {
     if (!incomingProjects || Object.keys(incomingProjects).length === 0) {
         projects = defaults_1.defaultProjects;
     }
@@ -87,6 +80,7 @@ function setupEnvironment(env) {
         compose_support_1.logger.error('Specify a project when running webpack eg --env.project="core"');
         process.exit(1);
     }
+    return exports.environment;
 }
 exports.setupEnvironment = setupEnvironment;
 /**
@@ -118,17 +112,17 @@ function getMavenConfiguration() {
         appsPath: helpers_1.getMavenConfigurationValueByPath({
             parser: (value) => value[0],
             path: 'package.appsPath',
-            pom: configuration[Types.ConfigurationType.MAVEN_PROJECT],
+            pom: configuration[enum_1.ConfigurationType.MAVEN_PROJECT],
         }),
         authorPort: helpers_1.getMavenConfigurationValueByPath({
             parser: (value) => value[0],
             path: 'crx.port',
-            pom: configuration[Types.ConfigurationType.MAVEN_PARENT],
+            pom: configuration[enum_1.ConfigurationType.MAVEN_PARENT],
         }),
         sharedAppsPath: helpers_1.getMavenConfigurationValueByPath({
             parser: (value) => value[0],
             path: 'package.path.apps',
-            pom: configuration[Types.ConfigurationType.MAVEN_PROJECT],
+            pom: configuration[enum_1.ConfigurationType.MAVEN_PROJECT],
         }),
     };
 }

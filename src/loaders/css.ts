@@ -22,7 +22,7 @@ export default (env: webpack.ParserOptions, options: {
       sourceMap : env.dev === true,
 
       config: {
-        path: resolve(__dirname, '../postcss.config.js'),
+        path: resolve(process.cwd(), 'postcss.config.js'),
 
         ctx: {
           prod: env.prod === true,

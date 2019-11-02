@@ -1,18 +1,19 @@
 import { resolve } from 'path'
 import webpack from 'webpack'
 
-const nodeModulesPath = resolve(process.cwd(), 'node_modules')
+const nodeModulesChildPath   = resolve(process.cwd(), 'node_modules')
+const nodeModulesCurrentPath = resolve(__dirname, '../../', 'node_modules')
 
 export default (env: webpack.ParserOptions, options: {
   configFile?: string;
 } = {}): webpack.RuleSetRule[] => ([
   {
-    exclude : [nodeModulesPath],
+    exclude : [nodeModulesChildPath, nodeModulesCurrentPath],
     loader  : 'vue-loader',
     test    : /\.vue$/,
   },
   {
-    exclude : [nodeModulesPath],
+    exclude : [nodeModulesChildPath, nodeModulesCurrentPath],
     test    : /\.[jt]sx?$/,
 
     use: [
@@ -30,7 +31,7 @@ export default (env: webpack.ParserOptions, options: {
   },
   {
     enforce : 'pre',
-    exclude : [nodeModulesPath],
+    exclude : [nodeModulesChildPath, nodeModulesCurrentPath],
     test    : /\.js$/,
     use     : ['eslint-loader'],
   },

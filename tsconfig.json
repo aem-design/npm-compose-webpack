@@ -15,10 +15,15 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": false,
-    "outDir": "./dist",
+    "outDir": "dist",
     "skipLibCheck": true,
     "strict": true,
     "target": "es6",
+
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ]
   },
 
   "exclude": [
@@ -28,6 +33,6 @@
   ],
 
   "include": [
-    "src"
+    "src/**/*"
   ]
 }

@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
-      
+
       - name: Setup Node.js v10.x
         uses: actions/setup-node@v1
         with:
@@ -26,26 +26,26 @@ jobs:
           scope: '@aem-design'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
-      
+
       - name: Install dependencies
-        run: npm install
+        run: yarn install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN_ADMIN }}
-      
+
       - name: Lint our source code
-        run: npm run lint
-      
+        run: yarn lint
+
       - name: Compile TypeScript
-        run: npm run build
-      
+        run: yarn build
+
       - name: Run tests
         run: npm test
-      
+
       - name: Get logs if failure
         run: |
           cd /home/runner/.npm/_logs
           cat * */*
         if: failure()
-      
+
       - name: Ensure NPM can package everything up
         run: npm pack --dry-run

@@ -2,14 +2,8 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const chalk_1 = __importDefault(require("chalk"));
 const path_1 = require("path");
 const webpack_1 = __importDefault(require("webpack"));
 const webpack_config_utils_1 = require("webpack-config-utils");
@@ -18,20 +12,29 @@ const copy_webpack_plugin_1 = __importDefault(require("copy-webpack-plugin"));
 const imagemin_webpack_plugin_1 = __importDefault(require("imagemin-webpack-plugin"));
 const lodash_webpack_plugin_1 = __importDefault(require("lodash-webpack-plugin"));
 const mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plugin"));
+const progress_bar_webpack_plugin_1 = __importDefault(require("progress-bar-webpack-plugin"));
 const stylelint_webpack_plugin_1 = __importDefault(require("stylelint-webpack-plugin"));
 const vue_loader_1 = require("vue-loader");
 const webpack_bundle_analyzer_1 = require("webpack-bundle-analyzer");
-const Types = __importStar(require("../ast"));
+const enum_1 = require("../enum");
 const config_1 = require("../config");
 const helpers_1 = require("../helpers");
 const messages_1 = __importDefault(require("./messages"));
 exports.ComposeMessages = messages_1.default;
 exports.default = () => {
-    const clientLibsPath = config_1.getConfiguration(Types.ConfigurationType.PATH_CLIENTLIBS);
-    const publicPath = config_1.getConfiguration(Types.ConfigurationType.PATH_PUBLIC);
+    const clientLibsPath = config_1.getConfiguration(enum_1.ConfigurationType.PATH_CLIENTLIBS);
+    const publicPath = config_1.getConfiguration(enum_1.ConfigurationType.PATH_PUBLIC);
     const projectName = config_1.environment.project;
-    const sourcePath = config_1.getProjectPath(Types.ConfigurationType.PATH_SOURCE);
+    const sourcePath = config_1.getProjectPath(enum_1.ConfigurationType.PATH_SOURCE);
     return webpack_config_utils_1.removeEmpty([
+        /**
+         * Custom progress bar!
+         *
+         * @see https://github.com/clessg/progress-bar-webpack-plugin
+         */
+        new progress_bar_webpack_plugin_1.default({
+            format: 'Build [:bar] ' + chalk_1.default.green.bold(':percent') + ' (:elapsed seconds)',
+        }),
         /**
          * When enabled, we clean up our public directory for the current project so we are using old
          * assets when sending out files for our builds and pipelines.
@@ -139,11 +142,11 @@ exports.default = () => {
          * @see https://webpack.js.org/plugins/define-plugin
          */
         new webpack_1.default.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify(config_1.environment.mode),
-            },
-            '__DEV__': config_1.environment.dev === true,
-            '__PROD__': config_1.environment.prod === true,
+            // 'process.env': {
+            //   NODE_ENV: JSON.stringify(environment.mode),
+            // },
+            ['__DEV__']: config_1.environment.dev === true,
+            ['__PROD__']: config_1.environment.prod === true,
         }),
         /**
          * Bundle analyzer is used to showcase our overall bundle weight which we can use to find

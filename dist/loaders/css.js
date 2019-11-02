@@ -15,7 +15,7 @@ exports.default = (env, options = {}) => ([
             ident: 'postcss',
             sourceMap: env.dev === true,
             config: {
-                path: path_1.resolve(__dirname, '../postcss.config.js'),
+                path: path_1.resolve(process.cwd(), 'postcss.config.js'),
                 ctx: {
                     prod: env.prod === true,
                 },

@@ -1,4 +1,4 @@
-import * as Types from './ast'
+import * as Types from '../types/index'
 
 /**
  * Default projects map for core and styleguide (DLS).

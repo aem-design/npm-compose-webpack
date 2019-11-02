@@ -2,10 +2,15 @@
   "author": "Chris Shaw <me@cshaw.xyz>",
   "description": "Webpack configuration and helpers for the AEM.Design compose module",
   "engines": {
-    "node": ">= 10.x"
+    "node": ">= 10.x",
+    "yarn": ">= 1.10.x"
+  },
+  "bin": {
+    "aemdesign-compose": "dist/bin/cli-service.js"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "types/*.d.ts"
   ],
   "keywords": [
     "aem",
@@ -16,7 +21,7 @@
   ],
   "license": "Apache-2.0",
   "main": "dist/index.js",
-  "types": "dist/*.d.ts",
+  "types": "types/index.d.ts",
   "name": "@aem-design/compose-webpack",
   "repository": {
     "type": "git",
@@ -25,13 +30,17 @@
   "bugs": {
     "url": "https://github.com/aem-design/npm-compose-webpack/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "npm run build.source && npm run build.types",
-    "build.source": "cross-env NODE_ENV=production tsc",
-    "build.types": "cross-env NODE_ENV=production tsc --project tsconfig.types.json",
+    "build": "npm run clean && npm run build.compile",
+    "build.compile": "cross-env NODE_ENV=production tsc",
+    "clean": "rm -rf dist",
     "lint": "eslint '**/*.ts'",
+    "postbuild": "chmod +x dist/bin/cli-service.js",
     "postversion": "npm run test && git push && git push --tags",
-    "watch": "$(npm bin)/tsc --watch"
+    "watch": "tsc --watch"
   },
   "husky": {
     "skipCI": true,
@@ -41,7 +50,7 @@
   },
   "version": "1.3.0",
   "dependencies": {
-    "@aem-design/compose-support": "1.0.1",
+    "@aem-design/compose-support": "1.1.0",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
@@ -57,12 +66,12 @@
     "@types/lodash": "^4.14.144",
     "@types/lodash-webpack-plugin": "^0.11.3",
     "@types/mini-css-extract-plugin": "^0.8.0",
-    "@types/node": "^12.11.7",
+    "@types/node": "^12.12.5",
     "@types/optimize-css-assets-webpack-plugin": "^5.0.1",
     "@types/sass": "^1.16.0",
     "@types/stylelint-webpack-plugin": "^0.1.4",
     "@types/terser-webpack-plugin": "^1.2.1",
-    "@types/webpack": "^4.39.5",
+    "@types/webpack": "^4.39.8",
     "@types/webpack-bundle-analyzer": "^2.13.3",
     "@types/webpack-config-utils": "^2.3.0",
     "@types/webpack-dev-server": "^3.4.0",
@@ -75,7 +84,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^3.2.0",
-    "dotenv": "^8.2.0",
+    "eslint-loader": "^3.0.2",
     "exports-loader": "^0.7.0",
     "expose-loader": "^0.7.5",
     "extract-loader": "^3.1.0",
@@ -84,33 +93,40 @@
     "imagemin-webpack-plugin": "^2.4.2",
     "imports-loader": "^0.8.0",
     "lodash": "^4.17.15",
+    "lodash-webpack-plugin": "^0.11.5",
     "mini-css-extract-plugin": "^0.8.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "sass": "^1.23.1",
+    "sass": "^1.23.3",
     "sass-loader": "^8.0.0",
     "source-map-loader": "^0.2.4",
     "style-loader": "^1.0.0",
+    "stylelint-webpack-plugin": "^1.0.3",
     "terser-webpack-plugin": "^2.2.1",
     "ts-loader": "^6.2.1",
+    "tsconfig-paths": "^3.9.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslint": "^5.20.0",
     "vue": "^2.6.10",
-    "vue-loader": "^15.7.1",
+    "vue-loader": "^15.7.2",
     "vue-property-decorator": "^8.3.0",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.41.2",
+    "webpack-bundle-analyzer": "^3.6.0",
     "webpack-config-utils": "^2.3.1",
+    "webpack-dev-server": "^3.9.0",
     "webpack-format-messages": "^2.0.5",
-    "xml2js": "^0.4.22"
+    "xml2js": "^0.4.22",
+    "yargs": "^14.2.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.5.0",
-    "@typescript-eslint/parser": "^2.5.0",
+    "@types/yargs": "^13.0.3",
+    "@typescript-eslint/eslint-plugin": "^2.6.0",
+    "@typescript-eslint/parser": "^2.6.0",
     "cross-env": "^6.0.3",
     "eslint": "^5.16.0",
     "husky": "^3.0.9",
-    "ts-node": "^8.4.1",
+    "progress-bar-webpack-plugin": "^1.12.1",
     "typescript": "^3.6.4"
   }
 }

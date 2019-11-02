@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("path");
-const nodeModulesPath = path_1.resolve(process.cwd(), 'node_modules');
+const nodeModulesChildPath = path_1.resolve(process.cwd(), 'node_modules');
+const nodeModulesCurrentPath = path_1.resolve(__dirname, '../../', 'node_modules');
 exports.default = (env, options = {}) => ([
     {
-        exclude: [nodeModulesPath],
+        exclude: [nodeModulesChildPath, nodeModulesCurrentPath],
         loader: 'vue-loader',
         test: /\.vue$/,
     },
     {
-        exclude: [nodeModulesPath],
+        exclude: [nodeModulesChildPath, nodeModulesCurrentPath],
         test: /\.[jt]sx?$/,
         use: [
             {
@@ -25,7 +26,7 @@ exports.default = (env, options = {}) => ([
     },
     {
         enforce: 'pre',
-        exclude: [nodeModulesPath],
+        exclude: [nodeModulesChildPath, nodeModulesCurrentPath],
         test: /\.js$/,
         use: ['eslint-loader'],
     },

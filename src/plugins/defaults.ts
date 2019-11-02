@@ -1,3 +1,4 @@
+import chalk from 'chalk'
 import { resolve } from 'path'
 import webpack from 'webpack'
 
@@ -8,11 +9,12 @@ import CopyWebpackPlugin from 'copy-webpack-plugin'
 import ImageminPlugin from 'imagemin-webpack-plugin'
 import LodashPlugin from 'lodash-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
 import { VueLoaderPlugin } from 'vue-loader'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
-import * as Types from '../ast'
+import { ConfigurationType } from '../enum'
 
 import {
   environment,
@@ -30,12 +32,21 @@ export {
 }
 
 export default (): webpack.Plugin[] => {
-  const clientLibsPath = getConfiguration(Types.ConfigurationType.PATH_CLIENTLIBS)
-  const publicPath     = getConfiguration(Types.ConfigurationType.PATH_PUBLIC)
+  const clientLibsPath = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
+  const publicPath     = getConfiguration(ConfigurationType.PATH_PUBLIC)
   const projectName    = environment.project
-  const sourcePath     = getProjectPath(Types.ConfigurationType.PATH_SOURCE)
+  const sourcePath     = getProjectPath(ConfigurationType.PATH_SOURCE)
 
   return removeEmpty<webpack.Plugin>([
+
+    /**
+     * Custom progress bar!
+     *
+     * @see https://github.com/clessg/progress-bar-webpack-plugin
+     */
+    new ProgressBarPlugin({
+      format: 'Build [:bar] ' + chalk.green.bold(':percent') + ' (:elapsed seconds)',
+    }),
 
     /**
      * When enabled, we clean up our public directory for the current project so we are using old
@@ -153,12 +164,12 @@ export default (): webpack.Plugin[] => {
      * @see https://webpack.js.org/plugins/define-plugin
      */
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(environment.mode),
-      },
+      // 'process.env': {
+      //   NODE_ENV: JSON.stringify(environment.mode),
+      // },
 
-      '__DEV__'  : environment.dev === true,
-      '__PROD__' : environment.prod === true,
+      ['__DEV__']  : environment.dev === true,
+      ['__PROD__'] : environment.prod === true,
     }),
 
     /**

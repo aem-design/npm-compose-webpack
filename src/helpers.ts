@@ -6,7 +6,7 @@ import xml2js from 'xml2js'
 
 import { getIfUtils } from 'webpack-config-utils'
 
-import * as Types from './ast'
+import * as Types from '../types/index'
 
 import { environment } from './config'
 
