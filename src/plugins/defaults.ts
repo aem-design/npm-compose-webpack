@@ -1,4 +1,3 @@
-import chalk from 'chalk'
 import { resolve } from 'path'
 import webpack from 'webpack'
 

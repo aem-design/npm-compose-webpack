@@ -1,8 +1,6 @@
 .cache
+dist/
 node_modules/
-
-# TypeScript things
-dist/enum.js
 
 # Logs
 logs
