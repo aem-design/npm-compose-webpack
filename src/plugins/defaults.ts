@@ -23,7 +23,7 @@ import {
   getProjectPath,
 } from '../config'
 
-import { ifProd } from '../helpers'
+import { getIfUtilsInstance } from '../helpers'
 
 import ComposeMessages from './messages'
 
@@ -40,13 +40,13 @@ export default (): webpack.Plugin[] => {
   return removeEmpty<webpack.Plugin>([
 
     /**
-     * Custom progress bar!
+     * Custom progress!
      *
+     * @see https://webpack.js.org/plugins/progress-plugin
      * @see https://github.com/clessg/progress-bar-webpack-plugin
      */
-    new ProgressBarPlugin({
-      format: 'Build [:bar] ' + chalk.green.bold(':percent') + ' (:elapsed seconds)',
-    }),
+    environment.maven !== true ? new webpack.ProgressPlugin() : undefined,
+    new ProgressBarPlugin(),
 
     /**
      * When enabled, we clean up our public directory for the current project so we are using old
@@ -105,7 +105,7 @@ export default (): webpack.Plugin[] => {
      *
      * @see https://www.npmjs.com/package/imagemin-webpack-plugin
      */
-    ifProd(new ImageminPlugin({
+    getIfUtilsInstance().ifProd(new ImageminPlugin({
       test: /\.(jpe?g|png|gif|svg)$/i,
     })),
 
@@ -164,12 +164,8 @@ export default (): webpack.Plugin[] => {
      * @see https://webpack.js.org/plugins/define-plugin
      */
     new webpack.DefinePlugin({
-      // 'process.env': {
-      //   NODE_ENV: JSON.stringify(environment.mode),
-      // },
-
-      ['__DEV__']  : environment.dev === true,
-      ['__PROD__'] : environment.prod === true,
+      '__DEV__'  : environment.dev === true,
+      '__PROD__' : environment.prod === true,
     }),
 
     /**
@@ -178,14 +174,14 @@ export default (): webpack.Plugin[] => {
      *
      * @see https://www.npmjs.com/package/webpack-bundle-analyzer
      */
-    environment.dev === true && environment.maven !== true && environment.deploy !== true ? new BundleAnalyzerPlugin({
+    environment.analyzer === true ? new BundleAnalyzerPlugin({
       openAnalyzer: false,
     }) : undefined,
 
     /**
      * @see https://webpack.js.org/plugins/loader-options-plugin
      */
-    ifProd(new webpack.LoaderOptionsPlugin({
+    getIfUtilsInstance().ifProd(new webpack.LoaderOptionsPlugin({
       minimize: true,
     })),
 

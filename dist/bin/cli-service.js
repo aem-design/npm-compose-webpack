@@ -13,6 +13,11 @@ const index_1 = __importDefault(require("../index"));
 const args = yargs_1.default
     .alias('h', 'help')
     .alias('v', 'version')
+    .option('analyzer', {
+    default: false,
+    description: 'Enable the Bundle Analyzer plugin?',
+    type: 'boolean',
+})
     .option('clean', {
     default: true,
     description: 'Should the public directory for the specified project be cleaned?',
@@ -23,7 +28,8 @@ const args = yargs_1.default
     description: 'Compose configuration file name',
 })
     .option('dev', {
-    default: true,
+    alias: 'd',
+    default: false,
     description: 'Set the build mode to development',
     type: 'boolean',
 })
@@ -33,6 +39,7 @@ const args = yargs_1.default
     type: 'boolean',
 })
     .option('prod', {
+    alias: 'p',
     default: false,
     description: 'Set the build mode to production',
     type: 'boolean',
@@ -70,27 +77,18 @@ catch (_) {
  */
 const webpackConfiguration = index_1.default({}, composeConfiguration)(args);
 const webpackInstance = webpack_1.default(webpackConfiguration);
-if (args.watch && webpackConfiguration.devServer) {
-    const devServer = new webpack_dev_server_1.default(webpackInstance, {});
+if (args.watch) {
+    const devServer = new webpack_dev_server_1.default(webpackInstance);
     devServer.listen(webpackConfiguration.devServer.port, (err) => {
-        if (err) {
-            compose_support_1.logger.error(err);
-            process.exit(1);
-        }
-        compose_support_1.logger.info('Webpack Dev Server started...');
-    });
-}
-else {
-    webpackInstance.run((err, stats) => {
         if (err) {
             throw err;
         }
-        process.stdout.write(stats.toString({
-            children: false,
-            chunkModules: false,
-            chunks: false,
-            colors: true,
-            modules: false,
-        }) + '\n\n');
+    });
+}
+else {
+    webpackInstance.run((err) => {
+        if (err) {
+            throw err;
+        }
     });
 }

@@ -12,6 +12,11 @@ import Compose from '../index'
 const args = yargs
   .alias('h', 'help')
   .alias('v', 'version')
+  .option('analyzer', {
+    default     : false,
+    description : 'Enable the Bundle Analyzer plugin?',
+    type        : 'boolean',
+  })
   .option('clean', {
     default     : true,
     description : 'Should the public directory for the specified project be cleaned?',
@@ -22,7 +27,8 @@ const args = yargs
     description : 'Compose configuration file name',
   })
   .option('dev', {
-    default     : true,
+    alias       : 'd',
+    default     : false,
     description : 'Set the build mode to development',
     type        : 'boolean',
   })
@@ -32,6 +38,7 @@ const args = yargs
     type        : 'boolean',
   })
   .option('prod', {
+    alias       : 'p',
     default     : false,
     description : 'Set the build mode to production',
     type        : 'boolean',
@@ -57,7 +64,6 @@ const args = yargs
 /**
  * Is there a custom configuration file we can use?
  */
-
 let composeConfiguration = {}
 
 try {
@@ -70,33 +76,21 @@ try {
 /**
  * Start your engines...
  */
-
 const webpackConfiguration = Compose({}, composeConfiguration)(args)
 const webpackInstance      = webpack(webpackConfiguration)
 
-if (args.watch && webpackConfiguration.devServer) {
-  const devServer = new webpackDevServer(webpackInstance, {})
+if (args.watch) {
+  const devServer = new webpackDevServer(webpackInstance)
 
   devServer.listen(webpackConfiguration.devServer.port as number, (err) => {
     if (err) {
-      logger.error(err)
-      process.exit(1)
+      throw err
     }
-
-    logger.info('Webpack Dev Server started...')
   })
 } else {
-  webpackInstance.run((err, stats) => {
+  webpackInstance.run((err) => {
     if (err) {
       throw err
     }
-
-    process.stdout.write(stats.toString({
-      children     : false,
-      chunkModules : false,
-      chunks       : false,
-      colors       : true,
-      modules      : false,
-    }) + '\n\n')
   })
 }

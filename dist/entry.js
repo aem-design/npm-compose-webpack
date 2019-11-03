@@ -1,5 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const get_1 = __importDefault(require("lodash/get"));
 const config_1 = require("./config");
 function getHMRConfiguration(project) {
     const mappedEntries = {
@@ -7,7 +11,10 @@ function getHMRConfiguration(project) {
         header: [],
     };
     const additionalEntries = project.additionalEntries;
-    const fileMap = project.fileMap;
+    const fileMap = {
+        footer: [...get_1.default(project, 'fileMap.footer', [])],
+        header: [...get_1.default(project, 'fileMap.header', [])],
+    };
     if (additionalEntries && fileMap) {
         for (const key of Object.keys(mappedEntries)) {
             const additionalEntryKeys = Object.keys(additionalEntries)

@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import figlet from 'figlet'
-import { get as _get } from 'lodash'
+import _get from 'lodash/get'
 import { relative, resolve } from 'path'
 import webpack from 'webpack'
 import webpackDevServer from 'webpack-dev-server'
@@ -28,7 +28,7 @@ import {
 
 import EntryConfiguration from './entry'
 
-import { ifDev } from './helpers'
+import { getIfUtilsInstance } from './helpers'
 
 import loaders from './loaders'
 import plugins from './plugins'
@@ -40,51 +40,54 @@ export default (
   /**
    * Support banner
    */
+  console.log('')
   console.log(figlet.textSync(
     _get(env, 'banner.text', 'AEM.Design'),
     _get(env, 'banner.font', '3D-ASCII') as figlet.Fonts,
   ))
 
   /**
-   * General output
-   */
-  logger.info('Starting up the webpack bundler...')
-  logger.info('')
-
-  /**
-   * Ensure our Maven config values are valid before continuing on...
-   */
-  const { appsPath, authorPort, sharedAppsPath } = getMavenConfiguration()
-
-  if (!(authorPort || appsPath || sharedAppsPath)) {
-    logger.error('Unable to continue due to missing or invalid Maven configuration values!')
-    process.exit(1)
-  }
-
-  /**
-   * Set any user-defined projects.
-   */
-  setProjects(configuration.projects || null)
-
-  logger.info(chalk.bold('Maven configuration'))
-  logger.info('-------------------')
-  logger.info(chalk.bold('Author Port         :'), authorPort)
-  logger.info(chalk.bold('Apps Path           :'), appsPath)
-  logger.info(chalk.bold('Shared Apps Path    :'), sharedAppsPath)
-  logger.info('')
-
-  /**
    * Begin Webpack!!
    */
-  return (webpackEnv: webpack.ParserOptions): webpack.Configuration & webpackDevServer.Configuration => {
+  return (webpackEnv: webpack.ParserOptions): webpack.Configuration & {
+    devServer: webpackDevServer.Configuration;
+  } => {
     const environment = setupEnvironment({
       ...webpackEnv,
     })
 
     const flagDev  = environment.dev === true
     const flagProd = environment.prod === true
-    const flagHMR  = environment.hmr === true
+    const flagHMR  = environment.watch === true
     const project  = environment.project
+
+    /**
+     * General output
+     */
+    logger.info('Starting up the webpack bundler...')
+    logger.info('')
+
+    /**
+     * Ensure our Maven config values are valid before continuing on...
+     */
+    const { appsPath, authorPort, sharedAppsPath } = getMavenConfiguration()
+
+    if (!(authorPort || appsPath || sharedAppsPath)) {
+      logger.error('Unable to continue due to missing or invalid Maven configuration values!')
+      process.exit(1)
+    }
+
+    /**
+     * Set any user-defined projects.
+     */
+    setProjects(configuration.projects || null)
+
+    logger.info(chalk.bold('Maven configuration'))
+    logger.info('-------------------')
+    logger.info(chalk.bold('Author Port         :'), authorPort)
+    logger.info(chalk.bold('Apps Path           :'), appsPath)
+    logger.info(chalk.bold('Shared Apps Path    :'), sharedAppsPath)
+    logger.info('')
 
     if (!flagHMR) {
       setConfiguration(
@@ -102,7 +105,7 @@ export default (
     const clientLibsPath     = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
     const devServerProxyPort = _get(env, 'webpack.server.proxyPort', authorPort)
     const entry              = EntryConfiguration(flagHMR)
-    const mode               = flagDev ? 'development' : 'production'
+    const mode               = getIfUtilsInstance().ifDev('development', 'production')
     const projectPathPublic  = getProjectPath(ConfigurationType.PATH_PUBLIC)
     const projectPathSource  = getProjectPath(ConfigurationType.PATH_SOURCE)
     const publicPath         = getConfiguration(ConfigurationType.PATH_PUBLIC)
@@ -125,7 +128,7 @@ export default (
 
     return {
       context: sourcePath,
-      devtool: ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
+      devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
       entry,
       mode,
 
@@ -134,6 +137,12 @@ export default (
         filename      : `${clientLibsPath || ''}clientlibs-footer/js/[name].js`,
         path          : projectPathPublic,
         publicPath    : publicPathAEM,
+      },
+
+      performance: {
+        hints             : 'warning',
+        maxAssetSize      : 300000,
+        maxEntrypointSize : 300000,
       },
 
       module: {
@@ -314,6 +323,9 @@ export default (
       devServer: {
         contentBase : projectPathPublic,
         host        : _get(env, 'webpack.server.host', '0.0.0.0'),
+        hot         : true,
+        hotOnly     : true,
+        noInfo      : true,
         open        : false,
         port        : parseInt(_get(env, 'webpack.server.port', 4504), 10),
         stats       : 'minimal',

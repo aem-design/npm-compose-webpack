@@ -4,7 +4,7 @@ import { resolve } from 'path'
 import { get } from 'lodash'
 import xml2js from 'xml2js'
 
-import { getIfUtils } from 'webpack-config-utils'
+import { getIfUtils, IfUtils } from 'webpack-config-utils'
 
 import * as Types from '../types/index'
 
@@ -13,6 +13,8 @@ import { environment } from './config'
 // Internal
 const mavenConfigs: Types.SavedMavenConfig = {}
 const xmlParser: xml2js.Parser = new xml2js.Parser()
+
+let ifUtilsInstance: IfUtils | null = null
 
 /**
  * Retrieve the Maven configuration using the given `filePath`.
@@ -52,21 +54,14 @@ export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: pr
 }
 
 /**
- * Determines if the current mode is for development.
+ * Create an if utilities instance.
  *
- * @param {*} obj Value to pass back
- * @return {*}
+ * @return {ifUtilsInstance}
  */
-export function ifDev(obj: any): any {
-  return getIfUtils(environment).ifDevelopment(obj)
-}
+export function getIfUtilsInstance(): IfUtils {
+  if (!ifUtilsInstance) {
+    ifUtilsInstance = getIfUtils(environment)
+  }
 
-/**
- * Determines if the current mode is for production.
- *
- * @param {*} obj Value to pass back
- * @return {*}
- */
-export function ifProd(obj: any): any {
-  return getIfUtils(environment).ifProduction(obj)
+  return ifUtilsInstance
 }

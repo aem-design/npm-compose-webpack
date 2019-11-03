@@ -12,6 +12,7 @@ const config_1 = require("./config");
 // Internal
 const mavenConfigs = {};
 const xmlParser = new xml2js_1.default.Parser();
+let ifUtilsInstance = null;
 /**
  * Retrieve the Maven configuration using the given `filePath`.
  *
@@ -44,22 +45,14 @@ function getMavenConfigurationValueByPath({ fallback, parser, path: propPath, po
 }
 exports.getMavenConfigurationValueByPath = getMavenConfigurationValueByPath;
 /**
- * Determines if the current mode is for development.
+ * Create an if utilities instance.
  *
- * @param {*} obj Value to pass back
- * @return {*}
+ * @return {ifUtilsInstance}
  */
-function ifDev(obj) {
-    return webpack_config_utils_1.getIfUtils(config_1.environment).ifDevelopment(obj);
+function getIfUtilsInstance() {
+    if (!ifUtilsInstance) {
+        ifUtilsInstance = webpack_config_utils_1.getIfUtils(config_1.environment);
+    }
+    return ifUtilsInstance;
 }
-exports.ifDev = ifDev;
-/**
- * Determines if the current mode is for production.
- *
- * @param {*} obj Value to pass back
- * @return {*}
- */
-function ifProd(obj) {
-    return webpack_config_utils_1.getIfUtils(config_1.environment).ifProduction(obj);
-}
-exports.ifProd = ifProd;
+exports.getIfUtilsInstance = getIfUtilsInstance;

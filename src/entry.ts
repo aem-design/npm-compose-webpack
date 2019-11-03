@@ -1,3 +1,4 @@
+import _get from 'lodash/get'
 import webpack from 'webpack'
 
 import * as Types from '../types/index'
@@ -9,13 +10,19 @@ import {
 } from './config'
 
 function getHMRConfiguration(project: Types.Project): webpack.Entry {
-  const mappedEntries = {
+  const mappedEntries: {
+    [key: string]: string[];
+  } = {
     footer: [],
     header: [],
   }
 
   const additionalEntries = project.additionalEntries
-  const fileMap           = project.fileMap
+
+  const fileMap: typeof mappedEntries = {
+    footer: [..._get(project, 'fileMap.footer', [])],
+    header: [..._get(project, 'fileMap.header', [])],
+  }
 
   if (additionalEntries && fileMap) {
     for (const key of Object.keys(mappedEntries)) {

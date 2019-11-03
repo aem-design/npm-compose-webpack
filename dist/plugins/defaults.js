@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const chalk_1 = __importDefault(require("chalk"));
 const path_1 = require("path");
 const webpack_1 = __importDefault(require("webpack"));
 const webpack_config_utils_1 = require("webpack-config-utils");
@@ -28,13 +27,13 @@ exports.default = () => {
     const sourcePath = config_1.getProjectPath(enum_1.ConfigurationType.PATH_SOURCE);
     return webpack_config_utils_1.removeEmpty([
         /**
-         * Custom progress bar!
+         * Custom progress!
          *
+         * @see https://webpack.js.org/plugins/progress-plugin
          * @see https://github.com/clessg/progress-bar-webpack-plugin
          */
-        new progress_bar_webpack_plugin_1.default({
-            format: 'Build [:bar] ' + chalk_1.default.green.bold(':percent') + ' (:elapsed seconds)',
-        }),
+        config_1.environment.maven !== true ? new webpack_1.default.ProgressPlugin() : undefined,
+        new progress_bar_webpack_plugin_1.default(),
         /**
          * When enabled, we clean up our public directory for the current project so we are using old
          * assets when sending out files for our builds and pipelines.
@@ -88,7 +87,7 @@ exports.default = () => {
          *
          * @see https://www.npmjs.com/package/imagemin-webpack-plugin
          */
-        helpers_1.ifProd(new imagemin_webpack_plugin_1.default({
+        helpers_1.getIfUtilsInstance().ifProd(new imagemin_webpack_plugin_1.default({
             test: /\.(jpe?g|png|gif|svg)$/i,
         })),
         /**
@@ -142,11 +141,8 @@ exports.default = () => {
          * @see https://webpack.js.org/plugins/define-plugin
          */
         new webpack_1.default.DefinePlugin({
-            // 'process.env': {
-            //   NODE_ENV: JSON.stringify(environment.mode),
-            // },
-            ['__DEV__']: config_1.environment.dev === true,
-            ['__PROD__']: config_1.environment.prod === true,
+            '__DEV__': config_1.environment.dev === true,
+            '__PROD__': config_1.environment.prod === true,
         }),
         /**
          * Bundle analyzer is used to showcase our overall bundle weight which we can use to find
@@ -154,13 +150,13 @@ exports.default = () => {
          *
          * @see https://www.npmjs.com/package/webpack-bundle-analyzer
          */
-        config_1.environment.dev === true && config_1.environment.maven !== true && config_1.environment.deploy !== true ? new webpack_bundle_analyzer_1.BundleAnalyzerPlugin({
+        config_1.environment.analyzer === true ? new webpack_bundle_analyzer_1.BundleAnalyzerPlugin({
             openAnalyzer: false,
         }) : undefined,
         /**
          * @see https://webpack.js.org/plugins/loader-options-plugin
          */
-        helpers_1.ifProd(new webpack_1.default.LoaderOptionsPlugin({
+        helpers_1.getIfUtilsInstance().ifProd(new webpack_1.default.LoaderOptionsPlugin({
             minimize: true,
         })),
     ]);

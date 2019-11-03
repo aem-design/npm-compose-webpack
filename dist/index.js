@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const chalk_1 = __importDefault(require("chalk"));
 const figlet_1 = __importDefault(require("figlet"));
-const lodash_1 = require("lodash");
+const get_1 = __importDefault(require("lodash/get"));
 const path_1 = require("path");
 const mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plugin"));
 const optimize_css_assets_webpack_plugin_1 = __importDefault(require("optimize-css-assets-webpack-plugin"));
@@ -22,30 +22,8 @@ exports.default = (configuration = {}, env = {}) => {
     /**
      * Support banner
      */
-    console.log(figlet_1.default.textSync(lodash_1.get(env, 'banner.text', 'AEM.Design'), lodash_1.get(env, 'banner.font', '3D-ASCII')));
-    /**
-     * General output
-     */
-    compose_support_1.logger.info('Starting up the webpack bundler...');
-    compose_support_1.logger.info('');
-    /**
-     * Ensure our Maven config values are valid before continuing on...
-     */
-    const { appsPath, authorPort, sharedAppsPath } = config_1.getMavenConfiguration();
-    if (!(authorPort || appsPath || sharedAppsPath)) {
-        compose_support_1.logger.error('Unable to continue due to missing or invalid Maven configuration values!');
-        process.exit(1);
-    }
-    /**
-     * Set any user-defined projects.
-     */
-    config_1.setProjects(configuration.projects || null);
-    compose_support_1.logger.info(chalk_1.default.bold('Maven configuration'));
-    compose_support_1.logger.info('-------------------');
-    compose_support_1.logger.info(chalk_1.default.bold('Author Port         :'), authorPort);
-    compose_support_1.logger.info(chalk_1.default.bold('Apps Path           :'), appsPath);
-    compose_support_1.logger.info(chalk_1.default.bold('Shared Apps Path    :'), sharedAppsPath);
-    compose_support_1.logger.info('');
+    console.log('');
+    console.log(figlet_1.default.textSync(get_1.default(env, 'banner.text', 'AEM.Design'), get_1.default(env, 'banner.font', '3D-ASCII')));
     /**
      * Begin Webpack!!
      */
@@ -53,17 +31,40 @@ exports.default = (configuration = {}, env = {}) => {
         const environment = config_1.setupEnvironment(Object.assign({}, webpackEnv));
         const flagDev = environment.dev === true;
         const flagProd = environment.prod === true;
-        const flagHMR = environment.hmr === true;
+        const flagHMR = environment.watch === true;
         const project = environment.project;
+        /**
+         * General output
+         */
+        compose_support_1.logger.info('Starting up the webpack bundler...');
+        compose_support_1.logger.info('');
+        /**
+         * Ensure our Maven config values are valid before continuing on...
+         */
+        const { appsPath, authorPort, sharedAppsPath } = config_1.getMavenConfiguration();
+        if (!(authorPort || appsPath || sharedAppsPath)) {
+            compose_support_1.logger.error('Unable to continue due to missing or invalid Maven configuration values!');
+            process.exit(1);
+        }
+        /**
+         * Set any user-defined projects.
+         */
+        config_1.setProjects(configuration.projects || null);
+        compose_support_1.logger.info(chalk_1.default.bold('Maven configuration'));
+        compose_support_1.logger.info('-------------------');
+        compose_support_1.logger.info(chalk_1.default.bold('Author Port         :'), authorPort);
+        compose_support_1.logger.info(chalk_1.default.bold('Apps Path           :'), appsPath);
+        compose_support_1.logger.info(chalk_1.default.bold('Shared Apps Path    :'), sharedAppsPath);
+        compose_support_1.logger.info('');
         if (!flagHMR) {
             config_1.setConfiguration(enum_1.ConfigurationType.PATH_CLIENTLIBS, `${sharedAppsPath}/${appsPath}/clientlibs/${project}/`);
             config_1.setConfiguration(enum_1.ConfigurationType.PATH_PUBLIC_AEM, `/etc.clientlibs/${appsPath}/clientlibs/${project}/`);
         }
         // Webpack configuration
         const clientLibsPath = config_1.getConfiguration(enum_1.ConfigurationType.PATH_CLIENTLIBS);
-        const devServerProxyPort = lodash_1.get(env, 'webpack.server.proxyPort', authorPort);
+        const devServerProxyPort = get_1.default(env, 'webpack.server.proxyPort', authorPort);
         const entry = entry_1.default(flagHMR);
-        const mode = flagDev ? 'development' : 'production';
+        const mode = helpers_1.getIfUtilsInstance().ifDev('development', 'production');
         const projectPathPublic = config_1.getProjectPath(enum_1.ConfigurationType.PATH_PUBLIC);
         const projectPathSource = config_1.getProjectPath(enum_1.ConfigurationType.PATH_SOURCE);
         const publicPath = config_1.getConfiguration(enum_1.ConfigurationType.PATH_PUBLIC);
@@ -84,7 +85,7 @@ exports.default = (configuration = {}, env = {}) => {
         console.log(JSON.stringify(entry, null, 2));
         return {
             context: sourcePath,
-            devtool: helpers_1.ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
+            devtool: helpers_1.getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
             entry,
             mode,
             output: {
@@ -92,6 +93,11 @@ exports.default = (configuration = {}, env = {}) => {
                 filename: `${clientLibsPath || ''}clientlibs-footer/js/[name].js`,
                 path: projectPathPublic,
                 publicPath: publicPathAEM,
+            },
+            performance: {
+                hints: 'warning',
+                maxAssetSize: 300000,
+                maxEntrypointSize: 300000,
             },
             module: {
                 rules: [
@@ -171,8 +177,8 @@ exports.default = (configuration = {}, env = {}) => {
                         extractComments: {
                             condition: true,
                             banner() {
-                                const projectName = lodash_1.get(env, 'project.name', 'AEM.Design');
-                                const start = lodash_1.get(env, 'project.start', (new Date()).getFullYear());
+                                const projectName = get_1.default(env, 'project.name', 'AEM.Design');
+                                const start = get_1.default(env, 'project.start', (new Date()).getFullYear());
                                 return `Copyright ${start}-${(new Date()).getFullYear()} ${projectName}`;
                             },
                         },
@@ -222,7 +228,7 @@ exports.default = (configuration = {}, env = {}) => {
             },
             plugins: [
                 ...plugins_1.default.ComposeDefaults(),
-                ...lodash_1.get(env, 'webpack.plugins', []),
+                ...get_1.default(env, 'webpack.plugins', []),
             ],
             resolve: {
                 alias: {
@@ -242,14 +248,17 @@ exports.default = (configuration = {}, env = {}) => {
             stats: 'minimal',
             devServer: {
                 contentBase: projectPathPublic,
-                host: lodash_1.get(env, 'webpack.server.host', '0.0.0.0'),
+                host: get_1.default(env, 'webpack.server.host', '0.0.0.0'),
+                hot: true,
+                hotOnly: true,
+                noInfo: true,
                 open: false,
-                port: parseInt(lodash_1.get(env, 'webpack.server.port', 4504), 10),
+                port: parseInt(get_1.default(env, 'webpack.server.port', 4504), 10),
                 stats: 'minimal',
                 proxy: [
                     {
                         context: () => true,
-                        target: `http://${lodash_1.get(env, 'webpack.server.proxyHost', 'localhost')}:${devServerProxyPort}`,
+                        target: `http://${get_1.default(env, 'webpack.server.proxyHost', 'localhost')}:${devServerProxyPort}`,
                     },
                 ],
             },
