@@ -39,8 +39,8 @@
     "clean": "rm -rf dist",
     "lint": "eslint '**/*.ts'",
     "postbuild": "chmod +x dist/bin/cli-service.js",
-    "prepublish": "npm run build",
     "postversion": "npm run test && git push && git push --tags",
+    "prepare": "npm run build",
     "watch": "tsc --watch"
   },
   "husky": {
