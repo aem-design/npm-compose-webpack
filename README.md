@@ -105,6 +105,7 @@ NPM will automagically reference the binary in `node_modules` for you, and execu
 | **--version** _or_ **-v**<br>_Show the version of `aemdesign-compose`_ |
 
 </div>
+
 <style>
   .options th:first-of-type {
     max-width: 400px;
