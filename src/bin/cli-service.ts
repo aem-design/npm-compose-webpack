@@ -46,7 +46,6 @@ const args = yargs
     type        : 'boolean',
   })
   .option('project', {
-    default     : '',
     description : 'Name of the project to build',
     required    : true,
     type        : 'string',

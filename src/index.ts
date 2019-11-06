@@ -231,19 +231,9 @@ export default (
       optimization: {
         minimizer: [
           new TerserPlugin({
-            cache     : true,
-            sourceMap : false,
-
-            extractComments: {
-              condition: true,
-
-              banner() {
-                const projectName = _get(env, 'project.name', 'AEM.Design')
-                const start       = _get(env, 'project.start', (new Date()).getFullYear())
-
-                return `Copyright ${start}-${(new Date()).getFullYear()} ${projectName}`
-              },
-            },
+            cache           : true,
+            extractComments : false,
+            sourceMap       : false,
 
             terserOptions: {
               ecma     : 6,
@@ -300,8 +290,13 @@ export default (
       },
 
       plugins: removeEmpty<webpack.Plugin>([
+        // Custom messages
         environment.watch !== true ? new plugins.ComposeMessages() : undefined,
+
+        // Default plugins that are required
         ...plugins.ComposeDefaults(),
+
+        // Any additional plugins that the child projects needs
         ..._get(env, 'webpack.plugins', []),
       ]),
 
@@ -336,6 +331,11 @@ export default (
         port        : parseInt(_get(env, 'webpack.server.port', 4504), 10),
 
         proxy: [
+          // Additional proxy paths need to be loaded first since they will bind from the same host which uses
+          // root context by default. This means the default proxy below is the boss when it comes to requests.
+          ..._get(env, 'webpack.server.proxies', []),
+
+          // Default AEM proxy
           {
             context : () => true,
             target  : `http://${_get(env, 'webpack.server.proxyHost', 'localhost')}:${devServerProxyPort}`,
