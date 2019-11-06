@@ -11,6 +11,8 @@ import { logger } from '@aem-design/compose-support'
 
 import Compose from '../index'
 
+import * as Types from '../../types/index'
+
 const args = yargs
   .alias('h', 'help')
   .alias('v', 'version')
@@ -65,7 +67,7 @@ const args = yargs
 /**
  * Is there a custom configuration file we can use?
  */
-let composeConfiguration = {}
+let composeConfiguration: Types.WebpackConfiguration = {}
 
 try {
   // tslint:disable-next-line
@@ -77,7 +79,7 @@ try {
 /**
  * Start your engines...
  */
-const webpackConfiguration = Compose({}, composeConfiguration)(args)
+const webpackConfiguration = Compose(composeConfiguration)(args)
 const webpackInstance      = webpack(webpackConfiguration)
 
 if (args.watch) {

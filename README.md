@@ -36,6 +36,9 @@ Webpack configuration module to help bootstrap and get AEM projects running fast
   - [With the CLI](#with-the-cli)
   - [With NPM Scripts](#with-npm-scripts)
 - [Options](#support)
+- [Configuration](#configuration)
+  - [Example](#example)
+- [Features](#features)
 - [Browser Support](#browser-support)
 - [Contributing](#contributing)
 - [License](#license)
@@ -43,7 +46,7 @@ Webpack configuration module to help bootstrap and get AEM projects running fast
 ## Getting Started
 First things first, install the module:
 
-```console
+```bash
 npm install @aem-design/compose-webpack --save-dev
 
 # or with Yarn
@@ -57,7 +60,7 @@ There are a couple of different ways to run the module service:
 ### With the CLI
 Run from the project directory where your `compose.config.js` file lives:
 
-```console
+```bash
 node_modules/.bin/aemdesign-compose
 
 # or using some NPM magic
@@ -78,7 +81,7 @@ Convenience is a nice thing though and NPM scripts provide a much cleaner and ea
 
 And run the following in your terminal/console:
 
-```console
+```bash
 npm run build
 
 # or with Yarn
@@ -90,10 +93,10 @@ NPM will automagically reference the binary in `node_modules` for you, and execu
 
 ## Options
 | Argument | Type | Default |
-| ---      | ---  | --- |
+| :---     | ---  | --- |
 | **--analyzer**<br><sub>_Enable the Bundle Analyzer plugin?_</sub> | `Boolean` | `false` |
 | **--clean**<br><sub>_Should the public directory for the specified project be cleaned?_</sub> | `Boolean` | `true` |
-| **--config** _&lt;file name&gt;_<br><sub>_Compose configuration file name. You only need to pass a string as the module will resolve it using `process.cwd()`_</sub> | `String` | `compose.config.js` |
+| **--config** _&lt;file name&gt;_<br><sub>_Compose configuration file name.<br>You only need to pass a string as the module will resolve it using `process.cwd()`_</sub> | `String` | `compose.config.js` |
 | **--dev** _or_ **-d**<br><sub>_Set the build mode to development_</sub> | `Boolean` | `false` |
 | **--maven**<br><sub>_Was the task started from within Maven?_</sub> | `Boolean` | `false` |
 | **--prod** _or_ **-p**<br><sub>_Set the build mode to production_</sub> | `Boolean` | `false` |
@@ -103,6 +106,70 @@ NPM will automagically reference the binary in `node_modules` for you, and execu
 | **--version** _or_ **-v**<br><sub>_Show the version of `aemdesign-compose`_</sub> |
 
 **NOTE:** _As we use yargs for argument parsing, you can use `--no-<argument>` for booleans to inverse them._
+
+## Configuration
+The main goal we want to achieve is a zero-config approach that allows you to get going so you can spend time making awesome things. It wouldn't be a great experience though if you couldn't add your own configuration thus we created `compose.config.js`. What is nice about this is it follows the same conventions of other NPM modules which means you can import additional plugins and such.
+
+### Example
+```js
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
+module.exports = {
+  banner: {
+    disable : false,         // Enable/disable the support banner
+    font    : 'ANSI Shadow', // ASCII Font type
+    text    : 'My Project',  // Text
+  },
+
+  webpack: {
+    rules: [
+      {
+        loader : 'file-loader',
+        test   : /\.(png|jpg|gif|eot|ttf|svg|woff|woff2)$/,
+      },
+    ],
+
+    cacheGroups: {
+      // ...
+    },
+
+    plugins: [
+      new CleanWebpackPlugin(),
+    ],
+
+    // Dev server
+    server: {
+      host      : 'localhost', // hostaddr to bind 'webpack-dev-server' to
+      port      : 1337,        // Port to bind 'webpack-dev-server' to
+      proxyHost : 'localhost', // Default : localhost
+      proxyPort : 4502,        // Default : 4502
+
+      // The proxies must conform to the array syntax which only accepts objects based on:
+      // https://github.com/chimurai/http-proxy-middleware#options
+      proxies: [
+        {
+          path   : '/hello-world',
+          target : 'http://localhost:1337/foo',
+        },
+      ],
+    },
+  },
+}
+```
+
+## Features
+Following the zero-config approach we are going for there are a number of things OOTB we do to help the situation that is browser support and modern features.
+
+* Babel 7 (with dynamic imports)
+* ES6/ES7/ES8
+* TypeScript
+* ESLint/Stylelint/TSLint
+* Sass (using Dart Sass)
+* Vue.js
+
+### Experimental features
+* Nullish coalescing
+* `async` & `await`
 
 ## Browser Support
 OOTB we provide support for IE11 and all modern browsers (latest 2 releases). Code will be compiled down to ES5 with support for browsers futher back but compatibility may vary for you.

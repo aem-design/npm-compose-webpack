@@ -34,18 +34,17 @@ import { getIfUtilsInstance } from './helpers'
 import loaders from './loaders'
 import plugins from './plugins'
 
-export default (
-  configuration: Types.WebpackConfiguration = {},
-  env: { [key: string]: any } = {},
-) => {
+export default (configuration: Types.WebpackConfiguration = {}) => {
   /**
    * Support banner
    */
-  console.log('')
-  console.log(figlet.textSync(
-    _get(env, 'banner.text', 'AEM.Design'),
-    _get(env, 'banner.font', '3D-ASCII') as figlet.Fonts,
-  ))
+  if (_get(configuration, 'banner.disable', true) !== false) {
+    console.log('')
+    console.log(figlet.textSync(
+      _get(configuration, 'banner.text', 'AEM.Design'),
+      _get(configuration, 'banner.font', '3D-ASCII') as figlet.Fonts,
+    ))
+  }
 
   /**
    * Begin Webpack!!
@@ -104,7 +103,7 @@ export default (
 
     // Webpack configuration
     const clientLibsPath     = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
-    const devServerProxyPort = _get(env, 'webpack.server.proxyPort', authorPort)
+    const devServerProxyPort = _get(configuration, 'webpack.server.proxyPort', authorPort)
     const entry              = EntryConfiguration(flagHMR)
     const mode               = getIfUtilsInstance().ifDev('development', 'production')
     const projectPathPublic  = getProjectPath(ConfigurationType.PATH_PUBLIC)
@@ -224,6 +223,9 @@ export default (
             ],
           },
           ...loaders.js(webpackEnv),
+
+          // Any additional rules that the child projects needs
+          ..._get(configuration, 'webpack.rules', []),
         ],
       },
 
@@ -284,6 +286,8 @@ export default (
               name: 'vue',
               test: /[\\/]node_modules[\\/](vue|vue-property-decorator)[\\/]/,
             },
+
+            ..._get(configuration, 'webpack.cacheGroups', {}),
           },
         },
       },
@@ -296,7 +300,7 @@ export default (
         ...plugins.ComposeDefaults(),
 
         // Any additional plugins that the child projects needs
-        ..._get(env, 'webpack.plugins', []),
+        ..._get(configuration, 'webpack.plugins', []),
       ]),
 
       resolve: {
@@ -324,20 +328,20 @@ export default (
 
       devServer: {
         contentBase : projectPathPublic,
-        host        : _get(env, 'webpack.server.host', '0.0.0.0'),
+        host        : _get(configuration, 'webpack.server.host', '0.0.0.0'),
         open        : false,
         overlay     : true,
-        port        : parseInt(_get(env, 'webpack.server.port', 4504), 10),
+        port        : parseInt(_get(configuration, 'webpack.server.port', 4504), 10),
 
         proxy: [
           // Additional proxy paths need to be loaded first since they will bind from the same host which uses
           // root context by default. This means the default proxy below is the boss when it comes to requests.
-          ..._get(env, 'webpack.server.proxies', []),
+          ..._get(configuration, 'webpack.server.proxies', []),
 
           // Default AEM proxy
           {
             context : () => true,
-            target  : `http://${_get(env, 'webpack.server.proxyHost', 'localhost')}:${devServerProxyPort}`,
+            target  : `http://${_get(configuration, 'webpack.server.proxyHost', 'localhost')}:${devServerProxyPort}`,
           },
         ],
       },
