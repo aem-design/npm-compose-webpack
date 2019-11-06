@@ -194,6 +194,8 @@ OOTB we provide support for IE11 and all modern browsers (latest 2 releases). Co
 ## Todo
 - [ ] Add more configuration points
 - [ ] Allow the object returned in `compose.config.js` to be a function
+- [ ] Opt-in for TypeScript
+- [ ] Opt-in for Vue.js
 
 ## Contributing
 A contribution guide will be coming soon, we won't bite if you open a PR.
