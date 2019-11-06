@@ -54,6 +54,7 @@
     "@aem-design/compose-support": "1.1.0",
     "@babel/core": "^7.7.0",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-regenerator": "^7.7.0",
@@ -128,6 +129,6 @@
     "cross-env": "^6.0.3",
     "eslint": "^5.16.0",
     "husky": "^3.0.9",
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.2"
   }
 }

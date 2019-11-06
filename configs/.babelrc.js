@@ -19,6 +19,7 @@ module.exports = {
     '@babel/plugin-transform-runtime',
     '@babel/proposal-class-properties',
     '@babel/proposal-object-rest-spread',
+    '@babel/proposal-nullish-coalescing-operator',
     '@babel/plugin-syntax-dynamic-import',
 
     ['@babel/plugin-transform-regenerator', {

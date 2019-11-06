@@ -109,7 +109,6 @@ export default (
     const mode               = getIfUtilsInstance().ifDev('development', 'production')
     const projectPathPublic  = getProjectPath(ConfigurationType.PATH_PUBLIC)
     const projectPathSource  = getProjectPath(ConfigurationType.PATH_SOURCE)
-    const publicPath         = getConfiguration(ConfigurationType.PATH_PUBLIC)
     const publicPathAEM      = getConfiguration(ConfigurationType.PATH_PUBLIC_AEM)
     const sourcePath         = getConfiguration(ConfigurationType.PATH_SOURCE)
 
@@ -121,7 +120,7 @@ export default (
     logger.info(chalk.bold('Client Libary Path  :'), clientLibsPath)
     logger.info(chalk.bold('Public Path         :'), projectPathPublic)
     logger.info(chalk.bold('Public Path (AEM)   :'), publicPathAEM)
-    logger.info(chalk.bold('Source Path         :'), sourcePath)
+    logger.info(chalk.bold('Source Path         :'), projectPathSource)
     logger.info('')
     logger.info(chalk.bold('Entry Configuration'))
     logger.info('-------------------')
