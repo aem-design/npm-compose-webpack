@@ -37,7 +37,8 @@ Webpack configuration module to help bootstrap and get AEM projects running fast
   - [With NPM Scripts](#with-npm-scripts)
 - [Options](#support)
 - [Configuration](#configuration)
-  - [Example](#example)
+  - [Babel](#babel)
+  - [TypeScript](#typescript)
 - [Features](#features)
 - [Browser Support](#browser-support)
 - [Contributing](#contributing)
@@ -92,11 +93,11 @@ yarn build
 NPM will automagically reference the binary in `node_modules` for you, and execute the file or command.
 
 ## Options
-| Argument | Type | Default |
-| :---     | ---  | --- |
+| Argument        | Type           | Default        |
+|:----------------|----------------|----------------|
 | **--analyzer**<br><sub>_Enable the Bundle Analyzer plugin?_</sub> | `Boolean` | `false` |
 | **--clean**<br><sub>_Should the public directory for the specified project be cleaned?_</sub> | `Boolean` | `true` |
-| **--config** _&lt;file name&gt;_<br><sub>_Compose configuration file name.<br>You only need to pass a string as the module will resolve it using `process.cwd()`_</sub> | `String` | `compose.config.js` |
+| **--config** _&lt;file name&gt;_<br><sub>_Compose configuration file name. You only need to pass a string as the module will resolve it using `process.cwd()`_</sub> | `String` | `compose.config.js` |
 | **--dev** _or_ **-d**<br><sub>_Set the build mode to development_</sub> | `Boolean` | `false` |
 | **--maven**<br><sub>_Was the task started from within Maven?_</sub> | `Boolean` | `false` |
 | **--prod** _or_ **-p**<br><sub>_Set the build mode to production_</sub> | `Boolean` | `false` |
@@ -110,7 +111,23 @@ NPM will automagically reference the binary in `node_modules` for you, and execu
 ## Configuration
 The main goal we want to achieve is a zero-config approach that allows you to get going so you can spend time making awesome things. It wouldn't be a great experience though if you couldn't add your own configuration thus we created `compose.config.js`. What is nice about this is it follows the same conventions of other NPM modules which means you can import additional plugins and such.
 
-### Example
+We also provide base configuration files for modules such as Babel and TypeScript, you can extend them in your base project and override settings however you choose.
+
+### Babel
+```js
+module.exports = {
+  extends: '@aem-design/compose-webpack/configs/babel.config.js',
+}
+```
+
+### TypeScript
+```json
+{
+  "extends": "@aem-design/compose-webpack/configs/tsconfig.json"
+}
+```
+
+### Example of **compose.config.js**
 ```js
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
@@ -134,15 +151,15 @@ module.exports = {
     },
 
     plugins: [
-      new CleanWebpackPlugin(),
+      new CopyWebpackPlugin(),
     ],
 
     // Dev server
     server: {
       host      : 'localhost', // hostaddr to bind 'webpack-dev-server' to
       port      : 1337,        // Port to bind 'webpack-dev-server' to
-      proxyHost : 'localhost', // Default : localhost
-      proxyPort : 4502,        // Default : 4502
+      proxyHost : 'localhost', // AEM Host - default: localhost
+      proxyPort : 4502,        // AEM Port - default: 4502
 
       // The proxies must conform to the array syntax which only accepts objects based on:
       // https://github.com/chimurai/http-proxy-middleware#options
@@ -161,7 +178,7 @@ module.exports = {
 Following the zero-config approach we are going for there are a number of things OOTB we do to help the situation that is browser support and modern features.
 
 * Babel 7 (with dynamic imports)
-* ES6/ES7/ES8
+* ES6 support
 * TypeScript
 * ESLint/Stylelint/TSLint
 * Sass (using Dart Sass)
@@ -173,6 +190,10 @@ Following the zero-config approach we are going for there are a number of things
 
 ## Browser Support
 OOTB we provide support for IE11 and all modern browsers (latest 2 releases). Code will be compiled down to ES5 with support for browsers futher back but compatibility may vary for you.
+
+## Todo
+- [ ] Add more configuration points
+- [ ] Allow the object returned in `compose.config.js` to be a function
 
 ## Contributing
 A contribution guide will be coming soon, we won't bite if you open a PR.
