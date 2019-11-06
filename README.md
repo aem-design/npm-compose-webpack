@@ -97,7 +97,7 @@ NPM will automagically reference the binary in `node_modules` for you, and execu
 | **--dev** _or_ **-d**<br>_Set the build mode to development_ | `Boolean` | `false` |
 | **--maven**<br>_Was the task started from within Maven?_ | `Boolean` | `false` |
 | **--prod** _or_ **-p**<br>_Set the build mode to production_ | `Boolean` | `false` |
-| **--project** _(required)_<br>_Name of the project to build_ | `String` |
+| **--project** _&lt;name&gt;_ _(required)_<br>_Name of the project to build_ | `String` |
 | **--watch**<br>_Use webpack-dev-server to proxy AEM and serve changes in real-time_ | `Boolean` | `false` |
 | **--help** _or_ **-h**<br>_Show help for the command line options_ |
 | **--version** _or_ **-v**<br>_Show the version of `aemdesign-compose`_ |
