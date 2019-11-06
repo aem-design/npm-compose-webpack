@@ -8,7 +8,6 @@ import CopyWebpackPlugin from 'copy-webpack-plugin'
 import ImageminPlugin from 'imagemin-webpack-plugin'
 import LodashPlugin from 'lodash-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
 import { VueLoaderPlugin } from 'vue-loader'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
@@ -32,20 +31,10 @@ export {
 
 export default (): webpack.Plugin[] => {
   const clientLibsPath = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
-  const publicPath     = getConfiguration(ConfigurationType.PATH_PUBLIC)
-  const projectName    = environment.project
+  const publicPath     = getProjectPath(ConfigurationType.PATH_PUBLIC)
   const sourcePath     = getProjectPath(ConfigurationType.PATH_SOURCE)
 
   return removeEmpty<webpack.Plugin>([
-
-    /**
-     * Custom progress!
-     *
-     * @see https://webpack.js.org/plugins/progress-plugin
-     * @see https://github.com/clessg/progress-bar-webpack-plugin
-     */
-    environment.maven !== true ? new webpack.ProgressPlugin() : undefined,
-    new ProgressBarPlugin(),
 
     /**
      * When enabled, we clean up our public directory for the current project so we are using old
@@ -53,9 +42,9 @@ export default (): webpack.Plugin[] => {
      *
      * @see https://github.com/johnagan/clean-webpack-plugin
      */
-    environment.clean === true ? new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [resolve(publicPath, projectName, '**/*')],
-    }) : undefined,
+    getIfUtilsInstance().ifClean(new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [resolve(publicPath, '**/*')],
+    })),
 
     /**
      * Copies static assets from our source folder into the public structure for AEM.
@@ -66,12 +55,12 @@ export default (): webpack.Plugin[] => {
       {
         context : resolve(sourcePath, 'clientlibs-header/resources'),
         from    : './**/*.*',
-        to      : resolve(publicPath, projectName, 'clientlibs-header/resources'),
+        to      : resolve(publicPath, 'clientlibs-header/resources'),
       },
       {
         context : resolve(sourcePath, 'clientlibs-header/css'),
         from    : './*.css',
-        to      : resolve(publicPath, projectName, 'clientlibs-header/css'),
+        to      : resolve(publicPath, 'clientlibs-header/css'),
       },
     ]),
 
@@ -91,13 +80,13 @@ export default (): webpack.Plugin[] => {
      *
      * @see https://webpack.js.org/plugins/stylelint-webpack-plugin
      */
-    environment.maven !== true ? new StyleLintPlugin({
+    getIfUtilsInstance().ifMaven(new StyleLintPlugin({
       context     : resolve(sourcePath, 'scss'),
       emitErrors  : false,
       failOnError : false,
       files       : ['**/*.scss'],
       quiet       : false,
-    }) : undefined,
+    })),
 
     /**
      * Compress any static assets in our build.
@@ -173,9 +162,9 @@ export default (): webpack.Plugin[] => {
      *
      * @see https://www.npmjs.com/package/webpack-bundle-analyzer
      */
-    environment.analyzer === true ? new BundleAnalyzerPlugin({
+    getIfUtilsInstance().ifAnalyzer(new BundleAnalyzerPlugin({
       openAnalyzer: false,
-    }) : undefined,
+    })),
 
     /**
      * @see https://webpack.js.org/plugins/loader-options-plugin

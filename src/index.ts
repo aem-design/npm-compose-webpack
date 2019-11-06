@@ -3,6 +3,7 @@ import figlet from 'figlet'
 import _get from 'lodash/get'
 import { relative, resolve } from 'path'
 import webpack from 'webpack'
+import { removeEmpty } from 'webpack-config-utils'
 import webpackDevServer from 'webpack-dev-server'
 
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
@@ -118,7 +119,7 @@ export default (
     logger.info(chalk.bold('Project Name        :'), project)
     logger.info(chalk.bold('Hot Reloading?      :'), environment.hmr ? 'yes' : 'no')
     logger.info(chalk.bold('Client Libary Path  :'), clientLibsPath)
-    logger.info(chalk.bold('Public Path         :'), publicPath)
+    logger.info(chalk.bold('Public Path         :'), projectPathPublic)
     logger.info(chalk.bold('Public Path (AEM)   :'), publicPathAEM)
     logger.info(chalk.bold('Source Path         :'), sourcePath)
     logger.info('')
@@ -140,7 +141,11 @@ export default (
       },
 
       performance: {
-        hints             : 'warning',
+        assetFilter(assetFilename) {
+          return !/fontawesome-brands|vue/.test(assetFilename)
+        },
+
+        hints             : getIfUtilsInstance().ifDev(false, 'error'),
         maxAssetSize      : 300000,
         maxEntrypointSize : 300000,
       },
@@ -294,10 +299,11 @@ export default (
         },
       },
 
-      plugins: [
+      plugins: removeEmpty<webpack.Plugin>([
+        environment.watch !== true ? new plugins.ComposeMessages() : undefined,
         ...plugins.ComposeDefaults(),
         ..._get(env, 'webpack.plugins', []),
-      ],
+      ]),
 
       resolve: {
         alias: {
@@ -318,17 +324,16 @@ export default (
         ],
       },
 
-      stats: 'minimal',
+      stats: {
+        colors: getIfUtilsInstance().ifDev(true, false),
+      },
 
       devServer: {
         contentBase : projectPathPublic,
         host        : _get(env, 'webpack.server.host', '0.0.0.0'),
-        hot         : true,
-        hotOnly     : true,
-        noInfo      : true,
         open        : false,
+        overlay     : true,
         port        : parseInt(_get(env, 'webpack.server.port', 4504), 10),
-        stats       : 'minimal',
 
         proxy: [
           {

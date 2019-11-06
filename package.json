@@ -128,7 +128,6 @@
     "cross-env": "^6.0.3",
     "eslint": "^5.16.0",
     "husky": "^3.0.9",
-    "progress-bar-webpack-plugin": "^1.12.1",
     "typescript": "^3.6.4"
   }
 }

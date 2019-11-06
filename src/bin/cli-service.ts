@@ -3,6 +3,8 @@
 import { resolve } from 'path'
 import webpack from 'webpack'
 import webpackDevServer from 'webpack-dev-server'
+import createConfig from 'webpack-dev-server/lib/utils/createConfig'
+import defaultPort from 'webpack-dev-server/lib/utils/defaultPort'
 import yargs from 'yargs'
 
 import { logger } from '@aem-design/compose-support'
@@ -80,7 +82,17 @@ const webpackConfiguration = Compose({}, composeConfiguration)(args)
 const webpackInstance      = webpack(webpackConfiguration)
 
 if (args.watch) {
-  const devServer = new webpackDevServer(webpackInstance)
+  const devServer = new webpackDevServer(
+    webpackInstance,
+    createConfig(webpackConfiguration, {
+      ...args,
+
+      // Set some defaults so we don't have to constantly pass them via CLI
+      hot      : true,
+      info     : true,
+      progress : true,
+    }, { port: defaultPort }),
+  )
 
   devServer.listen(webpackConfiguration.devServer.port as number, (err) => {
     if (err) {

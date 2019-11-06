@@ -60,7 +60,16 @@ export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: pr
  */
 export function getIfUtilsInstance(): IfUtils {
   if (!ifUtilsInstance) {
-    ifUtilsInstance = getIfUtils(environment)
+    ifUtilsInstance = getIfUtils(environment, [
+      'production',
+      'prod',
+      'test',
+      'development',
+      'dev',
+      'analyzer',
+      'maven',
+      'clean',
+    ])
   }
 
   return ifUtilsInstance
