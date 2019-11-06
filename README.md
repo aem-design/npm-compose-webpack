@@ -89,8 +89,6 @@ yarn build
 NPM will automagically reference the binary in `node_modules` for you, and execute the file or command.
 
 ## Options
-<div class="options">
-
 | Argument | Type | Default |
 | ---      | ---  | --- |
 | **--analyzer**<br>_Enable the Bundle Analyzer plugin?_ | `Boolean` | `false` |
@@ -103,20 +101,6 @@ NPM will automagically reference the binary in `node_modules` for you, and execu
 | **--watch**<br>_Use webpack-dev-server to proxy AEM and serve changes in real-time_ | `Boolean` | `false` |
 | **--help** _or_ **-h**<br>_Show help for the command line options_ |
 | **--version** _or_ **-v**<br>_Show the version of `aemdesign-compose`_ |
-
-</div>
-
-<style>
-  .options th:first-of-type {
-    max-width: 400px;
-  }
-  .options th:nth-of-type(2) {
-    min-width: 80px;
-  }
-  .options th:nth-of-type(3) {
-    min-width: 140px;
-  }
-</style>
 
 **NOTE:** _As we use yargs for argument parsing, you can use `--no-<argument>` for booleans to inverse them._
 
