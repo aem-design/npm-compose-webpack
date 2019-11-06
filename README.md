@@ -91,16 +91,16 @@ NPM will automagically reference the binary in `node_modules` for you, and execu
 ## Options
 | Argument | Type | Default |
 | ---      | ---  | --- |
-| **--analyzer**<br><small>_Enable the Bundle Analyzer plugin?_</small> | `Boolean` | `false` |
-| **--clean**<br><small>_Should the public directory for the specified project be cleaned?_</small> | `Boolean` | `true` |
-| **--config** _&lt;file name&gt;_<br><small>_Compose configuration file name. You only need to pass a string as the module will resolve it using `process.cwd()`_</small> | `String` | `compose.config.js` |
-| **--dev** _or_ **-d**<br><small>_Set the build mode to development_</small> | `Boolean` | `false` |
-| **--maven**<br><small>_Was the task started from within Maven?_</small> | `Boolean` | `false` |
-| **--prod** _or_ **-p**<br><small>_Set the build mode to production_</small> | `Boolean` | `false` |
-| **--project** _&lt;name&gt;_ _(required)_<br><small>_Name of the project to build_</small> | `String` |
-| **--watch**<br><small>_Use webpack-dev-server to proxy AEM and serve changes in real-time_</small> | `Boolean` | `false` |
-| **--help** _or_ **-h**<br><small>_Show help for the command line options_</small> |
-| **--version** _or_ **-v**<br><small>_Show the version of `aemdesign-compose`_</small> |
+| **--analyzer**<br><sub>_Enable the Bundle Analyzer plugin?_</sub> | `Boolean` | `false` |
+| **--clean**<br><sub>_Should the public directory for the specified project be cleaned?_</sub> | `Boolean` | `true` |
+| **--config** _&lt;file name&gt;_<br><sub>_Compose configuration file name. You only need to pass a string as the module will resolve it using `process.cwd()`_</sub> | `String` | `compose.config.js` |
+| **--dev** _or_ **-d**<br><sub>_Set the build mode to development_</sub> | `Boolean` | `false` |
+| **--maven**<br><sub>_Was the task started from within Maven?_</sub> | `Boolean` | `false` |
+| **--prod** _or_ **-p**<br><sub>_Set the build mode to production_</sub> | `Boolean` | `false` |
+| **--project** _&lt;name&gt;_ _(required)_<br><sub>_Name of the project to build_</sub> | `String` |
+| **--watch**<br><sub>_Use webpack-dev-server to proxy AEM and serve changes in real-time_</sub> | `Boolean` | `false` |
+| **--help** _or_ **-h**<br><sub>_Show help for the command line options_</sub> |
+| **--version** _or_ **-v**<br><sub>_Show the version of `aemdesign-compose`_</sub> |
 
 **NOTE:** _As we use yargs for argument parsing, you can use `--no-<argument>` for booleans to inverse them._
 
