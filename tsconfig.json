@@ -27,6 +27,7 @@
   },
 
   "exclude": [
+    "configs",
     "dist",
     "node_modules",
     "**/*.test.ts"

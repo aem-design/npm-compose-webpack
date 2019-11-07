@@ -1,4 +1,4 @@
-# Contributor Covenant Code of Conduct
+# AEM.Design Code of Conduct
 
 ## Our Pledge
 

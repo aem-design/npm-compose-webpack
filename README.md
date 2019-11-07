@@ -195,11 +195,10 @@ OOTB we provide support for IE11 and all modern browsers (latest 2 releases). Co
 - [ ] Opt-in for Vue.js
 
 ## Contributing
-A contribution guide will be coming soon, we won't bite if you open a PR.
+Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
 
 ## License
-
-#### [Apache-2.0](./LICENSE)
+[Apache-2.0](./LICENSE)
 
 [build]: https://github.com/aem-design/npm-compose-webpack/workflows/Build/badge.svg
 [build-url]: https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build
@@ -223,7 +222,7 @@ A contribution guide will be coming soon, we won't bite if you open a PR.
 [repo-size-url]: https://github.com/aem-design/npm-compose-webpack
 
 [last-commit]: https://img.shields.io/github/last-commit/aem-design/npm-compose-webpack
-[last-commit-url]: https://github.com/aem-design/npm-compose-webpack
+[last-commit-url]: https://github.com/aem-design/npm-compose-webpack/commits
 
 [downloads]: https://img.shields.io/npm/dm/@aem-design/compose-webpack.svg
 
