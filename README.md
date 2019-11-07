@@ -5,25 +5,9 @@
 <br>
 <br>
 
-[build]: https://github.com/aem-design/npm-compose-webpack/workflows/Build/badge.svg
-[build-url]: https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build
-[npm]: https://img.shields.io/npm/v/@aem-design/compose-webpack.svg
-[npm-url]: https://npmjs.com/package/@aem-design/compose-webpack
-[node]: https://img.shields.io/node/v/@aem-design/compose-webpack.svg
-[node-url]: https://nodejs.org
-[deps]: https://david-dm.org/aem-design/npm-compose-webpack.svg
-[deps-url]: https://david-dm.org/aem-design/npm-compose-webpack
-[deps-dev]: https://david-dm.org/aem-design/npm-compose-webpack/dev-status.svg
-[deps-dev-url]: https://david-dm.org/aem-design/npm-compose-webpack?type=dev
-[repo-size]: https://img.shields.io/github/repo-size/aem-design/npm-compose-webpack
-[repo-size-url]: https://github.com/aem-design/npm-compose-webpack
-[last-commit]: https://img.shields.io/github/last-commit/aem-design/npm-compose-webpack
-[last-commit-url]: https://github.com/aem-design/npm-compose-webpack
-[downloads]: https://img.shields.io/npm/dm/@aem-design/compose-webpack.svg
-[contributors]: https://img.shields.io/github/contributors/aem-design/npm-compose-webpack.svg
-[contributors-url]: https://github.com/aem-design/npm-compose-webpack/graphs/contributors
 
 [![build][build]][build-url]
+[![travis ci][travis]][travis-url]
 [![npm][npm]][npm-url]
 [![node][node]][node-url]
 [![deps][deps]][deps-url]
@@ -216,3 +200,32 @@ A contribution guide will be coming soon, we won't bite if you open a PR.
 ## License
 
 #### [Apache-2.0](./LICENSE)
+
+[build]: https://github.com/aem-design/npm-compose-webpack/workflows/Build/badge.svg
+[build-url]: https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build
+
+[travis]: https://travis-ci.com/aem-design/npm-compose-webpack.svg?branch=develop
+[travis-url]: https://travis-ci.com/aem-design/npm-compose-webpack
+
+[npm]: https://img.shields.io/npm/v/@aem-design/compose-webpack.svg
+[npm-url]: https://npmjs.com/package/@aem-design/compose-webpack
+
+[node]: https://img.shields.io/node/v/@aem-design/compose-webpack.svg
+[node-url]: https://nodejs.org
+
+[deps]: https://david-dm.org/aem-design/npm-compose-webpack.svg
+[deps-url]: https://david-dm.org/aem-design/npm-compose-webpack
+
+[deps-dev]: https://david-dm.org/aem-design/npm-compose-webpack/dev-status.svg
+[deps-dev-url]: https://david-dm.org/aem-design/npm-compose-webpack?type=dev
+
+[repo-size]: https://img.shields.io/github/repo-size/aem-design/npm-compose-webpack
+[repo-size-url]: https://github.com/aem-design/npm-compose-webpack
+
+[last-commit]: https://img.shields.io/github/last-commit/aem-design/npm-compose-webpack
+[last-commit-url]: https://github.com/aem-design/npm-compose-webpack
+
+[downloads]: https://img.shields.io/npm/dm/@aem-design/compose-webpack.svg
+
+[contributors]: https://img.shields.io/github/contributors/aem-design/npm-compose-webpack.svg
+[contributors-url]: https://github.com/aem-design/npm-compose-webpack/graphs/contributors
