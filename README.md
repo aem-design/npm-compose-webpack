@@ -2,7 +2,6 @@
 
   ![logo](logo.png?raw=true)
 
-</div>
 <br>
 <br>
 
@@ -39,6 +38,8 @@
 Webpack configuration module to help bootstrap and get AEM projects running fast and efficiently.
 
 Our solution is different from the rest simply because we don't using syncing, we don't require clunky solutions such as VLT, and we don't ask that FED's use technology stacks beyond what they know. Simple is best and that is what we give via Webpack & Webpack Dev Server.
+
+</div>
 
 ## Table of Contents
 - [Getting Started](#getting-started)
