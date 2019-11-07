@@ -198,8 +198,8 @@ Following the zero-config approach we are going for there are a number of things
 * Vue.js
 
 ### Experimental features
-* Nullish coalescing
-* `async` & `await`
+* Nullish coalescing ([v8.dev](https://v8.dev/features/nullish-coalescing))
+* `async` & `await` ([javascript.info](https://javascript.info/async-await))
 
 ## Browser Support
 OOTB we provide support for IE11 and all modern browsers (latest 2 releases). Code will be compiled down to ES5 with support for browsers futher back but compatibility may vary for you.
