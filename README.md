@@ -1,4 +1,10 @@
-# AEM.Design Compose Webpack
+<div align="center">
+
+  ![logo](logo.png?raw=true)
+
+</div>
+<br>
+<br>
 
 [build]: https://github.com/aem-design/npm-compose-webpack/workflows/Build/badge.svg
 [build-url]: https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build
@@ -28,19 +34,25 @@
 [![downloads][downloads]][npm-url]
 [![contributors][contributors]][contributors-url]
 
+# @aem-design/compose-webpack
+
 Webpack configuration module to help bootstrap and get AEM projects running fast and efficiently.
+
+Our solution is different from the rest simply because we don't using syncing, we don't require clunky solutions such as VLT, and we don't ask that FED's use technology stacks beyond what they know. Simple is best and that is what we give via Webpack & Webpack Dev Server.
 
 ## Table of Contents
 - [Getting Started](#getting-started)
 - [Usage](#usage)
   - [With the CLI](#with-the-cli)
   - [With NPM Scripts](#with-npm-scripts)
-- [Options](#support)
+- [Options](#options)
 - [Configuration](#configuration)
   - [Babel](#babel)
   - [TypeScript](#typescript)
 - [Features](#features)
+  - [Experimental features](#experimental-features)
 - [Browser Support](#browser-support)
+- [Todo](#todo)
 - [Contributing](#contributing)
 - [License](#license)
 
