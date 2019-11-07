@@ -13,11 +13,21 @@
     "types/*.d.ts"
   ],
   "keywords": [
+    "aem design",
     "aem",
     "design",
     "webpack",
     "compose",
-    "node"
+    "node",
+    "adobe",
+    "webpack-dev-server",
+    "front end",
+    "front-end",
+    "frontend",
+    "live reload",
+    "watch",
+    "typescript",
+    "vue"
   ],
   "license": "Apache-2.0",
   "main": "dist/index.js",
