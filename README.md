@@ -1,6 +1,6 @@
 <div align="center">
 
-  ![logo](logo.png?raw=true)
+  <img src="./logo.png?raw=true" width="600">
 
 <br>
 <br>
@@ -46,7 +46,7 @@ Our solution is different from the rest simply because we don't using syncing, w
 - [Usage](#usage)
   - [With the CLI](#with-the-cli)
   - [With NPM Scripts](#with-npm-scripts)
-- [Options](#options)
+- [CLI Options](#cli-options)
 - [Configuration](#configuration)
   - [Babel](#babel)
   - [TypeScript](#typescript)
@@ -105,7 +105,7 @@ yarn build
 
 NPM will automagically reference the binary in `node_modules` for you, and execute the file or command.
 
-## Options
+## CLI Options
 | Argument        | Type           | Default        |
 |:----------------|----------------|----------------|
 | **--analyzer**<br><sub>_Enable the Bundle Analyzer plugin?_</sub> | `Boolean` | `false` |
