@@ -1,0 +1,24 @@
+language: node_js
+
+branches:
+  except:
+    - master
+    - /^v[0-9]/
+
+os:
+  - osx
+  - linux
+
+node_js:
+  - 10
+  - 11
+
+script:
+  - yarn lint
+  - yarn build
+  - npm pack --dry-run
+
+cache:
+  directories:
+    - 'node_modules'
+  yarn: true
