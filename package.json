@@ -123,7 +123,6 @@
     "tslint": "^5.20.1",
     "vue": "^2.6.10",
     "vue-loader": "^15.7.2",
-    "vue-property-decorator": "^8.3.0",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.41.2",
