@@ -5,7 +5,6 @@
 <br>
 <br>
 
-
 [![build][build]][build-url]
 [![travis ci][travis]][travis-url]
 [![npm][npm]][npm-url]
@@ -21,11 +20,10 @@
 
 Webpack configuration module to help bootstrap and get AEM projects running fast and efficiently.
 
-Our solution is different from the rest simply because we don't using syncing, we don't require clunky solutions such as VLT, and we don't ask that FED's use technology stacks beyond what they know. Simple is best and that is what we give via Webpack & Webpack Dev Server.
-
 </div>
 
 ## Table of Contents
+- [Background](#background)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
   - [With the CLI](#with-the-cli)
@@ -40,6 +38,13 @@ Our solution is different from the rest simply because we don't using syncing, w
 - [Todo](#todo)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Background
+Implementing UI behaviour and functionality has been done successfully for a long time now but there is no one solution for AEM. We have taken the time over the past years to find ways of improving our day-to-day workflows. Trying several approaches, we eventually came to the conclusion that other "live reload" solutions didn't fit our needs.
+
+AEM.Design Compose was born with warmth and ❤️.
+
+Our solution is different from the rest simply because we don't using syncing, we don't require clunky solutions such as VLT, and we don't ask that FED's use technology stacks beyond what they know. Simple is best and that is what we give via Webpack & Webpack Dev Server.
 
 ## Getting Started
 First things first, install the module:
