@@ -9,8 +9,10 @@
     "aemdesign-compose": "dist/bin/cli-service.js"
   },
   "files": [
+    "configs/",
     "dist/",
-    "types/*.d.ts"
+    "types/*.d.ts",
+    ".browserlistrc"
   ],
   "keywords": [
     "aem design",
