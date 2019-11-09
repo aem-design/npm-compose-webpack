@@ -5,25 +5,8 @@
 <br>
 <br>
 
-[build]: https://github.com/aem-design/npm-compose-webpack/workflows/Build/badge.svg
-[build-url]: https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build
-[npm]: https://img.shields.io/npm/v/@aem-design/compose-webpack.svg
-[npm-url]: https://npmjs.com/package/@aem-design/compose-webpack
-[node]: https://img.shields.io/node/v/@aem-design/compose-webpack.svg
-[node-url]: https://nodejs.org
-[deps]: https://david-dm.org/aem-design/npm-compose-webpack.svg
-[deps-url]: https://david-dm.org/aem-design/npm-compose-webpack
-[deps-dev]: https://david-dm.org/aem-design/npm-compose-webpack/dev-status.svg
-[deps-dev-url]: https://david-dm.org/aem-design/npm-compose-webpack?type=dev
-[repo-size]: https://img.shields.io/github/repo-size/aem-design/npm-compose-webpack
-[repo-size-url]: https://github.com/aem-design/npm-compose-webpack
-[last-commit]: https://img.shields.io/github/last-commit/aem-design/npm-compose-webpack
-[last-commit-url]: https://github.com/aem-design/npm-compose-webpack
-[downloads]: https://img.shields.io/npm/dm/@aem-design/compose-webpack.svg
-[contributors]: https://img.shields.io/github/contributors/aem-design/npm-compose-webpack.svg
-[contributors-url]: https://github.com/aem-design/npm-compose-webpack/graphs/contributors
-
 [![build][build]][build-url]
+[![travis ci][travis]][travis-url]
 [![npm][npm]][npm-url]
 [![node][node]][node-url]
 [![deps][deps]][deps-url]
@@ -37,11 +20,11 @@
 
 Webpack configuration module to help bootstrap and get AEM projects running fast and efficiently.
 
-Our solution is different from the rest simply because we don't using syncing, we don't require clunky solutions such as VLT, and we don't ask that FED's use technology stacks beyond what they know. Simple is best and that is what we give via Webpack & Webpack Dev Server.
-
 </div>
 
 ## Table of Contents
+- [Background](#background)
+- [Requirements](#requirements)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
   - [With the CLI](#with-the-cli)
@@ -50,12 +33,28 @@ Our solution is different from the rest simply because we don't using syncing, w
 - [Configuration](#configuration)
   - [Babel](#babel)
   - [TypeScript](#typescript)
+  - [Projects](#projects)
 - [Features](#features)
   - [Experimental features](#experimental-features)
 - [Browser Support](#browser-support)
 - [Todo](#todo)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Background
+Implementing UI behaviour and functionality has been done successfully for a long time now but there is no one solution for AEM. We have taken the time over the past years to find ways of improving our day-to-day workflows. Trying several approaches, we eventually came to the conclusion that other "live reload" solutions didn't fit our needs.
+
+AEM.Design Compose was born with warmth and ❤️.
+
+Our solution is different from the rest simply because we don't using syncing, we don't require clunky solutions such as VLT, and we don't ask that FED's use technology stacks beyond what they know. Simple is best and that is what we give via Webpack & Webpack Dev Server.
+
+## Requirements
+- AEM 6.3+
+- Node.js 10+
+- Yarn _(NPM can be used but version stability isn't guaranteed)_
+
+### Optional
+- [aemdesign-aem-compose][aemdesign-compose-url] _(Recommended)_
 
 ## Getting Started
 First things first, install the module:
@@ -140,6 +139,18 @@ module.exports = {
 }
 ```
 
+### Projects
+The heart and soul of our module design is to base configuration on projects rather than Webpack itself. Through lots of prototyping we came up with a simple strucutre that enables you (an amazing FED) to quickly stub out structure without having to touch anything in the core Webpack setup. By default, we provide two projects:
+
+- **core**
+- **styleguide**
+
+There is a minor assumption made here that you are using the [aemdesign-aem-compose][aemdesign-compose-url] module which is what our default configuration is based on. It is strongly recommended you use this as a base for your project to remove any ambiguity. An update will be soon coming to `aemdesign-aem-compose` which a complete structure refresh and slimmed down core.
+
+To add custom projects, simply refer to the example configuration below.
+
+**NOTE:** _Custom projects override the defaults, please keep this in mind when setting them._
+
 ### Example of **compose.config.js**
 ```js
 const CopyWebpackPlugin = require('copy-webpack-plugin')
@@ -149,6 +160,20 @@ module.exports = {
     disable : false,         // Enable/disable the support banner
     font    : 'ANSI Shadow', // ASCII Font type
     text    : 'My Project',  // Text
+  },
+  
+  projects: {
+    projectName: {
+      outputName: 'myApp',
+
+      // Entry files are relative to the project source, you don't need to define them manually
+      entryFile: {
+        js   : 'myApp.ts',
+        sass : 'myApp.scss',
+      },
+
+      // fileMap, additionalEntries
+    },
   },
 
   webpack: {
@@ -198,21 +223,59 @@ Following the zero-config approach we are going for there are a number of things
 * Vue.js
 
 ### Experimental features
+* Optional chaining ([v8.dev](https://v8.dev/features/optional-chaining))
 * Nullish coalescing ([v8.dev](https://v8.dev/features/nullish-coalescing))
 * `async` & `await` ([javascript.info](https://javascript.info/async-await))
 
 ## Browser Support
-OOTB we provide support for IE11 and all modern browsers (latest 2 releases). Code will be compiled down to ES5 with support for browsers futher back but compatibility may vary for you.
+Code will be compiled down to ES5 with support for browsers futher back but compatibility may vary for you.
+
+![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![IE](https://raw.github.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) | ![Safari iOS](https://raw.github.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png) |
+--- | --- | --- | --- | --- | --- | --- |
+Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11+ ✔ | Latest ✔ |
+
+**NOTE:** _Be aware that IE11 support will be removed in the very near future._
 
 ## Todo
+- [ ] Create Wiki documentation
 - [ ] Add more configuration points
 - [ ] Allow the object returned in `compose.config.js` to be a function
 - [ ] Opt-in for TypeScript
 - [ ] Opt-in for Vue.js
 
 ## Contributing
-A contribution guide will be coming soon, we won't bite if you open a PR.
+Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
 
 ## License
+[Apache-2.0](./LICENSE)
 
-#### [Apache-2.0](./LICENSE)
+[aemdesign-compose-url]: https://github.com/aem-design/aemdesign-aem-support/tree/master/aemdesign-aem-compose
+
+[build]: https://github.com/aem-design/npm-compose-webpack/workflows/Build/badge.svg
+[build-url]: https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build
+
+[travis]: https://travis-ci.com/aem-design/npm-compose-webpack.svg?branch=develop
+[travis-url]: https://travis-ci.com/aem-design/npm-compose-webpack
+
+[npm]: https://img.shields.io/npm/v/@aem-design/compose-webpack.svg
+[npm-url]: https://npmjs.com/package/@aem-design/compose-webpack
+
+[node]: https://img.shields.io/node/v/@aem-design/compose-webpack.svg
+[node-url]: https://nodejs.org
+
+[deps]: https://david-dm.org/aem-design/npm-compose-webpack.svg
+[deps-url]: https://david-dm.org/aem-design/npm-compose-webpack
+
+[deps-dev]: https://david-dm.org/aem-design/npm-compose-webpack/dev-status.svg
+[deps-dev-url]: https://david-dm.org/aem-design/npm-compose-webpack?type=dev
+
+[repo-size]: https://img.shields.io/github/repo-size/aem-design/npm-compose-webpack
+[repo-size-url]: https://github.com/aem-design/npm-compose-webpack
+
+[last-commit]: https://img.shields.io/github/last-commit/aem-design/npm-compose-webpack
+[last-commit-url]: https://github.com/aem-design/npm-compose-webpack/commits
+
+[downloads]: https://img.shields.io/npm/dm/@aem-design/compose-webpack.svg
+
+[contributors]: https://img.shields.io/github/contributors/aem-design/npm-compose-webpack.svg
+[contributors-url]: https://github.com/aem-design/npm-compose-webpack/graphs/contributors

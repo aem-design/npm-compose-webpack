@@ -13,7 +13,7 @@ categories:
   - title: '🧰 Maintenance'
     label: 'chore'
   - title: 'Dependency Updates'
-    label: 'dependency update'
+    label: 'dependency'
 change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
 template: |
   ### Changes

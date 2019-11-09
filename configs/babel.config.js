@@ -11,8 +11,7 @@ module.exports = {
       },
     }],
 
-    '@babel/preset-typescript',
-    'vue',
+    '@babel/preset-typescript'
   ],
 
   plugins: [
