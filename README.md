@@ -32,6 +32,7 @@ Webpack configuration module to help bootstrap and get AEM projects running fast
 - [Configuration](#configuration)
   - [Babel](#babel)
   - [TypeScript](#typescript)
+  - [Projects](#projects)
 - [Features](#features)
   - [Experimental features](#experimental-features)
 - [Browser Support](#browser-support)
@@ -129,6 +130,18 @@ module.exports = {
 }
 ```
 
+### Projects
+The heart and soul of our module design is to base configuration on projects rather than Webpack itself. Through lots of prototyping we came up with a simple strucutre that enables you (an amazing FED) to quickly stub out structure without having to touch anything in the core Webpack setup. By default, we provide two projects:
+
+- **core**
+- **styleguide**
+
+There is a minor assumption made here that you are using the [aemdesign-aem-compose](https://github.com/aem-design/aemdesign-aem-support/tree/master/aemdesign-aem-compose) module which is what our default configuration is based on. It is strongly recommended you use this as a base for your project to remove any ambiguity. An update will be soon coming to `aemdesign-aem-compose` which a complete structure refresh and slimmed down core.
+
+To add custom projects, simply refer to the example configuration below.
+
+**NOTE:** _Custom projects override the defaults, please keep this in mind when setting them._
+
 ### Example of **compose.config.js**
 ```js
 const CopyWebpackPlugin = require('copy-webpack-plugin')
@@ -138,6 +151,20 @@ module.exports = {
     disable : false,         // Enable/disable the support banner
     font    : 'ANSI Shadow', // ASCII Font type
     text    : 'My Project',  // Text
+  },
+  
+  projects: {
+    projectName: {
+      outputName: 'myApp',
+
+      // Entry files are relative to the project source, you don't need to define them manually
+      entryFile: {
+        js   : 'myApp.ts',
+        sass : 'myApp.scss',
+      },
+
+      // fileMap, additionalEntries
+    },
   },
 
   webpack: {
@@ -194,6 +221,7 @@ Following the zero-config approach we are going for there are a number of things
 OOTB we provide support for IE11 and all modern browsers (latest 2 releases). Code will be compiled down to ES5 with support for browsers futher back but compatibility may vary for you.
 
 ## Todo
+- [ ] Create Wiki documentation
 - [ ] Add more configuration points
 - [ ] Allow the object returned in `compose.config.js` to be a function
 - [ ] Opt-in for TypeScript
