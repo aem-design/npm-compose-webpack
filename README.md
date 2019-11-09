@@ -234,7 +234,7 @@ Code will be compiled down to ES5 with support for browsers futher back but comp
 --- | --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11+ ✔ |
 
-**NOTE:** _Be aware that IE11 support will be removed in the very near future.
+**NOTE:** _Be aware that IE11 support will be removed in the very near future._
 
 ## Todo
 - [ ] Create Wiki documentation
