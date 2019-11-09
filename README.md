@@ -24,6 +24,7 @@ Webpack configuration module to help bootstrap and get AEM projects running fast
 
 ## Table of Contents
 - [Background](#background)
+- [Requirements](#requirements)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
   - [With the CLI](#with-the-cli)
@@ -46,6 +47,14 @@ Implementing UI behaviour and functionality has been done successfully for a lon
 AEM.Design Compose was born with warmth and ❤️.
 
 Our solution is different from the rest simply because we don't using syncing, we don't require clunky solutions such as VLT, and we don't ask that FED's use technology stacks beyond what they know. Simple is best and that is what we give via Webpack & Webpack Dev Server.
+
+## Requirements
+- AEM 6.3+
+- Node.js 10+
+- Yarn _(NPM can be used but version stability isn't guaranteed)_
+
+### Optional
+- [aemdesign-aem-compose][aemdesign-compose-url] _(Recommended)_
 
 ## Getting Started
 First things first, install the module:
@@ -136,7 +145,7 @@ The heart and soul of our module design is to base configuration on projects rat
 - **core**
 - **styleguide**
 
-There is a minor assumption made here that you are using the [aemdesign-aem-compose](https://github.com/aem-design/aemdesign-aem-support/tree/master/aemdesign-aem-compose) module which is what our default configuration is based on. It is strongly recommended you use this as a base for your project to remove any ambiguity. An update will be soon coming to `aemdesign-aem-compose` which a complete structure refresh and slimmed down core.
+There is a minor assumption made here that you are using the [aemdesign-aem-compose][aemdesign-compose-url] module which is what our default configuration is based on. It is strongly recommended you use this as a base for your project to remove any ambiguity. An update will be soon coming to `aemdesign-aem-compose` which a complete structure refresh and slimmed down core.
 
 To add custom projects, simply refer to the example configuration below.
 
@@ -232,6 +241,8 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 ## License
 [Apache-2.0](./LICENSE)
+
+[aemdesign-compose-url]: https://github.com/aem-design/aemdesign-aem-support/tree/master/aemdesign-aem-compose
 
 [build]: https://github.com/aem-design/npm-compose-webpack/workflows/Build/badge.svg
 [build-url]: https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build
