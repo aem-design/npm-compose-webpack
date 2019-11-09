@@ -223,6 +223,7 @@ Following the zero-config approach we are going for there are a number of things
 * Vue.js
 
 ### Experimental features
+* Optional chaining ([v8.dev](https://v8.dev/features/optional-chaining))
 * Nullish coalescing ([v8.dev](https://v8.dev/features/nullish-coalescing))
 * `async` & `await` ([javascript.info](https://javascript.info/async-await))
 
