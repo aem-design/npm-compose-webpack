@@ -11,6 +11,7 @@
 [![node][node]][node-url]
 [![deps][deps]][deps-url]
 [![deps dev][deps-dev]][deps-dev-url]
+[![dependabot status][dependabot]][dependabot-url]
 [![repo size][repo-size]][repo-size-url]
 [![last commit][last-commit]][last-commit-url]
 [![downloads][downloads]][npm-url]
@@ -268,6 +269,9 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 [deps-dev]: https://david-dm.org/aem-design/npm-compose-webpack/dev-status.svg
 [deps-dev-url]: https://david-dm.org/aem-design/npm-compose-webpack?type=dev
+
+[dependabot]: https://api.dependabot.com/badges/status?host=github&repo=aem-design/npm-compose-webpack
+[dependabot-url]: https://dependabot.com
 
 [repo-size]: https://img.shields.io/github/repo-size/aem-design/npm-compose-webpack
 [repo-size-url]: https://github.com/aem-design/npm-compose-webpack
