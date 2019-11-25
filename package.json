@@ -133,7 +133,7 @@
     "webpack-dev-server": "^3.9.0",
     "webpack-format-messages": "^2.0.5",
     "xml2js": "^0.4.22",
-    "yargs": "^14.2.0"
+    "yargs": "^15.0.2"
   },
   "devDependencies": {
     "@types/yargs": "^13.0.3",
