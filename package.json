@@ -62,7 +62,7 @@
       "pre-commit": "npm run lint"
     }
   },
-  "version": "1.4.2",
+  "version": "1.5.0",
   "dependencies": {
     "@aem-design/compose-support": "1.1.0",
     "@babel/core": "^7.8.3",
