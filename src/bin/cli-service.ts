@@ -5,6 +5,7 @@ import webpack from 'webpack'
 import webpackDevServer from 'webpack-dev-server'
 import createConfig from 'webpack-dev-server/lib/utils/createConfig'
 import defaultPort from 'webpack-dev-server/lib/utils/defaultPort'
+import wds from 'webpack-dev-server/node_modules/@types/webpack'
 import yargs from 'yargs'
 
 import { logger } from '@aem-design/compose-support'
@@ -84,7 +85,8 @@ const webpackInstance      = webpack(webpackConfiguration)
 
 if (args.watch) {
   const devServer = new webpackDevServer(
-    webpackInstance,
+    // TODO: Raise issue with webpack team so types are only resolved from a single package
+    webpackInstance as unknown as wds.Compiler,
     createConfig(webpackConfiguration, {
       ...args,
 

@@ -43,7 +43,7 @@ export default (): webpack.Plugin[] => {
      */
     getIfUtilsInstance().ifClean(new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [resolve(publicPath, '**/*')],
-    })),
+    }) as unknown as webpack.Plugin),
 
     /**
      * Copies static assets from our source folder into the public structure for AEM.
@@ -61,7 +61,7 @@ export default (): webpack.Plugin[] => {
         from    : './*.css',
         to      : resolve(publicPath, 'clientlibs-header/css'),
       },
-    ]),
+    ]) as unknown as webpack.Plugin,
 
     /**
      * CSS extraction.
@@ -72,7 +72,7 @@ export default (): webpack.Plugin[] => {
     new MiniCssExtractPlugin({
       chunkFilename : `${clientLibsPath || ''}clientlibs-header/css/[id].css`,
       filename      : `${clientLibsPath || ''}clientlibs-header/css/[name].css`,
-    }),
+    }) as unknown as webpack.Plugin,
 
     /**
      * Validate our Sass code using Stylelint to ensure we are following our own good practices.
@@ -85,7 +85,7 @@ export default (): webpack.Plugin[] => {
       failOnError : false,
       files       : ['**/*.scss'],
       quiet       : false,
-    })),
+    }) as unknown as webpack.Plugin),
 
     /**
      * Ensure all chunks that are generated have a unique ID assigned to them instead of pseudo-random
@@ -106,7 +106,7 @@ export default (): webpack.Plugin[] => {
     new LodashPlugin({
       collections : true,
       shorthands  : true,
-    }),
+    }) as unknown as webpack.Plugin,
 
     /**
      * Vue compilation configuration.
@@ -116,7 +116,7 @@ export default (): webpack.Plugin[] => {
     new VueLoaderPlugin(),
 
     /**
-     * Expose´ for 3rd-party vendors & libraries.
+     * Exposè for 3rd-party vendors & libraries.
      *
      * @see https://webpack.js.org/plugins/provide-plugin
      * @see https://github.com/shakacode/bootstrap-loader#bootstrap-4-internal-dependency-solution
@@ -154,7 +154,7 @@ export default (): webpack.Plugin[] => {
      */
     getIfUtilsInstance().ifAnalyzer(new BundleAnalyzerPlugin({
       openAnalyzer: false,
-    })),
+    }) as unknown as webpack.Plugin),
 
     /**
      * @see https://webpack.js.org/plugins/loader-options-plugin
