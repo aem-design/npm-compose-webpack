@@ -5,7 +5,6 @@ import { removeEmpty } from 'webpack-config-utils'
 
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
-import ImageminPlugin from 'imagemin-webpack-plugin'
 import LodashPlugin from 'lodash-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
@@ -86,15 +85,6 @@ export default (): webpack.Plugin[] => {
       failOnError : false,
       files       : ['**/*.scss'],
       quiet       : false,
-    })),
-
-    /**
-     * Compress any static assets in our build.
-     *
-     * @see https://www.npmjs.com/package/imagemin-webpack-plugin
-     */
-    getIfUtilsInstance().ifProd(new ImageminPlugin({
-      test: /\.(jpe?g|png|gif|svg)$/i,
     })),
 
     /**

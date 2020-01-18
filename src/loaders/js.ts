@@ -4,7 +4,7 @@ import webpack from 'webpack'
 const nodeModulesChildPath   = resolve(process.cwd(), 'node_modules')
 const nodeModulesCurrentPath = resolve(__dirname, '../../', 'node_modules')
 
-export default (env: webpack.ParserOptions, options: {
+export default (options: {
   configFile?: string;
 } = {}): webpack.RuleSetRule[] => ([
   {

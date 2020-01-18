@@ -1,3 +1,8 @@
+const corejs = {
+  proposals : true,
+  version   : 3,
+}
+
 module.exports = {
   presets: [
     ['@babel/preset-env', {
@@ -5,23 +10,22 @@ module.exports = {
       modules     : false,
       useBuiltIns : 'entry',
 
-      corejs: {
-        proposals : true,
-        version   : 3,
-      },
+      corejs,
     }],
 
     '@babel/preset-typescript'
   ],
 
   plugins: [
-    '@babel/plugin-transform-runtime',
+    ['@babel/transform-runtime', {
+      corejs,
+    }],
     '@babel/proposal-class-properties',
     '@babel/proposal-object-rest-spread',
     '@babel/proposal-nullish-coalescing-operator',
-    '@babel/plugin-syntax-dynamic-import',
+    '@babel/syntax-dynamic-import',
 
-    ['@babel/plugin-transform-regenerator', {
+    ['@babel/transform-regenerator', {
       'async'           : true,
       'asyncGenerators' : false,
       'generators'      : false,

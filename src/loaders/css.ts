@@ -2,7 +2,7 @@ import { resolve } from 'path'
 import sass from 'sass'
 import webpack from 'webpack'
 
-export default (env: webpack.ParserOptions, options: {
+export default (environment: webpack.ParserOptions, options: {
   sassLoader?: { [key: string]: any };
   sassOptions?: sass.Options;
 } = {}): webpack.RuleSetUseItem[] => ([
@@ -11,7 +11,7 @@ export default (env: webpack.ParserOptions, options: {
 
     options: {
       importLoaders : 1,
-      sourceMap     : env.dev === true,
+      sourceMap     : environment.dev === true,
     },
   },
   {
@@ -19,13 +19,13 @@ export default (env: webpack.ParserOptions, options: {
 
     options: {
       ident     : 'postcss',
-      sourceMap : env.dev === true,
+      sourceMap : environment.dev === true,
 
       config: {
         path: resolve(process.cwd(), 'postcss.config.js'),
 
         ctx: {
-          prod: env.prod === true,
+          prod: environment.prod === true,
         },
       },
     },
@@ -35,10 +35,10 @@ export default (env: webpack.ParserOptions, options: {
 
     options: {
       implementation : require('sass'),
-      sourceMap      : env.dev === true,
+      sourceMap      : environment.dev === true,
 
       sassOptions: {
-        outputStyle : env.dev === true ? 'expanded' : 'compressed',
+        outputStyle : environment.dev === true ? 'expanded' : 'compressed',
         precision   : 5,
         ...(options.sassOptions || {}),
       },

@@ -174,7 +174,7 @@ export default (configuration: Types.WebpackConfiguration = {}) => {
                   sourceMap : true,
                 },
               },
-              ...loaders.css(webpackEnv, {
+              ...loaders.css({
                 sassOptions: {
                   data         : `@import 'setup';`,
                   includePaths : [resolve(projectPathSource, 'scss')],
@@ -222,7 +222,9 @@ export default (configuration: Types.WebpackConfiguration = {}) => {
               },
             ],
           },
-          ...loaders.js(webpackEnv),
+
+          // Default JS loaders
+          ...loaders.js(),
 
           // Any additional rules that the child projects needs
           ..._get(configuration, 'webpack.rules', []),
@@ -311,7 +313,7 @@ export default (configuration: Types.WebpackConfiguration = {}) => {
         extensions: ['.ts', '.tsx', '.js'],
 
         // Resolve modules from the child project too so we don't get errors complaining about missing
-        // dependencies which aren't anything to do with our CLI script.
+        // dependencies which aren't anything to do with our script.
         modules: [
           relative(__dirname, resolve(process.cwd(), 'node_modules')),
           'node_modules',
