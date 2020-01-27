@@ -124,7 +124,7 @@
     "ts-loader": "^6.2.1",
     "tsconfig-paths": "^3.9.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "tslint": "^5.20.1",
+    "tslint": "^6.0.0",
     "vue": "^2.6.11",
     "vue-loader": "^15.8.3",
     "vue-style-loader": "^4.1.2",
