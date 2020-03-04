@@ -218,6 +218,7 @@ module.exports = {
 Following the zero-config approach we are going for there are a number of things OOTB we do to help the situation that is browser support and modern features.
 
 * Babel 7 (with dynamic imports)
+* CSS Modules
 * ES6 support
 * TypeScript
 * ESLint/Stylelint/TSLint

@@ -47,10 +47,7 @@ export interface Project {
     [entry: string]: string[];
   };
 
-  entryFile: {
-    js: string;
-    sass: string;
-  };
+  entryFile: string;
 
   fileMap?: {
     [key: string]: string[];

@@ -2,17 +2,13 @@ import { ProjectMap } from './types'
 
 export const defaultProjects: ProjectMap = {
   core: {
+    entryFile: 'app.ts',
     outputName: 'app',
 
     fileMap: {
       header: [
         '../../clientlibs-header/js/vendorlib/common',
       ],
-    },
-
-    entryFile: {
-      js   : 'app.ts',
-      sass : 'app.scss',
     },
 
     additionalEntries: {
@@ -29,11 +25,7 @@ export const defaultProjects: ProjectMap = {
   },
 
   styleguide: {
+    entryFile: 'styleguide.ts',
     outputName: 'styleguide',
-
-    entryFile: {
-      js   : 'styleguide.ts',
-      sass : 'styleguide.scss',
-    },
   },
 }

@@ -40,8 +40,7 @@ function getHMRConfiguration(project: Project): webpack.Entry {
 
   return {
     'clientlibs-footer': [
-      `./${environment.project}/js/${project.entryFile.js}`,
-      `./${environment.project}/scss/${project.entryFile.sass}`,
+      `./${environment.project}/js/${project.entryFile}`,
       ...mappedEntries.footer,
     ],
 
@@ -60,10 +59,7 @@ export default (flagHMR: boolean): webpack.Entry => {
   }
 
   return {
-    [project.outputName]: [
-      `./${environment.project}/js/${project.entryFile.js}`,
-      `./${environment.project}/scss/${project.entryFile.sass}`,
-    ],
+    [project.outputName]: `./${environment.project}/js/${project.entryFile}`,
 
     ...project.additionalEntries,
   }
