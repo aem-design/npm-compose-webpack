@@ -55,7 +55,7 @@
     "build.types": "tsc --emitDeclarationOnly --declaration true --declarationDir dist/types",
     "clean": "rm -rf dist",
     "lint": "eslint '**/*.ts'",
-    "postbuild": "chmod +x dist/commonjs/bin/cli-service.js",
+    "postbuild": "chmod +x dist/commonjs/bin/cli-service.js dist/module/bin/cli-service.js",
     "postversion": "npm run test && git push && git push --tags",
     "prepack": "npm run build",
     "watch": "tsc --watch"
