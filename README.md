@@ -166,13 +166,8 @@ module.exports = {
   
   projects: {
     projectName: {
+      entryFile: 'myApp.ts',
       outputName: 'myApp',
-
-      // Entry files are relative to the project source, you don't need to define them manually
-      entryFile: {
-        js   : 'myApp.ts',
-        sass : 'myApp.scss',
-      },
 
       // fileMap, additionalEntries
     },
