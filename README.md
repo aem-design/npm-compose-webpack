@@ -62,9 +62,7 @@ First things first, install the module:
 
 ```bash
 npm install @aem-design/compose-webpack --save-dev
-
 # or with Yarn
-
 yarn add @aem-design/compose-webpack -D
 ```
 
@@ -89,9 +87,12 @@ Convenience is a nice thing though and NPM scripts provide a much cleaner and ea
 
 ```json
 "scripts": {
-  "build": "aemdesign-compose"
+  "build": "aemdesign-compose",
+  "build.modern": "aemdesign-compose-modern"
 }
 ```
+
+**NOTE:** `aemdesign-compose-modern` refers to an ES2015 module, please ensure you are able to execute these modules before using it.
 
 And run the following in your terminal/console:
 
@@ -238,6 +239,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11+ ✔ | Lates
 **NOTE:** _Be aware that IE11 support will be removed in the very near future._
 
 ## Todo
+- [ ] Generate first-class typings for `compose.config.js`
 - [ ] Create Wiki documentation
 - [ ] Add more configuration points
 - [ ] Allow the object returned in `compose.config.js` to be a function

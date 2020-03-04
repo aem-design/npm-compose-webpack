@@ -6,7 +6,8 @@
     "yarn": ">= 1.10.x"
   },
   "bin": {
-    "aemdesign-compose": "dist/bin/cli-service.js"
+    "aemdesign-compose": "dist/commonjs/bin/cli-service.js",
+    "aemdesign-compose-modern": "dist/module/bin/cli-service.js"
   },
   "files": [
     "configs/",
@@ -48,13 +49,13 @@
     "access": "public"
   },
   "scripts": {
-    "build": "npm run clean npm run build.module && npm run build.commonjs && npm run build.types",
+    "build": "npm run clean && npm run build.module && npm run build.commonjs && npm run build.types",
     "build.module": "tsc --module es2015 --outDir dist/module --declaration false",
     "build.commonjs": "tsc --module commonjs --outDir dist/commonjs --declaration false",
     "build.types": "tsc --emitDeclarationOnly --declaration true --declarationDir dist/types",
     "clean": "rm -rf dist",
     "lint": "eslint '**/*.ts'",
-    "postbuild": "chmod +x dist/bin/cli-service.js",
+    "postbuild": "chmod +x dist/commonjs/bin/cli-service.js",
     "postversion": "npm run test && git push && git push --tags",
     "prepack": "npm run build",
     "watch": "tsc --watch"

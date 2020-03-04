@@ -12,7 +12,7 @@ import { logger } from '@aem-design/compose-support'
 
 import Compose from '../index'
 
-import * as Types from '../../types/index'
+import { WebpackConfiguration } from '../types'
 
 const args = yargs
   .alias('h', 'help')
@@ -68,7 +68,7 @@ const args = yargs
 /**
  * Is there a custom configuration file we can use?
  */
-let composeConfiguration: Types.WebpackConfiguration = {}
+let composeConfiguration: WebpackConfiguration = {}
 
 try {
   // tslint:disable-next-line

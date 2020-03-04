@@ -3,7 +3,13 @@ import webpack from 'webpack'
 
 import { logger } from '@aem-design/compose-support'
 
-import * as Types from '../types/index'
+import {
+  Configuration,
+  Environment,
+  MavenConfigMap,
+  Project,
+  ProjectMap,
+} from './types'
 
 import { ConfigurationType } from './enum'
 
@@ -14,7 +20,7 @@ import { defaultProjects } from './defaults'
 // Internal
 const workingDirectory = process.cwd()
 
-const configurationDefaults: Types.Configuration = {
+const configurationDefaults: Configuration = {
   [ConfigurationType.MAVEN_PARENT]    : resolve(workingDirectory, '../pom.xml'),
   [ConfigurationType.MAVEN_PROJECT]   : resolve(workingDirectory, './pom.xml'),
   [ConfigurationType.PATH_CLIENTLIBS] : false,
@@ -23,20 +29,26 @@ const configurationDefaults: Types.Configuration = {
   [ConfigurationType.PATH_SOURCE]     : resolve(workingDirectory, 'src'),
 }
 
-const configuration: Types.Configuration = {
+const configuration: Configuration = {
   ...configurationDefaults,
 }
 
 const configKeys = Object.values(ConfigurationType)
 
-let projects: Types.ProjectMap = {}
+let projects: ProjectMap = {}
+
+/**
+ * Environment configuration for Webpack.
+ */
+export let environment: Environment = {
+  mode    : 'development',
+  project : '',
+}
 
 /**
  * Sets the required projects map. If none are supplied, the default map will be used instead.
- *
- * @param {ProjectMap} incomingProjects User defined projects to watch and build
  */
-export function setProjects(incomingProjects: Types.ProjectMap | null = null) {
+export function setProjects(incomingProjects: ProjectMap | null = null) {
   if (!incomingProjects || Object.keys(incomingProjects).length === 0) {
     projects = defaultProjects
   } else {
@@ -45,21 +57,9 @@ export function setProjects(incomingProjects: Types.ProjectMap | null = null) {
 }
 
 /**
- * Environment configuration for Webpack.
- * @var {Environment}
- */
-export let environment: Types.Environment = {
-  mode    : 'development',
-  project : '',
-}
-
-/**
  * Retrieve a stored configuration value by the given `key`.
- *
- * @param {ConfigurationType} key Configuration key
- * @return {*}
  */
-export function getConfiguration<T extends ConfigurationType, R extends Types.Configuration[T]>(key: T): R {
+export function getConfiguration<T extends ConfigurationType, R extends Configuration[T]>(key: T): R {
   if (!configKeys.includes(key)) {
     throw new ReferenceError(`Unable to get configuration for ${key} as it isn't a valid configuration key. Avaliable configuration keys to use are:\n${configKeys.join(', ')}\n`)
   }
@@ -69,12 +69,8 @@ export function getConfiguration<T extends ConfigurationType, R extends Types.Co
 
 /**
  * Store a new `value` for the given `key`.
- *
- * @param {ConfigurationType} key Configuration key
- * @param {*} value Configuration value
- * @return {void}
  */
-export function setConfiguration<T extends ConfigurationType, V extends Types.Configuration[T]>(key: T, value: V): void {
+export function setConfiguration<T extends ConfigurationType, V extends Configuration[T]>(key: T, value: V): void {
   if (!configKeys.includes(key)) {
     throw new ReferenceError(`Unable to set configuration for ${key} as it isn't a valid configuration key. Avaliable configuration keys to use are:\n${configKeys.join(', ')}\n`)
   }
@@ -84,11 +80,8 @@ export function setConfiguration<T extends ConfigurationType, V extends Types.Co
 
 /**
  * Stores our current Webpack configuration and environment variables.
- *
- * @param {webpack.ParserOptions} env Webpack environment configuration
- * @return {void}
  */
-export function setupEnvironment(env: webpack.ParserOptions): Types.Environment {
+export function setupEnvironment(env: webpack.ParserOptions): Environment {
   environment = {
     ...env,
 
@@ -107,18 +100,13 @@ export function setupEnvironment(env: webpack.ParserOptions): Types.Environment 
 
 /**
  * Retrieve the project configuration.
- *
- * @return {Project}
  */
-export function getProjectConfiguration(): Types.Project {
+export function getProjectConfiguration(): Project {
   return projects[environment.project]
 }
 
 /**
  * Retrieve the project path for the given `path` key.
- *
- * @param {ConfigurationType} path Key of the path
- * @return {string}
  */
 export function getProjectPath<T extends ConfigurationType>(path: T): string {
   return resolve(getConfiguration(path), environment.project)
@@ -126,10 +114,8 @@ export function getProjectPath<T extends ConfigurationType>(path: T): string {
 
 /**
  * Retrieves the Maven configuration values we need.
- *
- * @return {MavenConfigMap}
  */
-export function getMavenConfiguration(): Types.MavenConfigMap {
+export function getMavenConfiguration(): MavenConfigMap {
   return {
     appsPath: getMavenConfigurationValueByPath<string>({
       parser : (value) => value[0],

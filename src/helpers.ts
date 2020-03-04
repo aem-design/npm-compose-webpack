@@ -6,12 +6,15 @@ import xml2js from 'xml2js'
 
 import { getIfUtils, IfUtils } from 'webpack-config-utils'
 
-import * as Types from '../types/index'
+import {
+  MavenConfig,
+  SavedMavenConfig,
+} from './types'
 
 import { environment } from './config'
 
 // Internal
-const mavenConfigs: Types.SavedMavenConfig = {}
+const mavenConfigs: SavedMavenConfig = {}
 const xmlParser: xml2js.Parser = new xml2js.Parser()
 
 let ifUtilsInstance: IfUtils | null = null
@@ -37,7 +40,7 @@ function getMavenConfigurationFromFile(filePath: string): string {
  * @param {MavenConfig} config Maven configuration
  * @return {string} Found value or the given `fallback`
  */
-export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: propPath, pom }: Types.MavenConfig<R>): R {
+export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: propPath, pom }: MavenConfig<R>): R {
   let value!: R
 
   xmlParser.parseString(getMavenConfigurationFromFile(pom), (_: any, { project }: any) => {

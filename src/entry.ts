@@ -1,7 +1,7 @@
 import _get from 'lodash/get'
 import webpack from 'webpack'
 
-import * as Types from '../types/index'
+import { Project } from './types'
 
 import {
   environment,
@@ -9,7 +9,7 @@ import {
   getProjectConfiguration,
 } from './config'
 
-function getHMRConfiguration(project: Types.Project): webpack.Entry {
+function getHMRConfiguration(project: Project): webpack.Entry {
   const mappedEntries: {
     [key: string]: string[];
   } = {

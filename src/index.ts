@@ -13,7 +13,7 @@ import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 
 import { logger } from '@aem-design/compose-support'
 
-import * as Types from '../types/index'
+import * as Types from './types'
 
 import { ConfigurationType } from './enum'
 
