@@ -6,3 +6,13 @@ export enum ConfigurationType {
   PATH_PUBLIC_AEM = 'paths.public.aem',
   PATH_SOURCE = 'paths.source',
 }
+
+export enum Hook {
+  PRE_INIT = 'init:pre',
+  POST_INIT = 'init:post',
+}
+
+export enum HookType {
+  AFTER,
+  BEFORE,
+}

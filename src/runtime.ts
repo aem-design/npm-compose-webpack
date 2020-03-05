@@ -18,7 +18,7 @@ import {
   WebpackConfiguration,
 } from './types'
 
-import { ConfigurationType } from './enum'
+import { ConfigurationType, Hook, HookType } from './enum'
 
 import {
   getConfiguration,
@@ -37,10 +37,15 @@ import {
   getIfUtilsInstance,
 } from './helpers'
 
+import { executeHook } from './hooks'
+
 import * as loaders from './loaders'
 import * as plugins from './plugins'
 
-export default (runtimeConfiguration: ComposeConfiguration) => {
+export default (
+  runtimeConfiguration: ComposeConfiguration,
+  webpackEnv: webpack.ParserOptions,
+) => {
   const baseConfiguration = generateConfiguration(runtimeConfiguration.standard)
 
   /**
@@ -55,12 +60,22 @@ export default (runtimeConfiguration: ComposeConfiguration) => {
   }
 
   /**
+   * Pre-init (before) hooks
+   */
+  executeHook(Hook.PRE_INIT, HookType.BEFORE, webpackEnv)
+
+  /**
    * Begin Webpack!!
    */
-  return (webpackEnv: webpack.ParserOptions): ComposeWebpackConfiguration => {
+  return (): ComposeWebpackConfiguration => {
     const environment = setupEnvironment({
       ...webpackEnv,
     })
+
+    /**
+     * Pre-init (after) hooks
+     */
+    executeHook(Hook.PRE_INIT, HookType.AFTER, environment)
 
     const flagDev  = environment.dev === true
     const flagProd = environment.prod === true
@@ -118,11 +133,21 @@ export default (runtimeConfiguration: ComposeConfiguration) => {
       },
     }
 
-    // Setup the webpack configuration
-    const webpackConfiguration = generateConfiguration(runtimeConfiguration.webpack, {
+    const environmentConfiguration = {
       ...environment,
       paths,
-    }) as WebpackConfiguration
+    }
+
+    // Setup the webpack configuration
+    const webpackConfiguration = generateConfiguration(
+      runtimeConfiguration.webpack,
+      environmentConfiguration,
+    ) as WebpackConfiguration
+
+    /**
+     * Post-init (before) hooks
+     */
+    executeHook(Hook.POST_INIT, HookType.BEFORE, environmentConfiguration)
 
     // Webpack configuration
     const clientLibsPath     = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
@@ -144,7 +169,7 @@ export default (runtimeConfiguration: ComposeConfiguration) => {
     logger.info('-------------------')
     console.log(JSON.stringify(entry, null, 2))
 
-    return {
+    const config: ComposeWebpackConfiguration = {
       context: paths.src,
       devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
       entry,
@@ -357,5 +382,12 @@ export default (runtimeConfiguration: ComposeConfiguration) => {
         ],
       },
     }
+
+    /**
+     * Post-init (after) hooks
+     */
+    executeHook(Hook.POST_INIT, HookType.AFTER, environmentConfiguration)
+
+    return config
   }
 }

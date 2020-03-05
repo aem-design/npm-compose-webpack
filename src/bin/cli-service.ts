@@ -87,7 +87,7 @@ if (existsSync(configFilePath)) {
 /**
  * Start your engines...
  */
-const webpackConfiguration = Runtime(composeConfiguration as ComposeConfiguration)(args)
+const webpackConfiguration = Runtime(composeConfiguration as ComposeConfiguration, args)()
 const webpackInstance      = webpack(webpackConfiguration)
 
 if (args.watch) {

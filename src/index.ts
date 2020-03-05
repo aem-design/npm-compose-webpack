@@ -4,6 +4,8 @@ import {
   getIfUtilsInstance as ifUtil,
 } from './helpers'
 
+import { registerHook } from './hooks'
+
 import {
   css,
 } from './loaders'
@@ -18,5 +20,6 @@ export {
   configuration,
   getMavenValueByPath,
   ifUtil,
+  registerHook,
   support,
 }

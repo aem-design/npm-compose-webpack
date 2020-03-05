@@ -93,5 +93,5 @@ export function generateConfiguration<T>(configuration: T, environmentConfigurat
     return configuration(environmentConfiguration || baseEnvironmentConfig)
   }
 
-  return configuration
+  return configuration || {} as T
 }
