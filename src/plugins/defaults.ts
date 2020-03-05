@@ -6,7 +6,7 @@ import { removeEmpty } from 'webpack-config-utils'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 import LodashPlugin from 'lodash-webpack-plugin'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import ExtractCssChunks from 'extract-css-chunks-webpack-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
 import { VueLoaderPlugin } from 'vue-loader'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
@@ -16,7 +16,6 @@ import { ConfigurationType } from '../enum'
 import {
   environment,
 
-  getConfiguration,
   getProjectPath,
 } from '../config'
 
@@ -24,16 +23,13 @@ import { getIfUtilsInstance } from '../helpers'
 
 import ComposeMessages from './messages'
 
-export {
-  ComposeMessages,
-}
-
 export default (): webpack.Plugin[] => {
-  const clientLibsPath = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
-  const publicPath     = getProjectPath(ConfigurationType.PATH_PUBLIC)
-  const sourcePath     = getProjectPath(ConfigurationType.PATH_SOURCE)
+  const publicPath = getProjectPath(ConfigurationType.PATH_PUBLIC)
+  const sourcePath = getProjectPath(ConfigurationType.PATH_SOURCE)
 
   return removeEmpty<webpack.Plugin>([
+
+    getIfUtilsInstance().ifProd(new ComposeMessages()),
 
     /**
      * When enabled, we clean up our public directory for the current project so we are using old
@@ -43,7 +39,7 @@ export default (): webpack.Plugin[] => {
      */
     getIfUtilsInstance().ifClean(new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [resolve(publicPath, '**/*')],
-    }) as unknown as webpack.Plugin),
+    })),
 
     /**
      * Copies static assets from our source folder into the public structure for AEM.
@@ -61,18 +57,18 @@ export default (): webpack.Plugin[] => {
         from    : './*.css',
         to      : resolve(publicPath, 'clientlibs-header/css'),
       },
-    ]) as unknown as webpack.Plugin,
+    ]),
 
     /**
      * CSS extraction.
      * Pulls out our CSS from the defined entry path(s) and puts it into our AEM structure.
      *
-     * @see https://webpack.js.org/plugins/mini-css-extract-plugin
+     * @see https://github.com/faceyspacey/extract-css-chunks-webpack-plugin
      */
-    new MiniCssExtractPlugin({
-      chunkFilename : `${clientLibsPath || ''}clientlibs-header/css/[id].css`,
-      filename      : `${clientLibsPath || ''}clientlibs-header/css/[name].css`,
-    }) as unknown as webpack.Plugin,
+    new ExtractCssChunks({
+      chunkFilename : 'clientlibs-header/css/[id].css',
+      filename      : 'clientlibs-header/css/[name].css',
+    }),
 
     /**
      * Validate our Sass code using Stylelint to ensure we are following our own good practices.
@@ -85,7 +81,7 @@ export default (): webpack.Plugin[] => {
       failOnError : false,
       files       : ['**/*.scss'],
       quiet       : false,
-    }) as unknown as webpack.Plugin),
+    })),
 
     /**
      * Ensure all chunks that are generated have a unique ID assigned to them instead of pseudo-random
@@ -106,7 +102,7 @@ export default (): webpack.Plugin[] => {
     new LodashPlugin({
       collections : true,
       shorthands  : true,
-    }) as unknown as webpack.Plugin,
+    }),
 
     /**
      * Vue compilation configuration.
@@ -154,7 +150,7 @@ export default (): webpack.Plugin[] => {
      */
     getIfUtilsInstance().ifAnalyzer(new BundleAnalyzerPlugin({
       openAnalyzer: false,
-    }) as unknown as webpack.Plugin),
+    })),
 
     /**
      * @see https://webpack.js.org/plugins/loader-options-plugin

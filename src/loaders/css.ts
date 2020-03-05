@@ -2,10 +2,11 @@ import { resolve } from 'path'
 import sass from 'sass'
 import webpack from 'webpack'
 
-export default (environment: webpack.ParserOptions, options: {
-  sassLoader?: { [key: string]: any };
-  sassOptions?: sass.Options;
-} = {}): webpack.RuleSetUseItem[] => ([
+import {
+  CSSLoaderOptions,
+} from '../types'
+
+export default (environment: webpack.ParserOptions, options: CSSLoaderOptions = {}): webpack.RuleSetUseItem[] => ([
   {
     loader: 'css-loader',
 
@@ -34,16 +35,16 @@ export default (environment: webpack.ParserOptions, options: {
     loader: 'sass-loader',
 
     options: {
-      implementation : require('sass'),
+      implementation : sass,
       sourceMap      : environment.dev === true,
 
       sassOptions: {
         outputStyle : environment.dev === true ? 'expanded' : 'compressed',
         precision   : 5,
-        ...(options.sassOptions || {}),
+        ...(options.sass?.options ?? {}),
       },
 
-      ...(options.sassLoader || {}),
+      ...(options.sass?.loader ?? {}),
     },
   },
 ])

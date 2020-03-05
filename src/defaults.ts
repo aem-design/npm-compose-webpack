@@ -1,6 +1,6 @@
-import { ProjectMap } from './types'
+import { ProjectsConfiguration } from './types'
 
-export const defaultProjects: ProjectMap = {
+export const defaultProjects: ProjectsConfiguration = {
   core: {
     entryFile: 'app.ts',
     outputName: 'app',

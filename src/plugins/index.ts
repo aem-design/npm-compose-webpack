@@ -1,7 +1,5 @@
 import ComposeDefaults from './defaults'
-import ComposeMessages from './messages'
 
-export default {
+export {
   ComposeDefaults,
-  ComposeMessages,
 }

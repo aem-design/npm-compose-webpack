@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { existsSync } from 'fs'
 import { resolve } from 'path'
 import webpack from 'webpack'
 import webpackDevServer from 'webpack-dev-server'
@@ -10,9 +11,11 @@ import yargs from 'yargs'
 
 import { logger } from '@aem-design/compose-support'
 
-import Compose from '../index'
+import Runtime from '../runtime'
 
-import { WebpackConfiguration } from '../types'
+import {
+  ComposeConfiguration,
+} from '../types'
 
 const args = yargs
   .alias('h', 'help')
@@ -68,24 +71,27 @@ const args = yargs
 /**
  * Is there a custom configuration file we can use?
  */
-let composeConfiguration: WebpackConfiguration = {}
+let composeConfiguration = {}
 
-try {
-  // tslint:disable-next-line
-  composeConfiguration = require(resolve(process.cwd(), args.config))
-} catch (_) {
-  logger.warning('Unable to find compose configuration file')
+const configFilePath = resolve(process.cwd(), args.config)
+
+if (existsSync(configFilePath)) {
+  try {
+    composeConfiguration = require(configFilePath)
+  } catch (e) {
+    logger.error('Unable to load compose configuration file..\n', e)
+    process.exit(1)
+  }
 }
 
 /**
  * Start your engines...
  */
-const webpackConfiguration = Compose(composeConfiguration)(args)
+const webpackConfiguration = Runtime(composeConfiguration as ComposeConfiguration)(args)
 const webpackInstance      = webpack(webpackConfiguration)
 
 if (args.watch) {
   const devServer = new webpackDevServer(
-    // TODO: Raise issue with webpack team so types are only resolved from a single package
     webpackInstance as unknown as wds.Compiler,
     createConfig(webpackConfiguration, {
       ...args,

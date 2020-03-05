@@ -1,6 +1,18 @@
+import sass from 'sass'
 import webpack from 'webpack'
+import wds from 'webpack-dev-server'
 
 import { ConfigurationType } from './enum'
+
+export interface CSSLoaderOptions {
+  sass?: {
+    loader?: {
+      [key: string]: any;
+    };
+
+    options?: sass.Options;
+  };
+}
 
 export interface MavenConfigMap {
   authorPort: number;
@@ -19,7 +31,6 @@ export interface SavedMavenConfig {
   [key: string]: string;
 }
 
-
 export interface Configuration {
   [ConfigurationType.MAVEN_PARENT]: string;
   [ConfigurationType.MAVEN_PROJECT]: string;
@@ -30,29 +41,19 @@ export interface Configuration {
 }
 
 export interface Environment extends webpack.ParserOptions {
+  hmr: boolean;
   mode: 'development' | 'production';
   project: string;
 }
 
-export interface WebpackConfiguration {
-  projects?: ProjectMap;
-}
-
-export interface ProjectMap {
-  [project: string]: Project;
+export interface WebpackEnvironment extends Environment {
+  paths: Partial<ComposePaths>;
 }
 
 export interface Project {
-  additionalEntries?: {
-    [entry: string]: string[];
-  };
-
+  additionalEntries?: AdditionalEntriesConfiguration;
   entryFile: string;
-
-  fileMap?: {
-    [key: string]: string[];
-  };
-
+  fileMap?: FileMapConfiguration;
   outputName: string;
 }
 
@@ -64,6 +65,55 @@ export interface Arguments {
   prod: boolean;
 }
 
-declare const runtime: (configuration?: WebpackConfiguration) => ((webpackEnv: webpack.ParserOptions) => webpack.Configuration)
+export interface ComposeWebpackConfiguration extends webpack.Configuration {
+  devServer: wds.Configuration;
+}
 
-export default runtime
+export interface ComposePaths {
+  aem: string;
+  project: ProjectPaths;
+  src: string;
+}
+
+export interface ProjectPaths {
+  public: string;
+  src: string;
+}
+
+export interface ComposeConfiguration {
+  standard: StandardConfiguration;
+  webpack: ComposeRuntimeConfiguration<WebpackConfiguration>;
+}
+
+interface BannerConfiguration {
+  disable: boolean;
+  font: figlet.Fonts;
+  text: string;
+}
+
+export interface ProjectsConfiguration {
+  [projectName: string]: Project;
+}
+
+interface AdditionalEntriesConfiguration {
+  [entry: string]: string[];
+}
+
+interface FileMapConfiguration {
+  footer?: string[];
+  header?: string[];
+}
+
+interface StandardConfiguration {
+  banner: BannerConfiguration;
+  projects: ProjectsConfiguration;
+}
+
+export interface WebpackConfiguration {
+  cacheGroups: Pick<webpack.Options.SplitChunksOptions, 'cacheGroups'>;
+  plugins: webpack.Plugin[];
+  rules: webpack.Rule[];
+  server: wds.Configuration;
+}
+
+export type ComposeRuntimeConfiguration<T = ComposeConfiguration> = ((env: WebpackEnvironment) => Partial<T>) | Partial<T>

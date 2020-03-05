@@ -1,14 +1,16 @@
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
 
-import { get } from 'lodash'
+import _get from 'lodash/get'
 import xml2js from 'xml2js'
 
 import { getIfUtils, IfUtils } from 'webpack-config-utils'
 
 import {
+  ComposeConfiguration,
   MavenConfig,
   SavedMavenConfig,
+  WebpackEnvironment,
 } from './types'
 
 import { environment } from './config'
@@ -17,14 +19,16 @@ import { environment } from './config'
 const mavenConfigs: SavedMavenConfig = {}
 const xmlParser: xml2js.Parser = new xml2js.Parser()
 
+const baseEnvironmentConfig: Partial<WebpackEnvironment> = {
+  paths: {},
+}
+
 let ifUtilsInstance: IfUtils | null = null
 
 /**
  * Retrieve the Maven configuration using the given `filePath`.
  *
  * @private
- * @param {string} filePath Path to load the Maven configuration
- * @return {string}
  */
 function getMavenConfigurationFromFile(filePath: string): string {
   if (mavenConfigs[filePath]) {
@@ -36,9 +40,6 @@ function getMavenConfigurationFromFile(filePath: string): string {
 
 /**
  * Gets the Maven configuration from the file system and returns the value requested.
- *
- * @param {MavenConfig} config Maven configuration
- * @return {string} Found value or the given `fallback`
  */
 export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: propPath, pom }: MavenConfig<R>): R {
   let value!: R
@@ -46,7 +47,7 @@ export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: pr
   xmlParser.parseString(getMavenConfigurationFromFile(pom), (_: any, { project }: any) => {
     const properties = project.properties[0]
 
-    value = get(properties, propPath, fallback)
+    value = _get(properties, propPath, fallback)
 
     if (parser) {
       value = parser(value)
@@ -58,8 +59,6 @@ export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: pr
 
 /**
  * Create an if utilities instance.
- *
- * @return {ifUtilsInstance}
  */
 export function getIfUtilsInstance(): IfUtils {
   if (!ifUtilsInstance) {
@@ -76,4 +75,23 @@ export function getIfUtilsInstance(): IfUtils {
   }
 
   return ifUtilsInstance
+}
+
+/**
+ * Proxy helper that provides intellisense for generating configurations and allows the
+ * environment configuration to be used via a callback function.
+ */
+export function configurationProxy(configuration: ComposeConfiguration): ComposeConfiguration {
+  return configuration
+}
+
+/**
+ * Generates the configuration structure needed for the given `context`.
+ */
+export function generateConfiguration<T>(configuration: T, environmentConfiguration?: WebpackEnvironment): T {
+  if (configuration instanceof Function) {
+    return configuration(environmentConfiguration || baseEnvironmentConfig)
+  }
+
+  return configuration
 }

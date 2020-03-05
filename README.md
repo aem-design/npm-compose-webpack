@@ -26,6 +26,7 @@ Webpack configuration module to help bootstrap and get AEM projects running fast
 ## Table of Contents
 - [Background](#background)
 - [Requirements](#requirements)
+  - [Optional](#optional)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
   - [With the CLI](#with-the-cli)
@@ -35,6 +36,10 @@ Webpack configuration module to help bootstrap and get AEM projects running fast
   - [Babel](#babel)
   - [TypeScript](#typescript)
   - [Projects](#projects)
+  - [Example of **compose.config.js**](#example-of-composeconfigjs)
+    - [Configuration as a function](#configuration-as-a-function)
+  - [Dynamic Configurations _(as of **v1.7.0**)_](#dynamic-configurations-as-of-v170)
+    - [Toggle value based on the environment](#toggle-value-based-on-the-environment)
 - [Features](#features)
   - [Experimental features](#experimental-features)
 - [Browser Support](#browser-support)
@@ -158,18 +163,20 @@ To add custom projects, simply refer to the example configuration below.
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-  banner: {
-    disable : false,         // Enable/disable the support banner
-    font    : 'ANSI Shadow', // ASCII Font type
-    text    : 'My Project',  // Text
-  },
-  
-  projects: {
-    projectName: {
-      entryFile: 'myApp.ts',
-      outputName: 'myApp',
+  standard: {
+    banner: {
+      disable : false,         // Enable/disable the support banner
+      font    : 'ANSI Shadow', // ASCII Font type
+      text    : 'My Project',  // Text
+    },
+    
+    projects: {
+      projectName: {
+        entryFile: 'myApp.ts',
+        outputName: 'myApp',
 
-      // fileMap, additionalEntries
+        // fileMap, additionalEntries
+      },
     },
   },
 
@@ -209,6 +216,62 @@ module.exports = {
 }
 ```
 
+#### Configuration as a function
+As of **v1.7.0** you will now be able to pass a callback function to `webpack` rather than an object. In return you will receive an environment object containing:
+* hmr (`boolean`)
+* mode (`development | production`)
+* paths
+  * aem (`string`)
+  * project
+    * public (`string`)
+    * src (`string`)
+  * src (`string`)
+* project (`string`)
+
+```js
+module.exports = {
+  webpack: (env) => ({
+    cacheGroups: {
+      // ...
+    },
+  }),
+}
+```
+
+For improved intellisense, you can also use the built-in `configuration` helper function which will enable first-class TypeScript support.
+
+```js
+const { configuration } = require('@aem-design/compose-webpack')
+
+module.exports = configuration({
+  webpack(env) {
+    console.log('Project: ', env.project)
+
+    return {
+      // ...
+    }
+  },
+})
+```
+
+### Dynamic Configurations _(as of **v1.7.0**)_
+In addition to been able to use a function for the webpack configuration, there are helper functions that allow that enable you to create dynamic configurations without needing to expose our entire API.
+
+#### Toggle value based on the environment
+There are many cases by which you may need to only execute a plugin for a particular environment, under the hood we extend `webpack-config-utils` which allow you to do things such as...
+
+```js
+const { configuration, ifUtil } = require('@aem-design/compose-webpack')
+
+module.exports = configuration({
+  webpack() {
+    console.log(ifUtil().ifProd('PROD', 'DEV'))
+  },
+})
+```
+
+**NOTE:** Using `ifUtil` outside of the webpack callback function will yeild incorrect results as the environment configuration won't be configured. This may be changed in a future update.
+
 ## Features
 Following the zero-config approach we are going for there are a number of things OOTB we do to help the situation that is browser support and modern features.
 
@@ -235,10 +298,10 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11+ ✔ | Lates
 **NOTE:** _Be aware that IE11 support will be removed in the very near future._
 
 ## Todo
-- [ ] Generate first-class typings for `compose.config.js`
+- [x] Generate first-class typings for `compose.config.js`
 - [ ] Create Wiki documentation
 - [ ] Add more configuration points
-- [ ] Allow the object returned in `compose.config.js` to be a function
+- [x] Allow the object returned in `compose.config.js` to be a function
 - [ ] Opt-in for TypeScript
 - [ ] Opt-in for Vue.js
 

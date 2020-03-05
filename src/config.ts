@@ -8,7 +8,7 @@ import {
   Environment,
   MavenConfigMap,
   Project,
-  ProjectMap,
+  ProjectsConfiguration,
 } from './types'
 
 import { ConfigurationType } from './enum'
@@ -35,12 +35,13 @@ const configuration: Configuration = {
 
 const configKeys = Object.values(ConfigurationType)
 
-let projects: ProjectMap = {}
+let projects: ProjectsConfiguration = {}
 
 /**
  * Environment configuration for Webpack.
  */
 export let environment: Environment = {
+  hmr     : false,
   mode    : 'development',
   project : '',
 }
@@ -48,7 +49,7 @@ export let environment: Environment = {
 /**
  * Sets the required projects map. If none are supplied, the default map will be used instead.
  */
-export function setProjects(incomingProjects: ProjectMap | null = null) {
+export function setProjects(incomingProjects: ProjectsConfiguration | null = null) {
   if (!incomingProjects || Object.keys(incomingProjects).length === 0) {
     projects = defaultProjects
   } else {
@@ -85,6 +86,7 @@ export function setupEnvironment(env: webpack.ParserOptions): Environment {
   environment = {
     ...env,
 
+    hmr     : env.watch === true,
     mode    : env.dev === true ? 'development' : 'production',
     project : env.project,
   }
