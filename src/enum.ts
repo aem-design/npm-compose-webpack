@@ -8,8 +8,8 @@ export enum ConfigurationType {
 }
 
 export enum Hook {
-  PRE_INIT = 'init:pre',
   POST_INIT = 'init:post',
+  PRE_INIT = 'init:pre',
 }
 
 export enum HookType {

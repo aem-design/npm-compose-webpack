@@ -4,12 +4,11 @@ import wds from 'webpack-dev-server'
 
 import { ConfigurationType } from './enum'
 
+export type WebpackParserOptions = Omit<webpack.ParserOptions, 'system'>
+
 export interface CSSLoaderOptions {
   sass?: {
-    loader?: {
-      [key: string]: any;
-    };
-
+    loader?: Record<string, any>;
     options?: sass.Options;
   };
 }
@@ -27,9 +26,7 @@ export interface MavenConfig<R> {
   pom: string;
 }
 
-export interface SavedMavenConfig {
-  [key: string]: string;
-}
+export type SavedMavenConfig = Record<string, string>
 
 export interface Configuration {
   [ConfigurationType.MAVEN_PARENT]: string;
@@ -40,7 +37,7 @@ export interface Configuration {
   [ConfigurationType.PATH_SOURCE]: string;
 }
 
-export interface Environment extends webpack.ParserOptions {
+export interface Environment extends WebpackParserOptions {
   hmr: boolean;
   mode: 'development' | 'production';
   project: string;
@@ -91,18 +88,11 @@ interface BannerConfiguration {
   text: string;
 }
 
-export interface ProjectsConfiguration {
-  [projectName: string]: Project;
-}
+export type ProjectsConfiguration = Record<string, Project>
 
-interface AdditionalEntriesConfiguration {
-  [entry: string]: string[];
-}
+type AdditionalEntriesConfiguration = Record<string, string[]>
 
-interface FileMapConfiguration {
-  footer?: string[];
-  header?: string[];
-}
+type FileMapConfiguration = Partial<Record<'header' | 'footer', string[]>>
 
 interface StandardConfiguration {
   banner: BannerConfiguration;

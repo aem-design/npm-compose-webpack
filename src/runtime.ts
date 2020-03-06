@@ -16,6 +16,7 @@ import {
   ComposeConfiguration,
   ComposeWebpackConfiguration,
   WebpackConfiguration,
+  WebpackParserOptions,
 } from './types'
 
 import { ConfigurationType, Hook, HookType } from './enum'
@@ -42,11 +43,8 @@ import { executeHook } from './hooks'
 import * as loaders from './loaders'
 import * as plugins from './plugins'
 
-export default (
-  runtimeConfiguration: ComposeConfiguration,
-  webpackEnv: webpack.ParserOptions,
-) => {
-  const baseConfiguration = generateConfiguration(runtimeConfiguration.standard)
+export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackParserOptions) => {
+  const baseConfiguration = runtimeConfiguration.standard
 
   /**
    * Support banner
@@ -244,9 +242,9 @@ export default (
             },
           },
           {
-            test: require.resolve('jquery', {
+            test: require.resolve('jquery'/*, {
               paths: [resolve(process.cwd(), 'node_modules')],
-            }),
+            }*/),
 
             use: [
               {
@@ -314,7 +312,7 @@ export default (
 
             jquery: flagHMR ? false : {
               // @ts-ignore
-              filename: 'clientlibs-header/js/vendorlib/jquery.js',
+              filename: 'clientlibs-footer/js/vendorlib/query.js',
               // @ts-check
 
               name : 'jquery',
@@ -332,7 +330,6 @@ export default (
       },
 
       plugins: removeEmpty<webpack.Plugin>([
-        // Default plugins that are required
         ...plugins.ComposeDefaults(),
 
         // Any additional plugins that the child projects needs

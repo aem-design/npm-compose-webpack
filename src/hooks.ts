@@ -1,28 +1,29 @@
-import webpack from 'webpack'
-
 import { Hook, HookType } from './enum'
 
 import {
   WebpackEnvironment,
 } from './types'
 
+export type EnvironmentConfig = Partial<WebpackEnvironment>
+
 export interface HookExecutor {
-  after?(env?: webpack.ParserOptions | WebpackEnvironment): void;
-  before?(env?: webpack.ParserOptions | WebpackEnvironment): void;
+  after?(env?: EnvironmentConfig): void;
+  before?(env?: EnvironmentConfig): void;
 }
 
-export type RegisteredHooks = {
-  [hook: string]: HookExecutor[];
-}
+export type RegisteredHooks = Record<Hook, HookExecutor[]>
 
 // Internal
-const registeredHooks: RegisteredHooks = {
+const registeredHooks: Partial<RegisteredHooks> = {
   [Hook.POST_INIT] : [],
   [Hook.PRE_INIT]  : [],
 }
 
+/**
+ * Register a new `HookExecutor` callback for the given `hook`.
+ */
 export function registerHook(hook: Hook, executor: HookExecutor) {
-  const registeredHook: HookExecutor[] = registeredHooks[hook]
+  const registeredHook = registeredHooks[hook]
 
   if (!registeredHook) {
     throw new Error(`Unable to register hook '${hook}' as it is invalid, please use: ${Object.values(Hook).join(', ')}`)
@@ -31,8 +32,12 @@ export function registerHook(hook: Hook, executor: HookExecutor) {
   registeredHook.push(executor)
 }
 
-export function executeHook(hook: Hook, type: HookType, env?: Partial<webpack.ParserOptions & WebpackEnvironment>) {
-  const registeredHook: HookExecutor[] = registeredHooks[hook]
+/**
+ * Executes the given `HookExecutor`'s for `hook` and the `type`. Optional environment variables
+ * can be passed through to help aid the callback functions.
+ */
+export function executeHook(hook: Hook, type: HookType, env?: EnvironmentConfig) {
+  const registeredHook = registeredHooks[hook]
 
   if (!registeredHook) {
     throw new Error(`Unable to execute hook '${hook}' as it is invalid, please use: ${Object.values(Hook).join(', ')}`)

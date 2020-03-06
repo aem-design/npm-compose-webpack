@@ -7,12 +7,12 @@ export const defaultProjects: ProjectsConfiguration = {
 
     fileMap: {
       header: [
-        '../../clientlibs-header/js/vendorlib/common',
+        'vendorlib/common',
       ],
     },
 
     additionalEntries: {
-      '../../clientlibs-header/js/vendorlib/common': [
+      'vendorlib/common': [
         './core/js/vendor.ts',
         'es6-promise/auto',
         'classlist.js',
