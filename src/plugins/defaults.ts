@@ -5,13 +5,13 @@ import { removeEmpty } from 'webpack-config-utils'
 
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
+import ESLintPlugin from 'eslint-webpack-plugin'
 import LodashPlugin from 'lodash-webpack-plugin'
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
-import { VueLoaderPlugin } from 'vue-loader'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
-import { ConfigurationType } from '../enum'
+import { ConfigurationType } from '../types/enums'
 
 import {
   environment,
@@ -19,7 +19,7 @@ import {
   getProjectPath,
 } from '../config'
 
-import { getIfUtilsInstance } from '../helpers'
+import { getIfUtilsInstance } from '../support/helpers'
 
 import ComposeMessages from './messages'
 
@@ -30,6 +30,7 @@ export default (): webpack.Plugin[] => {
   return removeEmpty<webpack.Plugin>([
 
     getIfUtilsInstance().ifProd(new ComposeMessages()),
+    getIfUtilsInstance().ifNotMaven(getIfUtilsInstance().ifNotProd(new webpack.ProgressPlugin())),
 
     /**
      * When enabled, we clean up our public directory for the current project so we are using old
@@ -75,13 +76,28 @@ export default (): webpack.Plugin[] => {
      *
      * @see https://webpack.js.org/plugins/stylelint-webpack-plugin
      */
-    getIfUtilsInstance().ifMaven(new StyleLintPlugin({
+    new StyleLintPlugin({
       context     : resolve(sourcePath, 'scss'),
       emitErrors  : false,
       failOnError : false,
       files       : ['**/*.scss'],
       quiet       : false,
-    })),
+    }),
+
+    /**
+     * Validate our JavaScript code using ESLint to ensure we are following our own good practices.
+     *
+     * @see https://github.com/webpack-contrib/eslint-webpack-plugin
+     */
+    new ESLintPlugin({
+      context     : resolve(sourcePath, 'js'),
+      emitError   : false,
+      failOnError : environment.mode === 'production',
+      files       : ['**/*.ts'],
+      fix         : false,
+      formatter   : 'codeframe',
+      quiet       : false,
+    }),
 
     /**
      * Ensure all chunks that are generated have a unique ID assigned to them instead of pseudo-random
@@ -103,13 +119,6 @@ export default (): webpack.Plugin[] => {
       collections : true,
       shorthands  : true,
     }),
-
-    /**
-     * Vue compilation configuration.
-     *
-     * @see https://vue-loader.vuejs.org/guide/
-     */
-    new VueLoaderPlugin(),
 
     /**
      * Exposè for 3rd-party vendors & libraries.

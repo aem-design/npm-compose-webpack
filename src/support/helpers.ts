@@ -8,18 +8,21 @@ import { getIfUtils, IfUtils } from 'webpack-config-utils'
 
 import {
   ComposeConfiguration,
+  RuntimeEnvironment,
+} from '../types'
+
+import {
   MavenConfig,
   SavedMavenConfig,
-  WebpackEnvironment,
-} from './types'
+} from '../types/maven'
 
-import { environment } from './config'
+import { environment } from '../config'
 
 // Internal
 const mavenConfigs: SavedMavenConfig = {}
 const xmlParser: xml2js.Parser = new xml2js.Parser()
 
-const baseEnvironmentConfig: Partial<WebpackEnvironment> = {
+const baseEnvironmentConfig: Partial<RuntimeEnvironment> = {
   paths: {},
 }
 
@@ -35,7 +38,8 @@ function getMavenConfigurationFromFile(filePath: string): string {
     return mavenConfigs[filePath]
   }
 
-  return (mavenConfigs[filePath] = readFileSync(resolve(__dirname, filePath), 'utf-8'))
+  mavenConfigs[filePath] = readFileSync(resolve(__dirname, filePath), 'utf-8')
+  return mavenConfigs[filePath]
 }
 
 /**
@@ -88,7 +92,7 @@ export function configurationProxy(configuration: ComposeConfiguration): Compose
 /**
  * Generates the configuration structure needed for the given `context`.
  */
-export function generateConfiguration<T>(configuration: T, environmentConfiguration?: WebpackEnvironment): T {
+export function generateConfiguration<T>(configuration: T, environmentConfiguration?: RuntimeEnvironment): T {
   if (configuration instanceof Function) {
     return configuration(environmentConfiguration || baseEnvironmentConfig)
   }

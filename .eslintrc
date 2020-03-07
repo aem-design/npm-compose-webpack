@@ -1,35 +1,39 @@
 {
+  "root": true,
+
   "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "@chrisblossom/eslint-config"
   ],
-
-  "plugins": [
-    "@typescript-eslint"
-  ],
-
-  "env": {
-    "node": true,
-    "es6": true
-  },
-
-  "parserOptions": {
-    "parser": "@typescript-eslint/parser",
-    "project": "./tsconfig.json"
-  },
 
   "rules": {
+    "arrow-body-style": "off",
+    "class-methods-use-this": "off",
     "no-console": "off",
+    "strict": ["error", "safe"],
 
-    // This rule has issues with the TypeScript parser, but tsc catches these sorts of errors anyway.
-    // See: https://github.com/typescript-eslint/typescript-eslint/issues/342
-    "no-undef": "off",
+    "filenames/match-exported": "off",
+    "filenames/no-index": "off",
 
-    "@typescript-eslint/ban-ts-ignore": "off",
-    "@typescript-eslint/camelcase": "off",
+    "import/group-exports": "off",
+    "import/no-anonymous-default-export": "off",
+    "import/no-cycle": "off",
+    "import/no-default-export": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/no-mutable-exports": "off",
+    "import/no-unresolved": "off",
+    "import/order": ["error", {
+      "newlines-between": "ignore"
+    }],
+
+    "promise/prefer-await-to-callbacks": "off",
+
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/explicit-member-accessibility": "off",
-    "@typescript-eslint/indent": [1, 2, {"SwitchCase": 1, "VariableDeclarator": 1}],
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-angle-bracket-type-assertion": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-object-literal-type-assertion": "off",
+    "@typescript-eslint/no-require-imports": "off",
+    "@typescript-eslint/no-triple-slash-reference": "off",
+    "@typescript-eslint/prefer-interface": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off"
   }
 }

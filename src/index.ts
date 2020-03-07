@@ -2,13 +2,11 @@ import {
   configurationProxy as configuration,
   getMavenConfigurationValueByPath as getMavenValueByPath,
   getIfUtilsInstance as ifUtil,
-} from './helpers'
+} from './support/helpers'
 
 import { registerHook } from './hooks'
 
-import {
-  css,
-} from './loaders'
+import css from './support/css'
 
 const support = {
   loaders: {

@@ -6,8 +6,7 @@
     "yarn": ">= 1.10.x"
   },
   "bin": {
-    "aemdesign-compose": "dist/commonjs/bin/cli-service.js",
-    "aemdesign-compose-modern": "dist/module/bin/cli-service.js"
+    "aemdesign-compose": "dist/bin/cli-service.js"
   },
   "files": [
     "configs/",
@@ -29,12 +28,10 @@
     "frontend",
     "live-reload",
     "watch",
-    "typescript",
-    "vue"
+    "typescript"
   ],
   "license": "Apache-2.0",
-  "main": "dist/commonjs",
-  "module": "dist/module",
+  "main": "dist",
   "types": "dist/types",
   "sideEffects": false,
   "name": "@aem-design/compose-webpack",
@@ -49,16 +46,15 @@
     "access": "public"
   },
   "scripts": {
-    "build": "npm run clean && npm run build.module && npm run build.commonjs && npm run build.types",
-    "build.module": "tsc --module es2015 --outDir dist/module --declaration false",
-    "build.commonjs": "tsc --module commonjs --outDir dist/commonjs --declaration false",
-    "build.types": "tsc --emitDeclarationOnly --declaration true --declarationDir dist/types",
+    "build": "npm run clean && npm run build.compile && npm run build.types",
+    "build.compile": "cross-env NODE_ENV=production tsc --declaration false",
+    "build.types": "cross-env NODE_ENV=production tsc --emitDeclarationOnly --declaration true --declarationDir dist/types",
     "clean": "rm -rf dist",
+    "dev": "npm run clean && cross-env NODE_ENV=development tsc --watch --declaration true --declarationDir dist/types",
     "lint": "eslint '**/*.ts'",
-    "postbuild": "chmod +x dist/commonjs/bin/cli-service.js dist/module/bin/cli-service.js",
+    "postbuild": "chmod +x dist/bin/cli-service.js",
     "postversion": "npm run test && git push && git push --tags",
-    "prepack": "npm run build",
-    "watch": "tsc --watch"
+    "prepack": "npm run build"
   },
   "husky": {
     "skipCI": true,
@@ -86,8 +82,9 @@
     "@types/lodash": "^4.14.149",
     "@types/lodash-webpack-plugin": "^0.11.3",
     "@types/mini-css-extract-plugin": "^0.9.1",
-    "@types/node": "^13.7.7",
+    "@types/node": "^13.9.0",
     "@types/optimize-css-assets-webpack-plugin": "^5.0.1",
+    "@types/prompts": "^2.0.4",
     "@types/sass": "^1.16.0",
     "@types/stylelint-webpack-plugin": "^0.1.5",
     "@types/terser-webpack-plugin": "^2.2.0",
@@ -96,8 +93,8 @@
     "@types/webpack-config-utils": "^2.3.0",
     "@types/webpack-dev-server": "^3.10.0",
     "@types/webpack-env": "^1.15.1",
+    "@types/webpack-merge": "^4.1.5",
     "@types/xml2js": "^0.4.5",
-    "@vue/cli-service": "^4.2.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-module-resolver": "^4.0.0",
@@ -107,10 +104,10 @@
     "css-loader": "^3.4.2",
     "cssnano": "^4.1.10",
     "eslint-loader": "^3.0.3",
+    "eslint-webpack-plugin": "^0.1.0",
     "exports-loader": "^0.7.0",
-    "expose-loader": "^0.7.5",
     "extract-css-chunks-webpack-plugin": "^4.7.4",
-    "extract-loader": "^5.0.0",
+    "extract-loader": "^5.0.1",
     "figlet": "^1.3.0",
     "file-loader": "^5.1.0",
     "imports-loader": "^0.8.0",
@@ -118,9 +115,9 @@
     "lodash-webpack-plugin": "^0.11.5",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-loader": "^3.0.0",
+    "prompts": "^2.3.1",
     "sass": "^1.26.2",
     "sass-loader": "^8.0.2",
-    "source-map-loader": "^0.2.4",
     "style-loader": "^1.1.3",
     "stylelint": "^13.2.0",
     "stylelint-webpack-plugin": "^1.2.3",
@@ -128,19 +125,17 @@
     "ts-loader": "^6.2.1",
     "tsconfig-paths": "^3.9.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "vue": "^2.6.11",
-    "vue-loader": "^15.9.0",
-    "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.6.11",
     "webpack": "^4.42.0",
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-config-utils": "^2.3.1",
     "webpack-dev-server": "^3.10.3",
     "webpack-format-messages": "^2.0.6",
+    "webpack-merge": "^4.2.2",
     "xml2js": "^0.4.23",
     "yargs": "^15.1.0"
   },
   "devDependencies": {
+    "@chrisblossom/eslint-config": "^6.1.5",
     "@types/yargs": "^15.0.4",
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
@@ -150,8 +145,8 @@
     "typescript": "^3.8.3"
   },
   "peerDependencies": {
-    "eslint": "^6.8.0",
-    "stylelint": "^13.2.0",
-    "webpack": "^4.42.0"
+    "eslint": "*",
+    "stylelint": "*",
+    "webpack": "*"
   }
 }

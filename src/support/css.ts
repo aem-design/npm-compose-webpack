@@ -6,13 +6,16 @@ import {
   CSSLoaderOptions,
 } from '../types'
 
-export default (environment: webpack.ParserOptions, options: CSSLoaderOptions = {}): webpack.RuleSetUseItem[] => ([
+export default (
+  { dev, prod }: webpack.ParserOptions,
+  options: CSSLoaderOptions = {},
+): webpack.RuleSetUseItem[] => ([
   {
     loader: 'css-loader',
 
     options: {
       importLoaders : 1,
-      sourceMap     : environment.dev === true,
+      sourceMap     : dev === true,
     },
   },
   {
@@ -20,13 +23,13 @@ export default (environment: webpack.ParserOptions, options: CSSLoaderOptions = 
 
     options: {
       ident     : 'postcss',
-      sourceMap : environment.dev === true,
+      sourceMap : dev === true,
 
       config: {
         path: resolve(process.cwd(), 'postcss.config.js'),
 
         ctx: {
-          prod: environment.prod === true,
+          prod: prod === true,
         },
       },
     },
@@ -36,15 +39,15 @@ export default (environment: webpack.ParserOptions, options: CSSLoaderOptions = 
 
     options: {
       implementation : sass,
-      sourceMap      : environment.dev === true,
+      sourceMap      : dev === true,
 
       sassOptions: {
-        outputStyle : environment.dev === true ? 'expanded' : 'compressed',
-        precision   : 5,
-        ...(options.sass?.options ?? {}),
-      },
+        outputStyle: dev === true ? 'expanded' : 'compressed',
 
-      ...(options.sass?.loader ?? {}),
+        ...(options.sass?.options ?? {}),
+      } as sass.Options,
+
+      ...(options.sass?.loader || {}),
     },
   },
 ])

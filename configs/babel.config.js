@@ -20,6 +20,7 @@ module.exports = {
     ['@babel/transform-runtime', {
       corejs,
     }],
+
     '@babel/proposal-class-properties',
     '@babel/proposal-object-rest-spread',
     '@babel/proposal-nullish-coalescing-operator',

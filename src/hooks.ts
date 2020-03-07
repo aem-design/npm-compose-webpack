@@ -1,10 +1,16 @@
-import { Hook, HookType } from './enum'
+import { Hook, HookType } from './types/enums'
 
 import {
-  WebpackEnvironment,
+  RuntimeEnvironment,
 } from './types'
 
-export type EnvironmentConfig = Partial<WebpackEnvironment>
+// Internal
+const registeredHooks: Partial<RegisteredHooks> = {
+  [Hook.POST_INIT] : [],
+  [Hook.PRE_INIT]  : [],
+}
+
+export type EnvironmentConfig = Partial<RuntimeEnvironment>
 
 export interface HookExecutor {
   after?(env?: EnvironmentConfig): void;
@@ -12,12 +18,6 @@ export interface HookExecutor {
 }
 
 export type RegisteredHooks = Record<Hook, HookExecutor[]>
-
-// Internal
-const registeredHooks: Partial<RegisteredHooks> = {
-  [Hook.POST_INIT] : [],
-  [Hook.PRE_INIT]  : [],
-}
 
 /**
  * Register a new `HookExecutor` callback for the given `hook`.

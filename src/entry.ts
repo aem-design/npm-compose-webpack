@@ -27,7 +27,7 @@ function getHMRConfiguration(project: Project): webpack.Entry {
   if (additionalEntries && fileMap) {
     for (const key of Object.keys(mappedEntries)) {
       const additionalEntryKeys = Object.keys(additionalEntries)
-        .filter((x) => fileMap[key].indexOf(x) !== -1)
+        .filter((x) => fileMap[key].includes(x))
 
       for (const entryKey of additionalEntryKeys) {
         mappedEntries[key] = [

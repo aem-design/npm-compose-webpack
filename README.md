@@ -38,7 +38,7 @@ Webpack configuration module to help bootstrap and get AEM projects running fast
   - [Projects](#projects)
   - [Example of **compose.config.js**](#example-of-composeconfigjs)
     - [Configuration as a function](#configuration-as-a-function)
-  - [Dynamic Configurations _(as of **v1.7.0**)_](#dynamic-configurations-as-of-v170)
+  - [Dynamic Configurations _(as of **v2**)_](#dynamic-configurations-as-of-v170)
     - [Toggle value based on the environment](#toggle-value-based-on-the-environment)
 - [Features](#features)
   - [Experimental features](#experimental-features)
@@ -217,7 +217,7 @@ module.exports = {
 ```
 
 #### Configuration as a function
-As of **v1.7.0** you will now be able to pass a callback function to `webpack` rather than an object. In return you will receive an environment object containing:
+As of **v2** you will now be able to pass a callback function to `webpack` rather than an object. In return you will receive an environment object containing:
 * hmr (`boolean`)
 * mode (`development | production`)
 * paths
@@ -254,7 +254,7 @@ module.exports = configuration({
 })
 ```
 
-### Dynamic Configurations _(as of **v1.7.0**)_
+### Dynamic Configurations _(as of **v2**)_
 In addition to been able to use a function for the webpack configuration, there are helper functions that allow that enable you to create dynamic configurations without needing to expose our entire API.
 
 #### Toggle value based on the environment
@@ -269,8 +269,6 @@ module.exports = configuration({
   },
 })
 ```
-
-**NOTE:** Using `ifUtil` outside of the webpack callback function will yeild incorrect results as the environment configuration won't be configured. This may be changed in a future update.
 
 ## Features
 Following the zero-config approach we are going for there are a number of things OOTB we do to help the situation that is browser support and modern features.
@@ -298,12 +296,13 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11+ ✔ | Lates
 **NOTE:** _Be aware that IE11 support will be removed in the very near future._
 
 ## Todo
-- [x] Generate first-class typings for `compose.config.js`
 - [ ] Create Wiki documentation
-- [ ] Add more configuration points
-- [x] Allow the object returned in `compose.config.js` to be a function
-- [ ] Opt-in for TypeScript
-- [ ] Opt-in for Vue.js
+- [ ] Add more configuration points **(in-progress)**
+- [ ] Opt-in for TypeScript **(in-progress)**
+- [ ] Opt-in for Vue.js **(in-progress)**
+- [x] Generate first-class typings for `compose.config.js`
+- [x] Allow `webpack` configuration to accept a function
+- [x] ~~Allow the object returned in `compose.config.js` to be a function~~
 
 ## Contributing
 Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for more information.

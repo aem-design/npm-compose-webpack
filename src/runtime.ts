@@ -1,9 +1,9 @@
+import { relative, resolve } from 'path'
 import chalk from 'chalk'
 import figlet from 'figlet'
 import _get from 'lodash/get'
-import { relative, resolve } from 'path'
-import webpack from 'webpack'
-import { removeEmpty } from 'webpack-config-utils'
+import _has from 'lodash/has'
+import merge from 'webpack-merge'
 
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
@@ -14,12 +14,23 @@ import { logger } from '@aem-design/compose-support'
 
 import {
   ComposeConfiguration,
-  ComposeWebpackConfiguration,
-  WebpackConfiguration,
-  WebpackParserOptions,
+  Environment,
+  RuntimeConfiguration,
+  RuntimePaths,
 } from './types'
 
-import { ConfigurationType, Hook, HookType } from './enum'
+import {
+  ConfigurationType,
+  DependencyType,
+  Hook,
+  HookType,
+  WebpackIgnoredProps
+} from './types/enums'
+
+import {
+  WebpackConfiguration,
+  WebpackParserOptions,
+} from './types/webpack'
 
 import {
   getConfiguration,
@@ -33,23 +44,48 @@ import {
 
 import EntryConfiguration from './entry'
 
+import FeatureMap from './features/map'
+
 import {
   generateConfiguration,
   getIfUtilsInstance,
-} from './helpers'
+} from './support/helpers'
 
 import { executeHook } from './hooks'
 
-import * as loaders from './loaders'
-import * as plugins from './plugins'
+import css from './support/css'
 
-export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackParserOptions) => {
-  const baseConfiguration = runtimeConfiguration.standard
+function processFeatures({ environment, features, paths, webpackConfig }: {
+  environment: Environment;
+  features: string[];
+  paths: RuntimePaths;
+  webpackConfig: WebpackConfiguration;
+}) {
+  for (const feature of features) {
+    try {
+      const featureInstance = FeatureMap[feature]({
+        general: environment,
+        paths,
+        webpack: webpackConfig,
+      })
+
+      console.log(featureInstance.getDependencyList(DependencyType.NON_DEV))
+      console.log(featureInstance.getDependencyList(DependencyType.DEV))
+    } catch (_) {
+      // Nothing to do here...
+    }
+  }
+
+  throw new Error('testing...')
+}
+
+export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOptions) => {
+  const baseConfiguration = configuration.standard
 
   /**
    * Support banner
    */
-  if (_get(baseConfiguration, 'banner.disable', true) !== false) {
+  if (_get(baseConfiguration, 'banner.disable', false) !== true && webpackEnv.prod !== true) {
     console.log('')
     console.log(figlet.textSync(
       _get(baseConfiguration, 'banner.text', 'AEM.Design'),
@@ -65,7 +101,7 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
   /**
    * Begin Webpack!!
    */
-  return (): ComposeWebpackConfiguration => {
+  return (): RuntimeConfiguration => {
     const environment = setupEnvironment({
       ...webpackEnv,
     })
@@ -92,14 +128,13 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
     const { appsPath, authorPort, sharedAppsPath } = getMavenConfiguration()
 
     if (!(authorPort || appsPath || sharedAppsPath)) {
-      logger.error('Unable to continue due to missing or invalid Maven configuration values!')
-      process.exit(1)
+      throw new Error('Unable to continue due to missing or invalid Maven configuration values!')
     }
 
     /**
      * Set any user-defined projects.
      */
-    setProjects(baseConfiguration.projects || null)
+    setProjects(baseConfiguration.projects ?? null)
 
     logger.info(chalk.bold('Maven configuration'))
     logger.info('-------------------')
@@ -136,11 +171,27 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
       paths,
     }
 
+    const nodeModulesChildPath   = resolve(process.cwd(), 'node_modules')
+    const nodeModulesCurrentPath = resolve(__dirname, '../../', 'node_modules')
+
     // Setup the webpack configuration
-    const webpackConfiguration = generateConfiguration(
-      runtimeConfiguration.webpack,
+    const configurationForWebpack = generateConfiguration(
+      configuration.webpack,
       environmentConfiguration,
     ) as WebpackConfiguration
+
+    // Validate the given webpack configuration (if any) and detect anything marked as forbidden
+    const forbiddenProps = Object.keys(WebpackIgnoredProps).filter((x) => !/\d+/.test(x))
+
+    for (const prop of forbiddenProps) {
+      if (_has(configurationForWebpack, prop) === true) {
+        throw new Error(`Forbidden webpack property detected (${prop})`)
+      }
+    }
+
+    // Merge some internal/external configurations together
+    // TODO: Move vue into dynamic config
+    const assetFilter = ['fontawesome.*', 'vue'/* , ...(configurationForWebpack.assetFilter || [])*/]
 
     /**
      * Post-init (before) hooks
@@ -149,7 +200,7 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
 
     // Webpack configuration
     const clientLibsPath     = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
-    const devServerProxyPort = _get(webpackConfiguration, 'server.proxyPort', authorPort)
+    // const devServerProxyPort = _get(configurationForWebpack, 'server.proxyPort', authorPort)
     const entry              = EntryConfiguration(flagHMR)
     const mode               = getIfUtilsInstance().ifDev('development', 'production')
 
@@ -157,7 +208,7 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
     logger.info('---------------------')
     logger.info(chalk.bold('Compilation Mode    :'), mode)
     logger.info(chalk.bold('Project Name        :'), project)
-    logger.info(chalk.bold('Hot Reloading?      :'), environment.hmr ? 'yes' : 'no')
+    logger.info(chalk.bold('Hot Reloading?      :'), flagHMR ? 'yes' : 'no')
     logger.info(chalk.bold('Client Libary Path  :'), clientLibsPath)
     logger.info(chalk.bold('Public Path         :'), paths.project.public)
     logger.info(chalk.bold('Public Path (AEM)   :'), paths.aem)
@@ -167,7 +218,10 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
     logger.info('-------------------')
     console.log(JSON.stringify(entry, null, 2))
 
-    const config: ComposeWebpackConfiguration = {
+    const config: RuntimeConfiguration = merge.smartStrategy({
+      'module.rules' : 'append',
+      'plugins'      : 'append',
+    })({
       context: paths.src,
       devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
       entry,
@@ -181,11 +235,8 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
       },
 
       performance: {
-        assetFilter(assetFilename) {
-          return !/fontawesome.*|vue/.test(assetFilename)
-        },
-
-        hints             : getIfUtilsInstance().ifDev(false, 'error'),
+        assetFilter       : (assetFilename) => !new RegExp(assetFilter.join('|')).test(assetFilename),
+        hints             : getIfUtilsInstance().ifDev(false, 'warning'),
         maxAssetSize      : 300000,
         maxEntrypointSize : 300000,
       },
@@ -198,33 +249,25 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
 
             use: [
               flagHMR ? 'style-loader' : { loader: ExtractCssChunks.loader },
-              ...loaders.css(webpackEnv),
+              ...css(webpackEnv),
             ],
           },
           {
-            include : [resolve(paths.project.src, 'js/components')],
-            test    : /\.scss$/,
+            exclude : [nodeModulesChildPath, nodeModulesCurrentPath],
+            test    : /\.[jt]sx?$/,
 
             use: [
               {
-                loader: 'vue-style-loader',
+                loader: 'babel-loader',
+              },
+              // TODO: Add opt-in for TypeScript
+              {
+                loader: 'ts-loader',
 
                 options: {
-                  hmr       : flagHMR,
-                  sourceMap : true,
+                  configFile: resolve(process.cwd(), 'tsconfig.json'),
                 },
               },
-              ...loaders.css(environment, {
-                sass: {
-                  loader: {
-                    prependData: `@import 'setup';`,
-                  },
-
-                  options: {
-                    includePaths : [resolve(paths.project.src, 'scss')],
-                  },
-                },
-              }),
             ],
           },
           {
@@ -236,33 +279,11 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
               emitFile : flagDev,
               name     : '[path][name].[ext]',
 
-              publicPath(url: string, resrc: string, context: string): string {
+              publicPath(_: any, resrc: string, context: string): string {
                 return `${flagHMR ? '/' : '../'}${relative(context, resrc)}`
               },
             },
           },
-          {
-            test: require.resolve('jquery'/*, {
-              paths: [resolve(process.cwd(), 'node_modules')],
-            }*/),
-
-            use: [
-              {
-                loader  : 'expose-loader',
-                options : 'jQuery',
-              },
-              {
-                loader  : 'expose-loader',
-                options : '$',
-              },
-            ],
-          },
-
-          // Default JS loaders
-          ...loaders.js(),
-
-          // Any additional rules that the child projects needs
-          ..._get(webpackConfiguration, 'rules', []),
         ],
       },
 
@@ -310,38 +331,24 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
             default: false,
             vendors: false,
 
-            jquery: flagHMR ? false : {
-              // @ts-ignore
-              filename: 'clientlibs-footer/js/vendorlib/query.js',
-              // @ts-check
-
-              name : 'jquery',
-              test : /[\\/]node_modules[\\/](jquery)[\\/]/,
-            },
-
             vue: {
               name: 'vue',
               test: /[\\/]node_modules[\\/](vue|vue-property-decorator)[\\/]/,
             },
-
-            ..._get(webpackConfiguration, 'cacheGroups', {}),
           },
         },
       },
 
-      plugins: removeEmpty<webpack.Plugin>([
-        ...plugins.ComposeDefaults(),
-
-        // Any additional plugins that the child projects needs
-        ..._get(webpackConfiguration, 'plugins', []),
-      ]),
+      // plugins: removeEmpty<webpack.Plugin>([
+      //   ...plugins.ComposeDefaults(),
+      // ]),
 
       resolve: {
         alias: {
-          vue$: flagDev ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.min.js',
+          // TODO: Put aliases here...
         },
 
-        extensions: ['.ts', '.tsx', '.js'],
+        extensions: ['.ts', '.js'],
 
         // Resolve modules from the child project too so we don't get errors complaining about missing
         // dependencies which aren't anything to do with our script.
@@ -361,23 +368,37 @@ export default (runtimeConfiguration: ComposeConfiguration, webpackEnv: WebpackP
 
       devServer: {
         contentBase : paths.project.public,
-        host        : _get(webpackConfiguration, 'server.host', '0.0.0.0'),
+        host        : '0.0.0.0',
         open        : false,
         overlay     : true,
-        port        : parseInt(_get(webpackConfiguration, 'server.port', 4504), 10),
+        port        : 4504,
 
         proxy: [
           // Additional proxy paths need to be loaded first since they will bind from the same host which uses
           // root context by default. This means the default proxy below is the boss when it comes to requests.
-          ..._get(webpackConfiguration, 'server.proxies', []),
+          // TODO: Build helper to inject custom proxy maps
+          // ..._get(configurationForWebpack, 'server.proxies', []),
 
           // Default AEM proxy
+          // TODO: Make this configurable
           {
             context : () => true,
-            target  : `http://${_get(webpackConfiguration, 'server.proxyHost', 'localhost')}:${devServerProxyPort}`,
+            target  : `http://localhost:${authorPort}`,
           },
         ],
       },
+    }, configurationForWebpack as any) as RuntimeConfiguration
+
+    /**
+     * Detect opt-in features
+     */
+    if (configuration.features) {
+      processFeatures({
+        environment,
+        features: configuration.features,
+        paths,
+        webpackConfig: configurationForWebpack,
+      })
     }
 
     /**

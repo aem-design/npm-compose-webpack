@@ -3,15 +3,13 @@
 import { existsSync } from 'fs'
 import { resolve } from 'path'
 import webpack from 'webpack'
-import webpackDevServer from 'webpack-dev-server'
+import WebpackDevServer from 'webpack-dev-server'
 import createConfig from 'webpack-dev-server/lib/utils/createConfig'
 import defaultPort from 'webpack-dev-server/lib/utils/defaultPort'
 import wds from 'webpack-dev-server/node_modules/@types/webpack'
 import yargs from 'yargs'
 
-import { logger } from '@aem-design/compose-support'
-
-import Runtime from '../runtime'
+import runtime from '../runtime'
 
 import {
   ComposeConfiguration,
@@ -71,27 +69,26 @@ const args = yargs
 /**
  * Is there a custom configuration file we can use?
  */
-let composeConfiguration = {}
+let composeConfiguration!: ComposeConfiguration
 
 const configFilePath = resolve(process.cwd(), args.config)
 
 if (existsSync(configFilePath)) {
   try {
     composeConfiguration = require(configFilePath)
-  } catch (e) {
-    logger.error('Unable to load compose configuration file..\n', e)
-    process.exit(1)
+  } catch (ex) {
+    throw new Error(`Unable to load compose configuration file: ${ex.message}`)
   }
 }
 
 /**
  * Start your engines...
  */
-const webpackConfiguration = Runtime(composeConfiguration as ComposeConfiguration, args)()
+const webpackConfiguration = runtime(composeConfiguration, args)()
 const webpackInstance      = webpack(webpackConfiguration)
 
 if (args.watch) {
-  const devServer = new webpackDevServer(
+  const devServer = new WebpackDevServer(
     webpackInstance as unknown as wds.Compiler,
     createConfig(webpackConfiguration, {
       ...args,

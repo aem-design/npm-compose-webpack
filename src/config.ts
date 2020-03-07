@@ -1,8 +1,6 @@
 import { resolve } from 'path'
 import webpack from 'webpack'
 
-import { logger } from '@aem-design/compose-support'
-
 import {
   Configuration,
   Environment,
@@ -11,9 +9,9 @@ import {
   ProjectsConfiguration,
 } from './types'
 
-import { ConfigurationType } from './enum'
+import { ConfigurationType } from './types/enums'
 
-import { getMavenConfigurationValueByPath } from './helpers'
+import { getMavenConfigurationValueByPath } from './support/helpers'
 
 import { defaultProjects } from './defaults'
 
@@ -93,8 +91,7 @@ export function setupEnvironment(env: webpack.ParserOptions): Environment {
 
   // Ensure the project is valid
   if (!environment.project) {
-    logger.error('Specify a project when running webpack eg --env.project="core"')
-    process.exit(1)
+    throw new Error('Specify a project when running webpack eg --env.project="core"')
   }
 
   return environment
