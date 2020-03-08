@@ -40,6 +40,12 @@ function executeInstallation(dependenciesMap: DependenciesMap) {
   ))
 }
 
+export function resolveDependency(dependency: string): string {
+  return require.resolve(dependency, {
+    paths: [process.cwd()]
+  })
+}
+
 export default function installDependencies(name: string, dependenciesMap: DependenciesMap): InstallStatus {
   const dependencyTypes = Object.keys(dependenciesMap)
 
@@ -47,7 +53,7 @@ export default function installDependencies(name: string, dependenciesMap: Depen
     _flatten(dependencyTypes.map<string>((type) => dependenciesMap[type]))
     .filter((dependency) => {
       try {
-        return require.resolve(dependency, { paths: [process.cwd()] }).length === 0
+        return resolveDependency(dependency).length === 0
       } catch (_) {
         return true
       }

@@ -11,6 +11,10 @@ import {
   WebpackAliases,
 } from '../types/webpack'
 
+import {
+  resolveDependency,
+} from '../support/dependencies'
+
 import Feature from './feature'
 
 export default class Vue extends Feature {
@@ -35,6 +39,29 @@ export default class Vue extends Feature {
     return {
       vue$: this.env.general.mode === 'development' ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.min.js',
     }
+  }
+
+  protected arbitraryUpdates(): webpack.Configuration {
+    return {
+      optimization: {
+        splitChunks: {
+          cacheGroups: {
+            vue: {
+              name: 'vue',
+              test: /[\\/]node_modules[\\/](vue|vue-property-decorator)[\\/]/,
+            },
+          },
+        },
+      },
+    }
+  }
+
+  protected plugins(): webpack.Plugin[] {
+    const VueLoaderPlugin = require(resolveDependency('vue-loader/lib/plugin'))
+
+    return [
+      new VueLoaderPlugin(),
+    ]
   }
 
   protected rules(): webpack.RuleSetRule[] {

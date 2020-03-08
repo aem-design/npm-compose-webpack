@@ -30,7 +30,7 @@ export default (): webpack.Plugin[] => {
   return removeEmpty<webpack.Plugin>([
 
     getIfUtilsInstance().ifProd(new ComposeMessages()),
-    getIfUtilsInstance().ifNotMaven(getIfUtilsInstance().ifNotProd(new webpack.ProgressPlugin())),
+    getIfUtilsInstance().ifNotProd(new webpack.ProgressPlugin()),
 
     /**
      * When enabled, we clean up our public directory for the current project so we are using old

@@ -22,6 +22,7 @@ export abstract class FeatureContract {
   public abstract getFeatureAssetFilters(): string[];
 
   protected abstract aliases(): WebpackAliases;
+  protected abstract arbitraryUpdates(): webpack.Configuration;
   protected abstract plugins(): webpack.Plugin[];
   protected abstract rules(): webpack.RuleSetRule[];
 }

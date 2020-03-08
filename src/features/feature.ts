@@ -1,13 +1,7 @@
 import webpack from 'webpack'
-import merge from 'webpack-merge'
-
-import {
-  mergeStrategy,
-} from '../config'
 
 import {
   DependenciesMap,
-  RuntimeConfiguration,
 } from '../types'
 
 import {
@@ -37,8 +31,8 @@ export default class Feature extends FeatureContract {
     this.env = env
   }
 
-  public defineWebpackConfiguration(webpackConfig: RuntimeConfiguration): RuntimeConfiguration {
-    return merge.smartStrategy(mergeStrategy)(webpackConfig, {
+  public defineWebpackConfiguration(): webpack.Configuration {
+    return {
       module: {
         rules: this.rules(),
       },
@@ -48,7 +42,9 @@ export default class Feature extends FeatureContract {
       resolve: {
         alias: this.aliases(),
       },
-    })
+
+      ...this.arbitraryUpdates(),
+    }
   }
 
   public getFeatureDependencies(): DependenciesMap {
@@ -63,6 +59,10 @@ export default class Feature extends FeatureContract {
   }
 
   protected aliases(): WebpackAliases {
+    return {}
+  }
+
+  protected arbitraryUpdates(): webpack.Configuration {
     return {}
   }
 

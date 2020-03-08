@@ -9,7 +9,6 @@ import merge from 'webpack-merge'
 import ExtractCssChunks from 'extract-css-chunks-webpack-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
-import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 
 import { logger } from '@aem-design/compose-support'
 
@@ -55,6 +54,7 @@ import { executeHook } from './hooks'
 import * as plugins from './plugins'
 
 import css from './support/css'
+
 import installDependencies from './support/dependencies'
 
 import {
@@ -94,13 +94,15 @@ function processFeatures({ environment, features, paths, webpackConfig }: {
 
       assetFilters.push(...featureInstance.getFeatureAssetFilters())
 
-      updatedConfig = featureInstance.defineWebpackConfiguration(webpackConfig)
+      updatedConfig = merge.smartStrategy(mergeStrategy)(
+        updatedConfig,
+        featureInstance.defineWebpackConfiguration(),
+      )
     } catch (ex) {
       console.log()
       logger.error('Failed to install dependencies:', ex.message)
 
-      // TODO: Use exit(1) instead once TypeScript is implemented
-      // exit(1)
+      exit(1)
     }
   }
 
@@ -261,7 +263,7 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
     console.log(entryCodeFrame)
     console.log()
 
-    const config: RuntimeConfiguration = merge.smartStrategy(mergeStrategy)({
+    let config: RuntimeConfiguration = merge.smartStrategy(mergeStrategy)({
       context: paths.src,
       devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
       entry,
@@ -293,21 +295,8 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
           },
           {
             exclude : [nodeModulesChildPath, nodeModulesCurrentPath],
-            test    : /\.[jt]sx?$/,
-
-            use: [
-              {
-                loader: 'babel-loader',
-              },
-              // TODO: Add opt-in for TypeScript
-              {
-                loader: 'ts-loader',
-
-                options: {
-                  configFile: resolve(process.cwd(), 'tsconfig.json'),
-                },
-              },
-            ],
+            loader  : 'babel-loader',
+            test    : /\.js$/,
           },
           {
             loader : 'file-loader',
@@ -369,11 +358,6 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
           cacheGroups: {
             default: false,
             vendors: false,
-
-            vue: {
-              name: 'vue',
-              test: /[\\/]node_modules[\\/](vue|vue-property-decorator)[\\/]/,
-            },
           },
         },
       },
@@ -381,21 +365,13 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
       plugins: plugins.ComposeDefaults(),
 
       resolve: {
-        alias: {
-          // TODO: Put aliases here...
-        },
-
-        extensions: ['.ts', '.js'],
+        extensions: ['.js'],
 
         // Resolve modules from the child project too so we don't get errors complaining about missing
         // dependencies which aren't anything to do with our script.
         modules: [
           relative(__dirname, resolve(process.cwd(), 'node_modules')),
           'node_modules',
-        ],
-
-        plugins: [
-          new TsconfigPathsPlugin(),
         ],
       },
 
@@ -430,7 +406,7 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
      * Detect opt-in features
      */
     if (configuration.features) {
-      processFeatures({
+      config = processFeatures({
         environment,
         features: configuration.features,
         paths,
