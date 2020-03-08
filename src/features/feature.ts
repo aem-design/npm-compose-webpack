@@ -1,5 +1,3 @@
-import _concat from 'lodash/concat'
-import _merge from 'lodash/merge'
 import webpack from 'webpack'
 import merge from 'webpack-merge'
 
