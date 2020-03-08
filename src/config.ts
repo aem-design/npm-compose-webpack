@@ -45,6 +45,14 @@ export let environment: Environment = {
 }
 
 /**
+ * Merge strategy for `webpack-merge`.
+ */
+export const mergeStrategy: Record<string, 'append' | 'prepend' | 'replace'> = {
+  'module.rules' : 'append',
+  'plugins'      : 'append',
+}
+
+/**
  * Sets the required projects map. If none are supplied, the default map will be used instead.
  */
 export function setProjects(incomingProjects: ProjectsConfiguration | null = null) {

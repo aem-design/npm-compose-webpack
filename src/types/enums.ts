@@ -23,8 +23,8 @@ export enum HookType {
 }
 
 export enum DependencyType {
-  DEV,
-  NON_DEV,
+  DEV = 'dev',
+  NON_DEV = 'nonDev',
 }
 
 export enum WebpackIgnoredProps {
@@ -40,4 +40,9 @@ export enum WebpackIgnoredProps {
   'performance.hints',
   'resolve.modules',
   'stats',
+}
+
+export enum InstallStatus {
+  RESTART,
+  SKIPPED,
 }

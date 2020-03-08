@@ -4,6 +4,7 @@ import wds from 'webpack-dev-server'
 
 import {
   ConfigurationType,
+  DependencyType,
   Features,
 } from './enums'
 
@@ -84,6 +85,8 @@ export type FileMap = Partial<Record<'header' | 'footer', string[]>>
 
 export type RuntimeForWebpack<T = WebpackConfiguration> = ((env: RuntimeEnvironment) => Partial<T>) | Partial<T>
 
+export type FeatureList = (keyof typeof Features)[]
+
 export interface ComposeConfiguration {
   /**
    * Additional features that you would like. All dependencies and configurations are done so
@@ -94,7 +97,7 @@ export interface ComposeConfiguration {
    *   features: ['vue'],
    * }
    */
-  features: (keyof typeof Features)[];
+  features: FeatureList;
 
   /**
    * The standard configuration is for configurations that are used for setup sequences.
@@ -206,3 +209,5 @@ export interface CSSLoaderOptions {
     options?: sass.Options;
   };
 }
+
+export type DependenciesMap = Record<DependencyType, string[]>

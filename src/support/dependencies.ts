@@ -1,38 +1,70 @@
 import { execSync } from 'child_process'
 import { existsSync } from 'fs'
 import { resolve } from 'path'
+import chalk from 'chalk'
+import _flatten from 'lodash/flatten'
 
-import { DependencyType } from 'src/types/enums'
+import { logger } from '@aem-design/compose-support'
 
-function constructCommand(dependencies: string[]): string {
-  return ''
+import {
+  DependenciesMap,
+} from '../types'
+
+import {
+  DependencyType,
+  InstallStatus,
+} from '../types/enums'
+
+// Internal
+const isUsingYarn = existsSync(resolve(process.cwd(), 'yarn.lock'))
+
+function constructCommand(dependencies: string[], type: DependencyType): string {
+  const isDev = type === DependencyType.DEV
+
+  if (isUsingYarn) {
+    return `yarn add ${dependencies.join(' ')}${isDev ? ' -D' : ''}`
+  }
+
+  return `npm install ${dependencies.join(' ')}${isDev ? ' --save-dev' : ''}`
 }
 
-function executeCommand(): void {
-  //
+function executeInstallation(dependenciesMap: DependenciesMap) {
+  execSync(constructCommand(
+    dependenciesMap[DependencyType.DEV],
+    DependencyType.DEV,
+  ))
+
+  execSync(constructCommand(
+    dependenciesMap[DependencyType.NON_DEV],
+    DependencyType.NON_DEV,
+  ))
 }
 
-function usingYarn(): boolean {
-  return existsSync(resolve(process.cwd(), 'yarn.lock'))
-}
+export default function installDependencies(name: string, dependenciesMap: DependenciesMap): InstallStatus {
+  const dependencyTypes = Object.keys(dependenciesMap)
 
-export function installDependencies(dependencies: string[], type: DependencyType): boolean {
-  const missingDependencies = dependencies.filter((dependency) => {
-    try {
-      return require.resolve(dependency).length
-    } catch (_) {
-      return true
+  const missingDependencies =
+    _flatten(dependencyTypes.map<string>((type) => dependenciesMap[type]))
+    .filter((dependency) => {
+      try {
+        return require.resolve(dependency, { paths: [process.cwd()] }).length === 0
+      } catch (_) {
+        return true
+      }
     }
-  })
+  )
 
   // Only install this batch of dependencies if at least one is missing
   if (missingDependencies.length === 0) {
-    return false
+    logger.info('No required dependencies are missing for', chalk.bold(name))
+
+    return InstallStatus.SKIPPED
   }
 
-  for (const dependency of missingDependencies) {
-    //
-  }
+  console.log()
+  logger.info('Getting ready to install...', chalk.italic(missingDependencies.join(', ')))
 
-  return true
+  executeInstallation(dependenciesMap)
+
+  return InstallStatus.RESTART
 }

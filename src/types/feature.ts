@@ -6,6 +6,7 @@ import {
 } from './webpack'
 
 import {
+  DependenciesMap,
   Environment,
   RuntimePaths,
 } from '.'
@@ -16,13 +17,9 @@ export interface FeatureEnvironment {
   webpack: WebpackConfiguration;
 }
 
-export interface FeatureDependencies {
-  dev: string[];
-  nonDev: string[];
-}
-
 export abstract class FeatureContract {
-  protected abstract getFeatureDependencies(): FeatureDependencies;
+  public abstract getFeatureDependencies(): DependenciesMap;
+  public abstract getFeatureAssetFilters(): string[];
 
   protected abstract aliases(): WebpackAliases;
   protected abstract plugins(): webpack.Plugin[];

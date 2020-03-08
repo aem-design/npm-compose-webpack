@@ -37,11 +37,8 @@ Webpack configuration module to help bootstrap and get AEM projects running fast
   - [TypeScript](#typescript)
   - [Projects](#projects)
   - [Example of **compose.config.js**](#example-of-composeconfigjs)
-    - [Configuration as a function](#configuration-as-a-function)
-  - [Dynamic Configurations _(as of **v2**)_](#dynamic-configurations-as-of-v170)
-    - [Toggle value based on the environment](#toggle-value-based-on-the-environment)
+  - [Dynamic Configurations](#dynamic-configurations)
 - [Features](#features)
-  - [Experimental features](#experimental-features)
 - [Browser Support](#browser-support)
 - [Todo](#todo)
 - [Contributing](#contributing)
@@ -93,19 +90,14 @@ Convenience is a nice thing though and NPM scripts provide a much cleaner and ea
 ```json
 "scripts": {
   "build": "aemdesign-compose",
-  "build.modern": "aemdesign-compose-modern"
 }
 ```
-
-**NOTE:** `aemdesign-compose-modern` refers to an ES2015 module, please ensure you are able to execute these modules before using it.
 
 And run the following in your terminal/console:
 
 ```bash
 npm run build
-
 # or with Yarn
-
 yarn build
 ```
 
@@ -159,10 +151,16 @@ To add custom projects, simply refer to the example configuration below.
 **NOTE:** _Custom projects override the defaults, please keep this in mind when setting them._
 
 ### Example of **compose.config.js**
+While this file is not required, it is recommended you create it and add at least a custom `projects` configuration.
+
+As of **v2** the webpack configuration now uses `webpack-merge` so you are able to mixin custom configurations to your hearts content.
+
 ```js
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
+  features: ['vue'], // Enable additional tools
+
   standard: {
     banner: {
       disable : false,         // Enable/disable the support banner
@@ -181,37 +179,18 @@ module.exports = {
   },
 
   webpack: {
-    rules: [
-      {
-        loader : 'file-loader',
-        test   : /\.(png|jpg|gif|eot|ttf|svg|woff|woff2)$/,
-      },
-    ],
-
-    cacheGroups: {
-      // ...
+    module: {
+      rules: [
+        {
+          loader : 'file-loader',
+          test   : /\.(png|jpg|gif|eot|ttf|svg|woff|woff2)$/,
+        },
+      ],
     },
 
     plugins: [
       new CopyWebpackPlugin(),
     ],
-
-    // Dev server
-    server: {
-      host      : 'localhost', // hostaddr to bind 'webpack-dev-server' to
-      port      : 1337,        // Port to bind 'webpack-dev-server' to
-      proxyHost : 'localhost', // AEM Host - default: localhost
-      proxyPort : 4502,        // AEM Port - default: 4502
-
-      // The proxies must conform to the array syntax which only accepts objects based on:
-      // https://github.com/chimurai/http-proxy-middleware#options
-      proxies: [
-        {
-          path   : '/hello-world',
-          target : 'http://localhost:1337/foo',
-        },
-      ],
-    },
   },
 }
 ```
@@ -254,7 +233,7 @@ module.exports = configuration({
 })
 ```
 
-### Dynamic Configurations _(as of **v2**)_
+### Dynamic Configurations
 In addition to been able to use a function for the webpack configuration, there are helper functions that allow that enable you to create dynamic configurations without needing to expose our entire API.
 
 #### Toggle value based on the environment
@@ -276,10 +255,11 @@ Following the zero-config approach we are going for there are a number of things
 * Babel 7 (with dynamic imports)
 * CSS Modules
 * ES6 support
-* TypeScript
-* ESLint/Stylelint/TSLint
-* Sass (using Dart Sass)
-* Vue.js
+* ESLint
+* Stylelint
+* Sass _(uses Dart Sass by default)_
+* TypeScript _(optional)_
+* Vue.js _(optional)_
 
 ### Experimental features
 * Optional chaining ([v8.dev](https://v8.dev/features/optional-chaining))

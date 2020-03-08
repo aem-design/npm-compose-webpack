@@ -4,12 +4,17 @@ import webpack from 'webpack'
 import css from '../support/css'
 
 import {
+  DependenciesMap,
+} from '../types'
+
+import {
   WebpackAliases,
 } from '../types/webpack'
-import Feature, { FeatureDependencies } from './feature'
+
+import Feature from './feature'
 
 export default class Vue extends Feature {
-  protected getFeatureDependencies(): FeatureDependencies {
+  public getFeatureDependencies(): DependenciesMap {
     return {
       dev: [
         'vue-loader',
@@ -20,6 +25,10 @@ export default class Vue extends Feature {
 
       nonDev: ['vue'],
     }
+  }
+
+  public getFeatureAssetFilters(): string[] {
+    return ['vue']
   }
 
   protected aliases(): WebpackAliases {

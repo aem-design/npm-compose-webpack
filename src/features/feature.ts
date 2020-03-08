@@ -1,8 +1,14 @@
-import webpack from 'webpack'
 import _concat from 'lodash/concat'
 import _merge from 'lodash/merge'
+import webpack from 'webpack'
+import merge from 'webpack-merge'
 
 import {
+  mergeStrategy,
+} from '../config'
+
+import {
+  DependenciesMap,
   RuntimeConfiguration,
 } from '../types'
 
@@ -12,7 +18,6 @@ import {
 
 import {
   FeatureContract,
-  FeatureDependencies,
   FeatureEnvironment,
 } from '../types/feature'
 
@@ -22,53 +27,41 @@ import {
 
 export {
   FeatureContract,
-  FeatureDependencies,
   FeatureEnvironment,
 }
 
 export default class Feature extends FeatureContract {
   protected env!: FeatureEnvironment
 
-  private readonly dependencies: string[] = [];
-  private readonly devDependencies: string[] = [];
-
   public constructor(env: FeatureEnvironment) {
     super()
 
-    const { dev, nonDev } = this.getFeatureDependencies()
-
-    this.dependencies    = nonDev
-    this.devDependencies = dev
-    this.env             = env
-  }
-
-  public getDependencyList(type: DependencyType): string[] {
-    return type === DependencyType.DEV ? this.devDependencies : this.dependencies
+    this.env = env
   }
 
   public defineWebpackConfiguration(webpackConfig: RuntimeConfiguration): RuntimeConfiguration {
-    const updatedConfig = webpackConfig
+    return merge.smartStrategy(mergeStrategy)(webpackConfig, {
+      module: {
+        rules: this.rules(),
+      },
 
-    if (updatedConfig.module) {
-      updatedConfig.module.rules = _concat(updatedConfig.module.rules, this.rules())
-    }
+      plugins: this.plugins(),
 
-    if (updatedConfig.plugins) {
-      updatedConfig.plugins = _concat(updatedConfig.plugins, this.plugins())
-    }
-
-    if (updatedConfig.resolve) {
-      updatedConfig.resolve.alias = _merge(updatedConfig.resolve.alias, this.aliases())
-    }
-
-    return webpackConfig
+      resolve: {
+        alias: this.aliases(),
+      },
+    })
   }
 
-  protected getFeatureDependencies(): FeatureDependencies {
+  public getFeatureDependencies(): DependenciesMap {
     return {
-      dev    : [],
-      nonDev : [],
+      [DependencyType.DEV]     : [],
+      [DependencyType.NON_DEV] : [],
     }
+  }
+
+  public getFeatureAssetFilters(): string[] {
+    return []
   }
 
   protected aliases(): WebpackAliases {

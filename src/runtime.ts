@@ -1,4 +1,5 @@
 import { relative, resolve } from 'path'
+import { codeFrameColumns } from '@babel/code-frame'
 import chalk from 'chalk'
 import figlet from 'figlet'
 import _get from 'lodash/get'
@@ -15,15 +16,16 @@ import { logger } from '@aem-design/compose-support'
 import {
   ComposeConfiguration,
   Environment,
+  FeatureList,
   RuntimeConfiguration,
   RuntimePaths,
 } from './types'
 
 import {
   ConfigurationType,
-  DependencyType,
   Hook,
   HookType,
+  InstallStatus,
   WebpackIgnoredProps
 } from './types/enums'
 
@@ -33,6 +35,8 @@ import {
 } from './types/webpack'
 
 import {
+  mergeStrategy,
+
   getConfiguration,
   getMavenConfiguration,
   getProjectPath,
@@ -46,21 +50,36 @@ import EntryConfiguration from './entry'
 
 import FeatureMap from './features/map'
 
+import { executeHook } from './hooks'
+
+import * as plugins from './plugins'
+
+import css from './support/css'
+import installDependencies from './support/dependencies'
+
 import {
+  exit,
   generateConfiguration,
   getIfUtilsInstance,
 } from './support/helpers'
 
-import { executeHook } from './hooks'
+// Internal
+// TODO: Move into the global configuration
+const assetFilters = ['fontawesome.*']
 
-import css from './support/css'
-
+/**
+ * Process the incoming features and install any dependencies they require. Dependencies are
+ * using either NPM or Yarn depending which type of lock file exists.
+ */
 function processFeatures({ environment, features, paths, webpackConfig }: {
   environment: Environment;
-  features: string[];
+  features: FeatureList;
   paths: RuntimePaths;
-  webpackConfig: WebpackConfiguration;
-}) {
+  webpackConfig: RuntimeConfiguration;
+}): RuntimeConfiguration {
+  let status!: InstallStatus
+  let updatedConfig = webpackConfig
+
   for (const feature of features) {
     try {
       const featureInstance = FeatureMap[feature]({
@@ -69,14 +88,30 @@ function processFeatures({ environment, features, paths, webpackConfig }: {
         webpack: webpackConfig,
       })
 
-      console.log(featureInstance.getDependencyList(DependencyType.NON_DEV))
-      console.log(featureInstance.getDependencyList(DependencyType.DEV))
-    } catch (_) {
-      // Nothing to do here...
+      status = status === InstallStatus.RESTART
+        ? status
+        : installDependencies(feature, featureInstance.getFeatureDependencies())
+
+      assetFilters.push(...featureInstance.getFeatureAssetFilters())
+
+      updatedConfig = featureInstance.defineWebpackConfiguration(webpackConfig)
+    } catch (ex) {
+      console.log()
+      logger.error('Failed to install dependencies:', ex.message)
+
+      // TODO: Use exit(1) instead once TypeScript is implemented
+      // exit(1)
     }
   }
 
-  throw new Error('testing...')
+  if (status === InstallStatus.RESTART) {
+    console.log()
+    logger.info('It appears some dependencies were just installed, please re-run the same command again to continue!')
+
+    exit(0)
+  }
+
+  return updatedConfig
 }
 
 export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOptions) => {
@@ -189,10 +224,6 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
       }
     }
 
-    // Merge some internal/external configurations together
-    // TODO: Move vue into dynamic config
-    const assetFilter = ['fontawesome.*', 'vue'/* , ...(configurationForWebpack.assetFilter || [])*/]
-
     /**
      * Post-init (before) hooks
      */
@@ -200,7 +231,6 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
 
     // Webpack configuration
     const clientLibsPath     = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
-    // const devServerProxyPort = _get(configurationForWebpack, 'server.proxyPort', authorPort)
     const entry              = EntryConfiguration(flagHMR)
     const mode               = getIfUtilsInstance().ifDev('development', 'production')
 
@@ -216,12 +246,22 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
     logger.info('')
     logger.info(chalk.bold('Entry Configuration'))
     logger.info('-------------------')
-    console.log(JSON.stringify(entry, null, 2))
 
-    const config: RuntimeConfiguration = merge.smartStrategy({
-      'module.rules' : 'append',
-      'plugins'      : 'append',
-    })({
+    const entryConfig = JSON.stringify(entry, null, 2)
+
+    const entryCodeFrame = codeFrameColumns(entryConfig, {
+      end   : { column: 0, line: 0 },
+      start : { column: 0, line: 0 },
+    }, {
+      highlightCode : true,
+      linesBelow    : entryConfig.split('\n').length,
+    })
+
+    console.log()
+    console.log(entryCodeFrame)
+    console.log()
+
+    const config: RuntimeConfiguration = merge.smartStrategy(mergeStrategy)({
       context: paths.src,
       devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
       entry,
@@ -235,7 +275,6 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
       },
 
       performance: {
-        assetFilter       : (assetFilename) => !new RegExp(assetFilter.join('|')).test(assetFilename),
         hints             : getIfUtilsInstance().ifDev(false, 'warning'),
         maxAssetSize      : 300000,
         maxEntrypointSize : 300000,
@@ -339,9 +378,7 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
         },
       },
 
-      // plugins: removeEmpty<webpack.Plugin>([
-      //   ...plugins.ComposeDefaults(),
-      // ]),
+      plugins: plugins.ComposeDefaults(),
 
       resolve: {
         alias: {
@@ -387,7 +424,7 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
           },
         ],
       },
-    }, configurationForWebpack as any) as RuntimeConfiguration
+    } as RuntimeConfiguration, configurationForWebpack)
 
     /**
      * Detect opt-in features
@@ -397,8 +434,15 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
         environment,
         features: configuration.features,
         paths,
-        webpackConfig: configurationForWebpack,
+        webpackConfig: config,
       })
+    }
+
+    // Generate the asset filters
+    if (config.performance) {
+      const filters = assetFilters.join('|')
+
+      config.performance.assetFilter = (assetFilename) => !new RegExp(filters).test(assetFilename)
     }
 
     /**
