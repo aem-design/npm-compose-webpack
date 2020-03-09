@@ -4,9 +4,10 @@ import chalk from 'chalk'
 import figlet from 'figlet'
 import _get from 'lodash/get'
 import _has from 'lodash/has'
+import rimraf from 'rimraf'
 import merge from 'webpack-merge'
 
-import ExtractCssChunks from 'extract-css-chunks-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 
@@ -37,10 +38,12 @@ import {
   mergeStrategy,
 
   getConfiguration,
+  getConfigurable,
   getMavenConfiguration,
   getProjectPath,
 
   setConfiguration,
+  setConfigurable,
   setProjects,
   setupEnvironment,
 } from './config'
@@ -63,10 +66,6 @@ import {
   getIfUtilsInstance,
 } from './support/helpers'
 
-// Internal
-// TODO: Move into the global configuration
-const assetFilters = ['fontawesome.*']
-
 /**
  * Process the incoming features and install any dependencies they require. Dependencies are
  * using either NPM or Yarn depending which type of lock file exists.
@@ -77,22 +76,28 @@ function processFeatures({ environment, features, paths, webpackConfig }: {
   paths: RuntimePaths;
   webpackConfig: RuntimeConfiguration;
 }): RuntimeConfiguration {
+  const skippedFeatures: string[] = []
+
   let status!: InstallStatus
   let updatedConfig = webpackConfig
 
   for (const feature of features) {
     try {
       const featureInstance = FeatureMap[feature]({
-        general: environment,
+        ...environment,
         paths,
         webpack: webpackConfig,
       })
 
-      status = status === InstallStatus.RESTART
-        ? status
-        : installDependencies(feature, featureInstance.getFeatureDependencies())
+      const featureStatus = installDependencies(featureInstance.getFeatureDependencies())
 
-      assetFilters.push(...featureInstance.getFeatureAssetFilters())
+      status = status === InstallStatus.RESTART ? status : featureStatus
+
+      if (featureStatus === InstallStatus.SKIPPED) {
+        skippedFeatures.push(feature)
+      }
+
+      setConfigurable('assetFilters', featureInstance.getFeatureAssetFilters())
 
       updatedConfig = merge.smartStrategy(mergeStrategy)(
         updatedConfig,
@@ -104,6 +109,10 @@ function processFeatures({ environment, features, paths, webpackConfig }: {
 
       exit(1)
     }
+  }
+
+  if (skippedFeatures.length) {
+    logger.info('No required dependencies are missing for', chalk.bold(skippedFeatures.join(', ')))
   }
 
   if (status === InstallStatus.RESTART) {
@@ -180,21 +189,15 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
     logger.info(chalk.bold('Shared Apps Path    :'), sharedAppsPath)
     logger.info('')
 
-    if (!flagHMR) {
-      setConfiguration(
-        ConfigurationType.PATH_CLIENTLIBS,
-        `${sharedAppsPath}/${appsPath}/clientlibs/${project}/`,
-      )
-
-      setConfiguration(
-        ConfigurationType.PATH_PUBLIC_AEM,
-        `/etc.clientlibs/${appsPath}/clientlibs/${project}/`,
-      )
-    }
+    setConfiguration(
+      ConfigurationType.PATH_PUBLIC_AEM,
+      `/etc.clientlibs/${appsPath}/clientlibs/${project}`,
+    )
 
     // Define the project paths
     const paths = {
-      aem: getConfiguration(ConfigurationType.PATH_PUBLIC_AEM),
+      aem: flagHMR ? '/' : getConfiguration(ConfigurationType.PATH_PUBLIC_AEM),
+      out: flagHMR ? getConfiguration(ConfigurationType.PATH_PUBLIC_AEM).substr(1) : false,
       src: getConfiguration(ConfigurationType.PATH_SOURCE),
 
       project: {
@@ -207,9 +210,6 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
       ...environment,
       paths,
     }
-
-    const nodeModulesChildPath   = resolve(process.cwd(), 'node_modules')
-    const nodeModulesCurrentPath = resolve(__dirname, '../../', 'node_modules')
 
     // Setup the webpack configuration
     const configurationForWebpack = generateConfiguration(
@@ -232,18 +232,17 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
     executeHook(Hook.POST_INIT, HookType.BEFORE, environmentConfiguration)
 
     // Webpack configuration
-    const clientLibsPath     = getConfiguration(ConfigurationType.PATH_CLIENTLIBS)
-    const entry              = EntryConfiguration(flagHMR)
-    const mode               = getIfUtilsInstance().ifDev('development', 'production')
+    const entry = EntryConfiguration(flagHMR)
+    const mode  = getIfUtilsInstance().ifDev('development', 'production')
 
     logger.info(chalk.bold('Webpack Configuration'))
     logger.info('---------------------')
     logger.info(chalk.bold('Compilation Mode    :'), mode)
     logger.info(chalk.bold('Project Name        :'), project)
     logger.info(chalk.bold('Hot Reloading?      :'), flagHMR ? 'yes' : 'no')
-    logger.info(chalk.bold('Client Libary Path  :'), clientLibsPath)
-    logger.info(chalk.bold('Public Path         :'), paths.project.public)
+    logger.info(chalk.bold('Client Libary Path  :'), getConfiguration(ConfigurationType.PATH_PUBLIC_AEM))
     logger.info(chalk.bold('Public Path (AEM)   :'), paths.aem)
+    logger.info(chalk.bold('Public Path         :'), paths.project.public)
     logger.info(chalk.bold('Source Path         :'), paths.project.src)
     logger.info('')
     logger.info(chalk.bold('Entry Configuration'))
@@ -263,6 +262,17 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
     console.log(entryCodeFrame)
     console.log()
 
+    /**
+     * Clean the public directory for the project first...
+     */
+    if (environment.clean === true) {
+      logger.info('Cleaning public folder...')
+      rimraf.sync(`public/${environment.project}/**/*`)
+      logger.info(chalk.bold('Done!'))
+
+      console.log()
+    }
+
     let config: RuntimeConfiguration = merge.smartStrategy(mergeStrategy)({
       context: paths.src,
       devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
@@ -270,13 +280,14 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
       mode,
 
       output: {
-        chunkFilename : `clientlibs-footer/resources/chunks/[name]${flagProd ? '.[contenthash:8]' : ''}.js`,
-        filename      : 'clientlibs-footer/js/[name].js',
+        chunkFilename : `${paths.out || 'clientlibs-footer'}/resources/chunks/[name]${flagProd ? '.[contenthash:8]' : ''}.js`,
+        filename      : `${paths.out || 'clientlibs-footer/js'}/[name].js`,
         path          : paths.project.public,
-        publicPath    : paths.aem,
+        publicPath    : `${flagHMR ? '' : paths.aem}/`,
       },
 
       performance: {
+        assetFilter       : (assetFilename) => !new RegExp(getConfigurable('assetFilters').join('|')).test(assetFilename),
         hints             : getIfUtilsInstance().ifDev(false, 'warning'),
         maxAssetSize      : 300000,
         maxEntrypointSize : 300000,
@@ -289,12 +300,20 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
             test    : /\.scss$/,
 
             use: [
-              flagHMR ? 'style-loader' : { loader: ExtractCssChunks.loader },
-              ...css(webpackEnv),
+              flagHMR ? 'style-loader' : MiniCssExtractPlugin.loader,
+              ...css(environmentConfiguration),
             ],
           },
           {
-            exclude : [nodeModulesChildPath, nodeModulesCurrentPath],
+            test: /\.css$/,
+
+            use: [
+              MiniCssExtractPlugin.loader,
+              ...css(environmentConfiguration),
+            ],
+          },
+          {
+            exclude : /node_modules/,
             loader  : 'babel-loader',
             test    : /\.js$/,
           },
@@ -362,7 +381,7 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
         },
       },
 
-      plugins: plugins.ComposeDefaults(),
+      plugins: plugins.ComposeDefaults(paths),
 
       resolve: {
         extensions: ['.js'],
@@ -412,13 +431,6 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
         paths,
         webpackConfig: config,
       })
-    }
-
-    // Generate the asset filters
-    if (config.performance) {
-      const filters = assetFilters.join('|')
-
-      config.performance.assetFilter = (assetFilename) => !new RegExp(filters).test(assetFilename)
     }
 
     /**

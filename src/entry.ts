@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import _get from 'lodash/get'
 import webpack from 'webpack'
 
@@ -20,8 +21,8 @@ function getHMRConfiguration(project: Project): webpack.Entry {
   const additionalEntries = project.additionalEntries
 
   const fileMap: typeof mappedEntries = {
-    footer: [..._get(project, 'fileMap.footer', [])],
-    header: [..._get(project, 'fileMap.header', [])],
+    footer: _get(project, 'fileMap.footer', []),
+    header: _get(project, 'fileMap.header', []),
   }
 
   if (additionalEntries && fileMap) {
@@ -45,7 +46,7 @@ function getHMRConfiguration(project: Project): webpack.Entry {
     ],
 
     'clientlibs-header': [
-      './hmr/empty.css',
+      resolve(__dirname, '../support/empty.css'),
       ...mappedEntries.header,
     ],
   }

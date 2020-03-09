@@ -3,44 +3,36 @@ import webpack from 'webpack'
 
 import { removeEmpty } from 'webpack-config-utils'
 
-import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 import ESLintPlugin from 'eslint-webpack-plugin'
 import LodashPlugin from 'lodash-webpack-plugin'
-import ExtractCssChunks from 'extract-css-chunks-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
-import { ConfigurationType } from '../types/enums'
+import {
+  RuntimePaths,
+} from '../types'
 
 import {
   environment,
-
-  getProjectPath,
 } from '../config'
 
-import { getIfUtilsInstance } from '../support/helpers'
+import {
+  getIfUtilsInstance,
+} from '../support/helpers'
+
+import {
+  resolveDependency,
+} from '../support/dependencies'
 
 import ComposeMessages from './messages'
 
-export default (): webpack.Plugin[] => {
-  const publicPath = getProjectPath(ConfigurationType.PATH_PUBLIC)
-  const sourcePath = getProjectPath(ConfigurationType.PATH_SOURCE)
-
+export default (paths: RuntimePaths): webpack.Plugin[] => {
   return removeEmpty<webpack.Plugin>([
 
     getIfUtilsInstance().ifProd(new ComposeMessages()),
     getIfUtilsInstance().ifNotProd(new webpack.ProgressPlugin()),
-
-    /**
-     * When enabled, we clean up our public directory for the current project so we are using old
-     * assets when sending out files for our builds and pipelines.
-     *
-     * @see https://github.com/johnagan/clean-webpack-plugin
-     */
-    getIfUtilsInstance().ifClean(new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [resolve(publicPath, '**/*')],
-    })),
 
     /**
      * Copies static assets from our source folder into the public structure for AEM.
@@ -49,14 +41,14 @@ export default (): webpack.Plugin[] => {
      */
     new CopyWebpackPlugin([
       {
-        context : resolve(sourcePath, 'clientlibs-header/resources'),
+        context : resolve(paths.project.src, 'clientlibs-header/resources'),
         from    : './**/*.*',
-        to      : resolve(publicPath, 'clientlibs-header/resources'),
+        to      : resolve(paths.project.public, 'clientlibs-header/resources'),
       },
       {
-        context : resolve(sourcePath, 'clientlibs-header/css'),
+        context : resolve(paths.project.src, 'clientlibs-header/css'),
         from    : './*.css',
-        to      : resolve(publicPath, 'clientlibs-header/css'),
+        to      : resolve(paths.project.public, 'clientlibs-header/css'),
       },
     ]),
 
@@ -64,11 +56,11 @@ export default (): webpack.Plugin[] => {
      * CSS extraction.
      * Pulls out our CSS from the defined entry path(s) and puts it into our AEM structure.
      *
-     * @see https://github.com/faceyspacey/extract-css-chunks-webpack-plugin
+     * @see https://webpack.js.org/plugins/mini-css-extract-plugin/
      */
-    new ExtractCssChunks({
-      chunkFilename : 'clientlibs-header/css/[id].css',
-      filename      : 'clientlibs-header/css/[name].css',
+    new MiniCssExtractPlugin({
+      chunkFilename : `${paths.out || 'clientlibs-header/css'}/[id].css`,
+      filename      : `${paths.out || 'clientlibs-header/css'}/[name].css`,
     }),
 
     /**
@@ -76,28 +68,35 @@ export default (): webpack.Plugin[] => {
      *
      * @see https://webpack.js.org/plugins/stylelint-webpack-plugin
      */
-    new StyleLintPlugin({
-      context     : resolve(sourcePath, 'scss'),
-      emitErrors  : false,
-      failOnError : false,
-      files       : ['**/*.scss'],
-      quiet       : false,
-    }),
+    getIfUtilsInstance().ifStylelint(new StyleLintPlugin({
+      context       : resolve(paths.project.src, 'scss'),
+      // @ts-ignore
+      emitError     : false,
+      emitWarning   : true,
+      // @ts-check
+      failOnError   : false,
+      files         : ['**/*.scss'],
+      quiet         : false,
+      // @ts-ignore
+      stylelintPath : resolveDependency('stylelint', true, require.resolve('stylelint')),
+      // @ts-check
+    })),
 
     /**
      * Validate our JavaScript code using ESLint to ensure we are following our own good practices.
      *
      * @see https://github.com/webpack-contrib/eslint-webpack-plugin
      */
-    new ESLintPlugin({
-      context     : resolve(sourcePath, 'js'),
+    getIfUtilsInstance().ifEslint(new ESLintPlugin({
+      context     : resolve(paths.project.src, 'js'),
       emitError   : false,
+      eslintPath  : resolveDependency('eslint', true, require.resolve('eslint')),
       failOnError : environment.mode === 'production',
-      files       : ['**/*.ts'],
+      // TODO: Pass this via config
+      files       : ['**/*.js'],
       fix         : false,
-      formatter   : 'codeframe',
       quiet       : false,
-    }),
+    })),
 
     /**
      * Ensure all chunks that are generated have a unique ID assigned to them instead of pseudo-random

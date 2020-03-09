@@ -22,12 +22,14 @@ export default class Vue extends Feature {
     return {
       dev: [
         'vue-loader',
-        'vue-property-decorator',
         'vue-style-loader',
         'vue-template-compiler',
       ],
 
-      nonDev: ['vue'],
+      nonDev: [
+        'vue-property-decorator',
+        'vue',
+      ],
     }
   }
 
@@ -37,7 +39,7 @@ export default class Vue extends Feature {
 
   protected aliases(): WebpackAliases {
     return {
-      vue$: this.env.general.mode === 'development' ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.min.js',
+      vue$: this.env.mode === 'development' ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.min.js',
     }
   }
 
@@ -80,11 +82,11 @@ export default class Vue extends Feature {
             loader: 'vue-style-loader',
 
             options: {
-              hmr       : this.env.general.hmr === true,
+              hmr       : this.env.hmr === true,
               sourceMap : true,
             },
           },
-          ...css(this.env.general, {
+          ...css(this.env, {
             sass: {
               loader: {
                 prependData: `@import 'setup';`,

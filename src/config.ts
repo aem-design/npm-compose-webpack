@@ -1,4 +1,7 @@
 import { resolve } from 'path'
+import _get from 'lodash/get'
+import _has from 'lodash/has'
+import _set from 'lodash/set'
 import webpack from 'webpack'
 
 import {
@@ -9,11 +12,21 @@ import {
   ProjectsConfiguration,
 } from './types'
 
-import { ConfigurationType } from './types/enums'
+import {
+  ConfigurationType,
+} from './types/enums'
 
-import { getMavenConfigurationValueByPath } from './support/helpers'
+import {
+  WebpackConfigurables,
+} from './types/webpack'
 
-import { defaultProjects } from './defaults'
+import {
+  getMavenConfigurationValueByPath,
+} from './support/helpers'
+
+import {
+  defaultProjects,
+} from './defaults'
 
 // Internal
 const workingDirectory = process.cwd()
@@ -21,7 +34,6 @@ const workingDirectory = process.cwd()
 const configurationDefaults: Configuration = {
   [ConfigurationType.MAVEN_PARENT]    : resolve(workingDirectory, '../pom.xml'),
   [ConfigurationType.MAVEN_PROJECT]   : resolve(workingDirectory, './pom.xml'),
-  [ConfigurationType.PATH_CLIENTLIBS] : false,
   [ConfigurationType.PATH_PUBLIC]     : resolve(workingDirectory, 'public'),
   [ConfigurationType.PATH_PUBLIC_AEM] : '/',
   [ConfigurationType.PATH_SOURCE]     : resolve(workingDirectory, 'src'),
@@ -33,15 +45,25 @@ const configuration: Configuration = {
 
 const configKeys = Object.values(ConfigurationType)
 
+const webpackConfigurables: WebpackConfigurables = {
+  assetFilters: ['fontawesome.*'],
+}
+
 let projects: ProjectsConfiguration = {}
 
 /**
  * Environment configuration for Webpack.
  */
 export let environment: Environment = {
-  hmr     : false,
-  mode    : 'development',
-  project : '',
+  analyzer  : false,
+  clean     : false,
+  eslint    : true,
+  hmr       : false,
+  maven     : false,
+  mode      : 'development',
+  project   : '',
+  stylelint : true,
+  watch     : false,
 }
 
 /**
@@ -95,7 +117,7 @@ export function setupEnvironment(env: webpack.ParserOptions): Environment {
     hmr     : env.watch === true,
     mode    : env.dev === true ? 'development' : 'production',
     project : env.project,
-  }
+  } as Environment
 
   // Ensure the project is valid
   if (!environment.project) {
@@ -125,21 +147,48 @@ export function getProjectPath<T extends ConfigurationType>(path: T): string {
 export function getMavenConfiguration(): MavenConfigMap {
   return {
     appsPath: getMavenConfigurationValueByPath<string>({
-      parser : (value) => value[0],
-      path   : 'package.appsPath',
-      pom    : configuration[ConfigurationType.MAVEN_PROJECT],
+      path : 'package.appsPath',
+      pom  : configuration[ConfigurationType.MAVEN_PROJECT],
     }),
 
     authorPort: getMavenConfigurationValueByPath<number>({
-      parser : (value) => value[0],
-      path   : 'crx.port',
-      pom    : configuration[ConfigurationType.MAVEN_PARENT],
+      path: 'crx.port',
     }),
 
     sharedAppsPath: getMavenConfigurationValueByPath<string>({
-      parser : (value) => value[0],
-      path   : 'package.path.apps',
-      pom    : configuration[ConfigurationType.MAVEN_PROJECT],
+      path : 'package.path.apps',
+      pom  : configuration[ConfigurationType.MAVEN_PROJECT],
     }),
   }
+}
+
+/**
+ * Assigns the `value` to the `key` given. Built-in checks enable merging for some obejct
+ * types, otherwise `value` overrides the previous value set.
+ */
+export function setConfigurable<T extends keyof WebpackConfigurables, R extends WebpackConfigurables[T]>(key: T, value: R) {
+  if (!_has(webpackConfigurables, key)) {
+    throw new Error(`Unable to update webpack configurable for ${key} as it is invalid!`)
+  }
+
+  let newValue = _get(webpackConfigurables, key)
+
+  if (Array.isArray(value)) {
+    newValue = [...newValue, ...value]
+  } else {
+    newValue = value
+  }
+
+  _set(webpackConfigurables, key, newValue)
+}
+
+/**
+ * Retrieve the stored value by the `key` given.
+ */
+export function getConfigurable<T extends keyof WebpackConfigurables>(key: T) {
+  if (!_has(webpackConfigurables, key)) {
+    throw new Error(`Unable to get webpack configurable for ${key} as it is invalid!`)
+  }
+
+  return _get(webpackConfigurables, key)
 }

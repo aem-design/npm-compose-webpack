@@ -40,13 +40,19 @@ function executeInstallation(dependenciesMap: DependenciesMap) {
   ))
 }
 
-export function resolveDependency(dependency: string): string {
-  return require.resolve(dependency, {
-    paths: [process.cwd()]
-  })
+export function resolveDependency(dependency: string, catchError = false, fallback = ''): string {
+  if (catchError === true) {
+    try {
+      return require.resolve(dependency, { paths: [process.cwd()] })
+    } catch (_) {
+      return fallback
+    }
+  }
+
+  return require.resolve(dependency, { paths: [process.cwd()] })
 }
 
-export default function installDependencies(name: string, dependenciesMap: DependenciesMap): InstallStatus {
+export default function installDependencies(dependenciesMap: DependenciesMap): InstallStatus {
   const dependencyTypes = Object.keys(dependenciesMap)
 
   const missingDependencies =
@@ -62,8 +68,6 @@ export default function installDependencies(name: string, dependenciesMap: Depen
 
   // Only install this batch of dependencies if at least one is missing
   if (missingDependencies.length === 0) {
-    logger.info('No required dependencies are missing for', chalk.bold(name))
-
     return InstallStatus.SKIPPED
   }
 

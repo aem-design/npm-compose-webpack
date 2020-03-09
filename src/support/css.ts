@@ -4,32 +4,38 @@ import webpack from 'webpack'
 
 import {
   CSSLoaderOptions,
+  Environment,
+  RuntimePaths,
 } from '../types'
 
+import {
+  resolveConfigFile,
+} from './helpers'
+
 export default (
-  { dev, prod }: webpack.ParserOptions,
+  { mode }: Environment & { paths: RuntimePaths },
   options: CSSLoaderOptions = {},
 ): webpack.RuleSetUseItem[] => ([
   {
     loader: 'css-loader',
 
     options: {
-      importLoaders : 1,
-      sourceMap     : dev === true,
+      importLoaders : 2,
+      sourceMap     : mode === 'development',
     },
   },
   {
-    loader: 'postcss-loader',
+    ident  : 'postcss',
+    loader : 'postcss-loader',
 
     options: {
-      ident     : 'postcss',
-      sourceMap : dev === true,
+      sourceMap: mode === 'development',
 
       config: {
-        path: resolve(process.cwd(), 'postcss.config.js'),
+        path: resolveConfigFile('postcss.config.js', 'configs/postcss.config.js'),
 
         ctx: {
-          prod: prod === true,
+          prod: mode === 'development',
         },
       },
     },
@@ -39,10 +45,10 @@ export default (
 
     options: {
       implementation : sass,
-      sourceMap      : dev === true,
+      sourceMap      : mode === 'development',
 
       sassOptions: {
-        outputStyle: dev === true ? 'expanded' : 'compressed',
+        outputStyle: mode === 'development' ? 'expanded' : 'compressed',
 
         ...(options.sass?.options ?? {}),
       } as sass.Options,

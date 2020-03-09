@@ -110,9 +110,11 @@ NPM will automagically reference the binary in `node_modules` for you, and execu
 | **--clean**<br><sub>_Should the public directory for the specified project be cleaned?_</sub> | `Boolean` | `true` |
 | **--config** _&lt;file name&gt;_<br><sub>_Compose configuration file name. You only need to pass a string as the module will resolve it using `process.cwd()`_</sub> | `String` | `compose.config.js` |
 | **--dev** _or_ **-d**<br><sub>_Set the build mode to development_</sub> | `Boolean` | `false` |
+| **--eslint**<br><sub>_Toggle ESLint for JavaScript files_</sub> | `Boolean` | `true` |
 | **--maven**<br><sub>_Was the task started from within Maven?_</sub> | `Boolean` | `false` |
 | **--prod** _or_ **-p**<br><sub>_Set the build mode to production_</sub> | `Boolean` | `false` |
 | **--project** _&lt;name&gt;_ _(required)_<br><sub>_Name of the project to build_</sub> | `String` |
+| **--stylelint**<br><sub>_Toggle Stylelint for Sass and CSS files_</sub> | `Boolean` | `true` |
 | **--watch**<br><sub>_Use webpack-dev-server to proxy AEM and serve changes in real-time_</sub> | `Boolean` | `false` |
 | **--help** _or_ **-h**<br><sub>_Show help for the command line options_</sub> |
 | **--version** _or_ **-v**<br><sub>_Show the version of `aemdesign-compose`_</sub> |
@@ -253,7 +255,7 @@ module.exports = configuration({
 Following the zero-config approach we are going for there are a number of things OOTB we do to help the situation that is browser support and modern features.
 
 * Babel 7 (with dynamic imports)
-* CSS Modules
+* CSS in JS
 * ES6 support
 * ESLint
 * Stylelint

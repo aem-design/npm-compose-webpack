@@ -1,4 +1,3 @@
-import { resolve } from 'path'
 import webpack from 'webpack'
 
 import {
@@ -9,9 +8,15 @@ import {
   resolveDependency,
 } from '../support/dependencies'
 
+import {
+  resolveConfigFile,
+} from '../support/helpers'
+
 import Feature from './feature'
 
 export default class TypeScript extends Feature {
+  private readonly configFile = resolveConfigFile('tsconfig.json', 'configs/tsconfig.json')
+
   public getFeatureDependencies(): DependenciesMap {
     return {
       dev    : ['tsconfig-paths-webpack-plugin', 'ts-loader', 'typescript'],
@@ -27,7 +32,9 @@ export default class TypeScript extends Feature {
         extensions: ['.ts', '.tsx'],
 
         plugins: [
-          new TsconfigPathsPlugin(),
+          new TsconfigPathsPlugin({
+            configFile: this.configFile,
+          }),
         ],
       },
     }
@@ -47,7 +54,7 @@ export default class TypeScript extends Feature {
             loader: 'ts-loader',
 
             options: {
-              configFile: resolve(process.cwd(), 'tsconfig.json'),
+              configFile: this.configFile,
             },
           },
         ],

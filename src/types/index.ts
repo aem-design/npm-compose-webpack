@@ -46,6 +46,7 @@ export interface RuntimeConfiguration extends webpack.Configuration {
 
 export interface RuntimePaths {
   aem: string;
+  out: string | boolean;
   project: ProjectPaths;
   src: string;
 }
@@ -58,16 +59,21 @@ export interface ProjectPaths {
 export interface Configuration {
   [ConfigurationType.MAVEN_PARENT]: string;
   [ConfigurationType.MAVEN_PROJECT]: string;
-  [ConfigurationType.PATH_CLIENTLIBS]: string | false;
   [ConfigurationType.PATH_PUBLIC]: string;
   [ConfigurationType.PATH_PUBLIC_AEM]: string;
   [ConfigurationType.PATH_SOURCE]: string;
 }
 
 export interface Environment extends WebpackParserOptions {
+  analyzer: boolean;
+  clean: boolean;
+  eslint: boolean;
   hmr: boolean;
+  maven: boolean;
   mode: 'development' | 'production';
   project: string;
+  stylelint: boolean;
+  watch: boolean;
 }
 
 export type ProjectsConfiguration = Record<string, Project>

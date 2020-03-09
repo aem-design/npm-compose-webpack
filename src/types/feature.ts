@@ -11,8 +11,7 @@ import {
   RuntimePaths,
 } from '.'
 
-export interface FeatureEnvironment {
-  general: Environment;
+export interface FeatureEnvironment extends Environment {
   paths: RuntimePaths;
   webpack: WebpackConfiguration;
 }

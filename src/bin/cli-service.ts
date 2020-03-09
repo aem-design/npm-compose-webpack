@@ -38,6 +38,11 @@ const args = yargs
     description : 'Set the build mode to development',
     type        : 'boolean',
   })
+  .option('eslint', {
+    default     : true,
+    description : 'Toggle ESLint validation via webpack',
+    type        : 'boolean',
+  })
   .option('maven', {
     default     : false,
     description : 'Was the task started from within Maven?',
@@ -53,6 +58,11 @@ const args = yargs
     description : 'Name of the project to build',
     required    : true,
     type        : 'string',
+  })
+  .option('stylelint', {
+    default     : true,
+    description : 'Toggle Stylelint validation via webpack',
+    type        : 'boolean',
   })
   .option('watch', {
     default     : false,
