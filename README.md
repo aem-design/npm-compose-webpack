@@ -280,8 +280,8 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11+ ✔ | Lates
 ## Todo
 - [ ] Create Wiki documentation
 - [ ] Add more configuration points **(in-progress)**
-- [ ] Opt-in for TypeScript **(in-progress)**
-- [ ] Opt-in for Vue.js **(in-progress)**
+- [x] Opt-in for TypeScript
+- [x] Opt-in for Vue.js
 - [x] Generate first-class typings for `compose.config.js`
 - [x] Allow `webpack` configuration to accept a function
 - [x] ~~Allow the object returned in `compose.config.js` to be a function~~
