@@ -1,3 +1,5 @@
+---
+---
 (function (jtd, undefined) {
 
 // Event handling
@@ -44,16 +46,18 @@ function initNav() {
 
 function initSearch() {
   var request = new XMLHttpRequest();
-  request.open('GET', 'https://aem-design.github.io/npm-compose-webpack/assets/js/search-data.json', true);
+  request.open('GET', '{{ "assets/js/search-data.json" | absolute_url }}', true);
 
   request.onload = function(){
     if (request.status >= 200 && request.status < 400) {
       // Success!
       var data = JSON.parse(request.responseText);
       
-      
-      lunr.tokenizer.separator = /[\s/]+/
-      
+      {% if site.search_tokenizer_separator != nil %}
+      lunr.tokenizer.separator = {{ site.search_tokenizer_separator }}
+      {% else %}
+      lunr.tokenizer.separator = /[\s\-/]+/
+      {% endif %}
       
       var index = lunr(function () {
         this.ref('id');
@@ -292,4 +296,4 @@ jtd.onReady(function(){
 
 })(window.jtd = window.jtd || {});
 
-
+{% include js/custom.js %}
