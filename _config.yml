@@ -51,6 +51,10 @@ plugins:
   - jekyll-seo-tag
   - jekyll-favicon
 
+whitelist:
+  - jekyll-seo-tag
+  - jekyll-favicon
+
 compress_html:
   clippings: all
   comments: all
@@ -58,6 +62,8 @@ compress_html:
   startings: []
   blanklines: false
   profile: false
+  ignore:
+    envs: development
 
 favicon:
   source: aem-logo.png

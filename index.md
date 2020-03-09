@@ -2,7 +2,7 @@
 layout: default
 title: Welcome
 nav_order: 1
-description: "Just the Docs is a responsive Jekyll theme with built-in search that is easily customizable and hosted on GitHub Pages."
+description: "A near zero-config solution to have a modern front end developer workflow for AEM"
 permalink: /
 ---
 

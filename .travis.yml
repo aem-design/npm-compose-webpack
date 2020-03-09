@@ -1,0 +1,31 @@
+language: ruby
+rvm:
+  - 2.6.3
+
+sudo: false # route your build to the container-based infrastructure for a faster build
+
+cache: bundler # caching bundler gem packages will speed up build
+
+addons:
+  apt:
+    packages:
+      - build-essential
+      - imagemagick
+      - libcurl4-openssl-dev
+
+# Optional: disable email notifications about the outcome of your builds
+notifications:
+  email: false
+
+script:
+  - bundle exec jekyll build
+
+## Create release in GitHub
+deploy:
+  provider: docs
+  local_dir: _site
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
+  on:
+    branch: gh-pages
