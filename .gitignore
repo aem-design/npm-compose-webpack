@@ -1,18 +1,6 @@
-.cache
-.vscode
-dist/
-node_modules/
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# Locks
-package-lock.json
-
-# Output of 'npm pack'
-*.tgz
+*.gem
+.bundle
+.sass-cache
+_site
+Gemfile.lock
+node_modules

@@ -1,151 +1,19 @@
 {
-  "author": "Chris Shaw <me@cshaw.xyz>",
-  "description": "Webpack configuration and helpers for the AEM.Design compose module",
-  "engines": {
-    "node": ">= 10.x",
-    "yarn": ">= 1.10.x"
+  "name": "just-the-docs",
+  "version": "0.2.7",
+  "description": "A modern Jekyll theme for documentation",
+  "repository": "pmarsceill/just-the-docs",
+  "license": "MIT",
+  "bugs": "https://github.com/pmarsceill/just-the-docs/issues",
+  "devDependencies": {
+    "stylelint": "^13.2.0",
+    "stylelint-config-primer": "^9.0.0",
+    "stylelint-selector-no-utility": "^4.0.0"
   },
-  "bin": {
-    "aemdesign-compose": "dist/bin/cli-service.js"
-  },
-  "files": [
-    "configs/",
-    "dist/",
-    "support/"
-  ],
-  "keywords": [
-    "aem design",
-    "aem",
-    "design",
-    "webpack-configuration",
-    "webpack",
-    "compose",
-    "node",
-    "adobe",
-    "webpack-dev-server",
-    "front end",
-    "front-end",
-    "frontend",
-    "live-reload",
-    "watch",
-    "typescript"
-  ],
-  "license": "Apache-2.0",
-  "main": "dist",
-  "types": "dist/types",
-  "sideEffects": false,
-  "name": "@aem-design/compose-webpack",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/aem-design/npm-compose-webpack"
-  },
-  "bugs": {
-    "url": "https://github.com/aem-design/npm-compose-webpack/issues"
-  },
-  "publishConfig": {
-    "access": "public"
+  "dependencies": {
+    "@primer/css": "^14.2.0"
   },
   "scripts": {
-    "build": "npm run clean && npm run build.compile && npm run build.types",
-    "build.compile": "cross-env NODE_ENV=production tsc --declaration false",
-    "build.types": "cross-env NODE_ENV=production tsc --emitDeclarationOnly --declaration true --declarationDir dist/types",
-    "clean": "rm -rf dist",
-    "dev": "npm run clean && cross-env NODE_ENV=development tsc --watch --declaration true --declarationDir dist/types",
-    "lint": "eslint '**/*.ts'",
-    "postbuild": "chmod +x dist/bin/cli-service.js",
-    "postversion": "npm run test && git push && git push --tags",
-    "prepack": "npm run build"
-  },
-  "husky": {
-    "skipCI": true,
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
-  },
-  "version": "1.6.1",
-  "dependencies": {
-    "@aem-design/compose-support": "1.2.1",
-    "@babel/code-frame": "^7.8.3",
-    "@babel/core": "^7.8.7",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/plugin-transform-regenerator": "^7.8.7",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/preset-env": "^7.8.7",
-    "@babel/preset-typescript": "^7.8.3",
-    "@babel/register": "^7.8.6",
-    "@babel/runtime": "^7.8.7",
-    "@babel/runtime-corejs3": "^7.8.7",
-    "@types/babel__code-frame": "^7.0.1",
-    "@types/copy-webpack-plugin": "^5.0.0",
-    "@types/figlet": "^1.2.0",
-    "@types/lodash": "^4.14.149",
-    "@types/lodash-webpack-plugin": "^0.11.3",
-    "@types/mini-css-extract-plugin": "^0.9.1",
-    "@types/node": "^13.9.0",
-    "@types/optimize-css-assets-webpack-plugin": "^5.0.1",
-    "@types/prompts": "^2.0.4",
-    "@types/rimraf": "^2.0.3",
-    "@types/sass": "^1.16.0",
-    "@types/stylelint-webpack-plugin": "^0.1.5",
-    "@types/terser-webpack-plugin": "^2.2.0",
-    "@types/webpack": "^4.41.7",
-    "@types/webpack-bundle-analyzer": "^2.13.3",
-    "@types/webpack-config-utils": "^2.3.0",
-    "@types/webpack-dev-server": "^3.10.0",
-    "@types/webpack-env": "^1.15.1",
-    "@types/xml2js": "^0.4.5",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-lodash": "^3.3.4",
-    "babel-plugin-module-resolver": "^4.0.0",
-    "chalk": "^3.0.0",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^5.1.1",
-    "css-loader": "^3.4.2",
-    "cssnano": "^4.1.10",
-    "eslint-loader": "^3.0.3",
-    "eslint-webpack-plugin": "^0.1.0",
-    "exports-loader": "^0.7.0",
-    "extract-loader": "^5.0.1",
-    "figlet": "^1.3.0",
-    "file-loader": "^5.1.0",
-    "imports-loader": "^0.8.0",
-    "lodash": "^4.17.15",
-    "lodash-webpack-plugin": "^0.11.5",
-    "mini-css-extract-plugin": "^0.9.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "postcss-loader": "^3.0.0",
-    "rimraf": "^3.0.2",
-    "sass": "^1.26.2",
-    "sass-loader": "^8.0.2",
-    "style-loader": "^1.1.3",
-    "stylelint": "^13.2.0",
-    "stylelint-webpack-plugin": "^1.2.3",
-    "terser-webpack-plugin": "^2.3.5",
-    "webpack": "^4.42.0",
-    "webpack-bundle-analyzer": "^3.6.0",
-    "webpack-config-utils": "^2.3.1",
-    "webpack-dev-server": "^3.10.3",
-    "webpack-format-messages": "^2.0.6",
-    "webpack-merge": "^4.2.2",
-    "xml2js": "^0.4.23",
-    "yargs": "^15.1.0"
-  },
-  "devDependencies": {
-    "@chrisblossom/eslint-config": "^6.1.5",
-    "@types/yargs": "^15.0.4",
-    "@typescript-eslint/eslint-plugin": "^2.22.0",
-    "@typescript-eslint/parser": "^2.22.0",
-    "cross-env": "^7.0.2",
-    "eslint": "^6.8.0",
-    "husky": "^4.2.3",
-    "typescript": "^3.8.3"
-  },
-  "peerDependencies": {
-    "eslint": "*",
-    "stylelint": "*",
-    "webpack": "*"
+    "test": "stylelint '**/*.scss'"
   }
 }
