@@ -58,7 +58,7 @@ Run the build in development mode.
 
 | Argument                 | Type           | Default Value       |
 |:-------------------------|:---------------|:--------------------|
-| `--dev` _em_ `-d`        | `Boolean`      | `false`             |
+| `--dev` _or_ `-d`        | `Boolean`      | `false`             |
 
 **NOTE:** Runing this flag along with the production flag will yield unexpected results.
 {: .text-zeta }
@@ -70,7 +70,7 @@ Run the build in production mode.
 
 | Argument                 | Type           | Default Value       |
 |:-------------------------|:---------------|:--------------------|
-| `--prod` _em_ `-p`       | `Boolean`      | `false`             |
+| `--prod` _or_ `-p`       | `Boolean`      | `false`             |
 
 **NOTE:** Runing this flag along with the development flag will yield unexpected results.
 {: .text-zeta }
