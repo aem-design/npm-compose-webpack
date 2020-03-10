@@ -35,7 +35,7 @@ heading_anchors: true
 
 # Aux links for the upper right navigation
 aux_links:
-  "npm-compose-webpack GitHub":
+  "@aem-design/compose-webpack on GitHub":
     - "https://github.com/aem-design/npm-compose-webpack"
 
 # Footer content appears at the bottom of every page's main content
