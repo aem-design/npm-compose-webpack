@@ -1,10 +1,11 @@
 ---
 layout: default
 title: v1.x
-nav_order: 1
-parent: Previous Releases
+has_children: true
+nav_order: 30
 description: "Documentation for v1.x of @aem-design/compose-webpack"
 permalink: /previous-releases/v1
+search_exclude: true
 ---
 
 # Previous Release (v1)

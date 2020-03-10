@@ -2,10 +2,12 @@
 layout: default
 title: Command Line Options
 nav_order: 1
-parent: Configuration
+parent: Configuration - v1.x
+grand_parent: v1.x
 description: "Command line options for the aemdesign-compose binary"
-permalink: /configuration/cli
+permalink: /previous-releases/v1/configuration/cli
 has_toc: false
+search_exclude: true
 ---
 
 # Command Line Options
@@ -53,21 +55,6 @@ File name for the compose configuration.
 
 ---
 
-### ESLint Validation
-New
-{: .label .label-purple }
-
-Runs JavaScript validation against the input source (`src/<project>/js`) using your `.eslintrc` file.
-
-| Argument                 | Type           | Default Value       |
-|:-------------------------|:---------------|:--------------------|
-| `--eslint`               | `Boolean`      | `true`              |
-
-See: [github.com](https://github.com/webpack-contrib/eslint-webpack-plugin/)
-{: .text-delta }
-
----
-
 ### Maven
 When enabled, some internal cogs are switched so certain things don't happen as they would when running a regular build.
 
@@ -110,21 +97,6 @@ Define which project you would like to build.
 | Argument                 | Type           | Default Value       |
 |:-------------------------|:---------------|:--------------------|
 | `--project`              | `String`       |                     |
-
----
-
-### Stylelint Validation
-New
-{: .label .label-purple }
-
-Runs Sass/CSS validation against the input source (`src/<project>/scss`) using your `.stylelintrc` file.
-
-| Argument                 | Type           | Default Value       |
-|:-------------------------|:---------------|:--------------------|
-| `--stylelint`            | `Boolean`      | `true`              |
-
-See: [github.com](https://github.com/webpack-contrib/stylelint-webpack-plugin/)
-{: .text-delta }
 
 ---
 

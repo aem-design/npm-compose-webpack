@@ -6,6 +6,9 @@ description: "A near zero-config solution to have a modern front end developer w
 permalink: /
 ---
 
+Work in progress
+{: .label .label-yellow }
+
 <a class="" href="https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build" target="_blank" rel="nofollow"><img src="https://github.com/aem-design/npm-compose-webpack/workflows/Build/badge.svg"></a>
 <a class="" href="https://travis-ci.com/aem-design/npm-compose-webpack" target="_blank" rel="nofollow"><img src="https://travis-ci.com/aem-design/npm-compose-webpack.svg?branch=develop"></a>
 <a class="" href="https://npmjs.com/package/@aem-design/compose-webpack" target="_blank" rel="nofollow"><img src="https://img.shields.io/npm/v/@aem-design/compose-webpack.svg"></a>
@@ -71,7 +74,7 @@ yarn build
 ```
 
 ### Configuration
-[See configuration]({{ site.baseurl }}{% link docs/configuration.md %}) page for more information.
+[See configuration](/configuration) page for more information.
 
 ---
 
