@@ -47,8 +47,16 @@ color_scheme: nil
 # Google Analytics Tracking (optional)
 ga_tracking: nil
 
+# Plugins
 plugins:
   - jekyll-seo-tag
+  - jekyll-sitemap
+
+# mimic GitHub Pages with --safe
+whitelist:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
 
 compress_html:
   clippings: all
