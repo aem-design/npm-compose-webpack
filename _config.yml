@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.github_repo }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: "@aem-design/compose-webpack"
+title: "@aem-design/compose-webpack v2.x"
 description: A near zero-config solution to have a modern front end developer workflow for AEM
 baseurl: "/"
 url: "http://webpack.aem.design"

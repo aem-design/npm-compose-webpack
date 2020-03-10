@@ -5,6 +5,7 @@ has_children: true
 nav_order: 2
 description: "How to configure the @aem-design/compose-webpack package"
 permalink: /configuration
+has_toc: false
 ---
 
 # Configuration
