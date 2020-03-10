@@ -15,8 +15,8 @@
 # in the templates via {{ site.myvariable }}.
 title: "@aem-design/compose-webpack"
 description: A near zero-config solution to have a modern front end developer workflow for AEM
-baseurl: "/npm-compose-webpack"
-url: "https://aem-design.github.io"
+baseurl: "/"
+url: "http://webpack.aem.design"
 
 permalink: pretty
 exclude: ["vendor/*", "node_modules/", "*.gemspec", "*.gem", "Gemfile", "Gemfile.lock", "package.json", "package-lock.json",  "script/", "LICENSE.txt", "lib/", "bin/", "README.md", "Rakefile", "yarn.lock"]
