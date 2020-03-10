@@ -17,6 +17,6 @@ permalink: /configuration
 {:toc}
 
 ## Command Line Options
-See [command line options](cli) for more information.
+See [command line options](/configuration/cli) for more information.
 
 ## Compose Configuration File
