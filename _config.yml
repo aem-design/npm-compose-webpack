@@ -59,3 +59,8 @@ compress_html:
   profile: false
   ignore:
     envs: development
+
+# Reading Files
+include:
+  - CNAME
+  - .well-known
