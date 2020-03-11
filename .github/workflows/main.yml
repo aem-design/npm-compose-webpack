@@ -1,8 +1,9 @@
-name: ci
+name: gh-pages-build
 
-push:
-  branches:
-    - gh-pages
+on:
+  push:
+    branches:
+      - gh-pages
 
 jobs:
   build:
