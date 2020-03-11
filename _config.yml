@@ -83,5 +83,5 @@ compress_html:
 
 # Reading Files
 include:
-  - CNAME
-  - .well-known
+  - "CNAME"
+  - ".well-known"
