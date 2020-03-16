@@ -1209,9 +1209,9 @@
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
 "@types/prompts@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@types/prompts/-/prompts-2.0.4.tgz#dbd829fe8114a8ffe17503bd767a047c285268f6"
-  integrity sha512-UlgMLjQMxfAUHesZDFeOlIZD8nyuX8HMdkcT2swgP1QLoLlPvTTZmEr7oYQgP8HxDl+dS45I0Mf/7fFya/Z9jw==
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@types/prompts/-/prompts-2.0.5.tgz#b3cb5cd2c69a0da11b21ea6618bffdab6091336c"
+  integrity sha512-07dV9H+uEmGjtudYst7UlRnctQfd/22zJ2/k1ykZR4Kx/n42hC314v1NCxvaesZebvJJ8i5AVMtBaMbSIR3oBw==
 
 "@types/q@^1.5.1":
   version "1.5.2"
