@@ -142,3 +142,22 @@ module.exports = configuration({
   },
 })
 ```
+
+## Blacklisted Webpack Properties
+Subject to change
+{: .label .label-yellow }
+
+Some properites within the webpack configuration have being blacklisted to prevent bugs and erroneous builds. These properties are:
+
+- context
+- devtool
+- devServer.contentBase
+- entry
+- mode
+- name
+- optimization.splitChunks.cacheGroups.vue
+- performance
+- performance.assetFilter
+- performance.hints
+- resolve.modules
+- stats.colors
