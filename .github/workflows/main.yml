@@ -1,0 +1,33 @@
+name: gh-pages-build
+
+on:
+  push:
+    branches:
+      - gh-pages
+
+jobs:
+  build:
+    
+    runs-on: ubuntu-latest
+    env:
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: install dependencies
+        run: |
+          sudo apt-get install libcurl4-openssl-dev libxslt-dev libxml2-dev
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.x' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
+      - name: build
+        run: |
+          bundle install
+          bundle exec jekyll build
+          # bundle exec htmlproofer --check-html --internal-domains localhost:4000 --assume-extension --disable-external --url-ignore "/#.*/" _site
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        env:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_branch: gh-pages-output
+          publish_dir: ./_site
