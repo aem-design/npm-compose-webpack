@@ -15,17 +15,13 @@ import { logger } from '@aem-design/compose-support'
 
 import {
   ComposeConfiguration,
-  Environment,
-  FeatureList,
   RuntimeConfiguration,
-  RuntimePaths,
 } from './types'
 
 import {
   ConfigurationType,
   Hook,
   HookType,
-  InstallStatus,
   WebpackIgnoredProps
 } from './types/enums'
 
@@ -43,14 +39,13 @@ import {
   getProjectPath,
 
   setConfiguration,
-  setConfigurable,
   setProjects,
   setupEnvironment,
 } from './config'
 
 import EntryConfiguration from './entry'
 
-import FeatureMap from './features/map'
+import processFeatures from './features/process'
 
 import { executeHook } from './hooks'
 
@@ -58,72 +53,10 @@ import * as plugins from './plugins'
 
 import css from './support/css'
 
-import installDependencies from './support/dependencies'
-
 import {
-  exit,
   generateConfiguration,
   getIfUtilsInstance,
 } from './support/helpers'
-
-/**
- * Process the incoming features and install any dependencies they require. Dependencies are
- * using either NPM or Yarn depending which type of lock file exists.
- */
-function processFeatures({ environment, features, paths, webpackConfig }: {
-  environment: Environment;
-  features: FeatureList;
-  paths: RuntimePaths;
-  webpackConfig: RuntimeConfiguration;
-}): RuntimeConfiguration {
-  const skippedFeatures: string[] = []
-
-  let status!: InstallStatus
-  let updatedConfig = webpackConfig
-
-  for (const feature of features) {
-    try {
-      const featureInstance = FeatureMap[feature]({
-        ...environment,
-        paths,
-        webpack: webpackConfig,
-      })
-
-      const featureStatus = installDependencies(featureInstance.getFeatureDependencies())
-
-      status = status === InstallStatus.RESTART ? status : featureStatus
-
-      if (featureStatus === InstallStatus.SKIPPED) {
-        skippedFeatures.push(feature)
-      }
-
-      setConfigurable('assetFilters', featureInstance.getFeatureAssetFilters())
-
-      updatedConfig = merge.smartStrategy(mergeStrategy)(
-        updatedConfig,
-        featureInstance.defineWebpackConfiguration(),
-      )
-    } catch (ex) {
-      console.log()
-      logger.error('Failed to install dependencies:', ex.message)
-
-      exit(1)
-    }
-  }
-
-  if (skippedFeatures.length) {
-    logger.info('No required dependencies are missing for', chalk.bold(skippedFeatures.join(', ')))
-  }
-
-  if (status === InstallStatus.RESTART) {
-    console.log()
-    logger.info('It appears some dependencies were just installed, please re-run the same command again to continue!')
-
-    exit(0)
-  }
-
-  return updatedConfig
-}
 
 export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOptions) => {
   const baseConfiguration = configuration.standard
@@ -406,11 +339,6 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
         port        : 4504,
 
         proxy: [
-          // Additional proxy paths need to be loaded first since they will bind from the same host which uses
-          // root context by default. This means the default proxy below is the boss when it comes to requests.
-          // TODO: Build helper to inject custom proxy maps
-          // ..._get(configurationForWebpack, 'server.proxies', []),
-
           // Default AEM proxy
           // TODO: Make this configurable
           {

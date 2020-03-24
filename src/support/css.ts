@@ -1,4 +1,3 @@
-import { resolve } from 'path'
 import sass from 'sass'
 import webpack from 'webpack'
 

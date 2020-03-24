@@ -38,7 +38,7 @@ export enum WebpackIgnoredProps {
   'performance.assetFilter',
   'performance.hints',
   'resolve.modules',
-  'stats',
+  'stats.colors',
 }
 
 export enum InstallStatus {
