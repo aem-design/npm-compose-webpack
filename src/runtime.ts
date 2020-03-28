@@ -337,7 +337,6 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
         open        : false,
         overlay     : true,
         port        : 4504,
-        stats       : 'verbose',
 
         proxy: [
           // Default AEM proxy

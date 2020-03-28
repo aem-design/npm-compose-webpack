@@ -31,7 +31,7 @@ import ComposeMessages from './messages'
 export default (paths: RuntimePaths): webpack.Plugin[] => {
   return removeEmpty<webpack.Plugin>([
 
-    new ComposeMessages(),
+    getIfUtilsInstance().ifNotWatch(new ComposeMessages()),
     getIfUtilsInstance().ifNotMaven(new webpack.ProgressPlugin()),
 
     /**
@@ -41,12 +41,12 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
      */
     new CopyWebpackPlugin([
       {
-        context : resolve(paths.project.src, 'clientlibs-header/resources'),
+        context : resolve(paths.project.src, 'resources'),
         from    : './**/*.*',
         to      : resolve(paths.project.public, 'clientlibs-header/resources'),
       },
       {
-        context : resolve(paths.project.src, 'clientlibs-header/css'),
+        context : resolve(paths.project.src, 'css'),
         from    : './*.css',
         to      : resolve(paths.project.public, 'clientlibs-header/css'),
       },
