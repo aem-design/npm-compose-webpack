@@ -6,6 +6,8 @@ import format from 'webpack-format-messages'
 
 import { logger } from '@aem-design/compose-support'
 
+import { exit } from '../support/helpers'
+
 // Internal
 const pluginName = 'compose-messages'
 
@@ -24,7 +26,7 @@ export default class ComposeMessages implements webpack.Plugin {
 
       if (messages.errors.length) {
         this.printError(chalk.red('Failed to compile!'), messages.errors)
-        return
+        exit(1)
       }
 
       if (messages.warnings.length) {

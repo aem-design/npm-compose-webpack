@@ -317,7 +317,7 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
       plugins: plugins.ComposeDefaults(paths),
 
       resolve: {
-        extensions: ['.js'],
+        extensions: getConfigurable('resolveExtensions'),
 
         // Resolve modules from the child project too so we don't get errors complaining about missing
         // dependencies which aren't anything to do with our script.
@@ -337,6 +337,7 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
         open        : false,
         overlay     : true,
         port        : 4504,
+        stats       : 'verbose',
 
         proxy: [
           // Default AEM proxy

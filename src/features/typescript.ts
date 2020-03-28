@@ -5,6 +5,10 @@ import {
 } from '../types'
 
 import {
+  setConfigurable,
+} from '../config'
+
+import {
   resolveDependency,
 } from '../support/dependencies'
 
@@ -26,6 +30,8 @@ export default class TypeScript extends Feature {
 
   protected arbitraryUpdates(): webpack.Configuration {
     const TsconfigPathsPlugin = require(resolveDependency('tsconfig-paths-webpack-plugin'))
+
+    setConfigurable('resolveExtensions', ['.ts', '.tsx'])
 
     return {
       resolve: {

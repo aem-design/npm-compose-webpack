@@ -31,8 +31,8 @@ import ComposeMessages from './messages'
 export default (paths: RuntimePaths): webpack.Plugin[] => {
   return removeEmpty<webpack.Plugin>([
 
-    getIfUtilsInstance().ifProd(new ComposeMessages()),
-    getIfUtilsInstance().ifNotProd(new webpack.ProgressPlugin()),
+    new ComposeMessages(),
+    getIfUtilsInstance().ifNotMaven(new webpack.ProgressPlugin()),
 
     /**
      * Copies static assets from our source folder into the public structure for AEM.
@@ -92,8 +92,7 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
       emitError   : false,
       eslintPath  : resolveDependency('eslint', true, require.resolve('eslint')),
       failOnError : environment.mode === 'production',
-      // TODO: Pass this via config
-      files       : ['**/*.js'],
+      files       : ['**/*'],
       fix         : false,
       quiet       : false,
     })),

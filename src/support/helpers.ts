@@ -38,6 +38,7 @@ const envVars = [
   'production',
   'stylelint',
   'test',
+  'watch',
 ]
 
 const mavenConfigs: SavedMavenConfig = {}

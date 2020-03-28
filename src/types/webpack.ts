@@ -10,6 +10,7 @@ export type WebpackConfiguration = Omit<webpack.Configuration, keyof typeof Webp
 
 export interface WebpackConfigurables {
   assetFilters: string[];
+  resolveExtensions: string[];
 }
 
 export type WebpackParserOptions = Omit<webpack.ParserOptions, 'system'>

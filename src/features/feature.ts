@@ -54,10 +54,6 @@ export default class Feature extends FeatureContract {
     }
   }
 
-  public getFeatureAssetFilters(): string[] {
-    return []
-  }
-
   protected aliases(): WebpackAliases {
     return {}
   }

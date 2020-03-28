@@ -46,7 +46,8 @@ const configuration: Configuration = {
 const configKeys = Object.values(ConfigurationType)
 
 const webpackConfigurables: WebpackConfigurables = {
-  assetFilters: ['fontawesome.*'],
+  assetFilters      : ['fontawesome.*'],
+  resolveExtensions : ['.js'],
 }
 
 let projects: ProjectsConfiguration = {}

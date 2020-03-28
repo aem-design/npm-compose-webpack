@@ -12,6 +12,10 @@ import {
 } from '../types/webpack'
 
 import {
+  setConfigurable,
+} from '../config'
+
+import {
   resolveDependency,
 } from '../support/dependencies'
 
@@ -33,10 +37,6 @@ export default class Vue extends Feature {
     }
   }
 
-  public getFeatureAssetFilters(): string[] {
-    return ['vue']
-  }
-
   protected aliases(): WebpackAliases {
     return {
       vue$: this.env.mode === 'development' ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.min.js',
@@ -44,6 +44,8 @@ export default class Vue extends Feature {
   }
 
   protected arbitraryUpdates(): webpack.Configuration {
+    setConfigurable('assetFilters', ['vue'])
+
     return {
       optimization: {
         splitChunks: {

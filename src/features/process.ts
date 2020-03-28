@@ -16,8 +16,6 @@ import {
 
 import {
   mergeStrategy,
-
-  setConfigurable,
 } from '../config'
 
 import installDependencies from '../support/dependencies'
@@ -54,8 +52,6 @@ export default function processFeatures({ environment, features, paths, webpackC
       if (featureStatus === InstallStatus.SKIPPED) {
         skippedFeatures.push(feature)
       }
-
-      setConfigurable('assetFilters', featureInstance.getFeatureAssetFilters())
 
       updatedConfig = merge.smartStrategy(mergeStrategy)(
         updatedConfig,
