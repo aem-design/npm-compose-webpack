@@ -133,7 +133,7 @@
     "yargs": "^15.3.1"
   },
   "devDependencies": {
-    "@chrisblossom/eslint-config": "^6.1.5",
+    "@chrisblossom/eslint-config": "^7.1.1",
     "@types/yargs": "^15.0.4",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
