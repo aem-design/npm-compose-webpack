@@ -11,6 +11,8 @@
       "es6"
     ],
 
+    "paths": {},
+
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": false,
@@ -24,7 +26,8 @@
   "exclude": [
     "configs",
     "dist",
-    "node_modules"
+    "node_modules",
+    "**/*.spec.ts"
   ],
 
   "include": [

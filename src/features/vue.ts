@@ -19,18 +19,20 @@ import {
   resolveDependency,
 } from '../support/dependencies'
 
+import { DependencyType } from '../types/enums'
+
 import Feature from './feature'
 
 export default class Vue extends Feature {
   public getFeatureDependencies(): DependenciesMap {
     return {
-      dev: [
+      [DependencyType.DEV]: [
         'vue-loader',
         'vue-style-loader',
         'vue-template-compiler',
       ],
 
-      nonDev: [
+      [DependencyType.NON_DEV]: [
         'vue-property-decorator',
         'vue',
       ],

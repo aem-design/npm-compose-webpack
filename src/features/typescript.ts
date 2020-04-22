@@ -16,6 +16,8 @@ import {
   resolveConfigFile,
 } from '../support/helpers'
 
+import { DependencyType } from '../types/enums'
+
 import Feature from './feature'
 
 export default class TypeScript extends Feature {
@@ -23,8 +25,8 @@ export default class TypeScript extends Feature {
 
   public getFeatureDependencies(): DependenciesMap {
     return {
-      dev    : ['tsconfig-paths-webpack-plugin', 'ts-loader', 'typescript'],
-      nonDev : [],
+      [DependencyType.DEV]     : ['tsconfig-paths-webpack-plugin', 'ts-loader', 'typescript'],
+      [DependencyType.NON_DEV] : [],
     }
   }
 
