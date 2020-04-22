@@ -12,6 +12,7 @@
 [![deps][deps]][deps-url]
 [![deps dev][deps-dev]][deps-dev-url]
 [![dependabot status][dependabot]][dependabot-url]
+[![codefactor][codefactor]][codefactor-url]
 [![repo size][repo-size]][repo-size-url]
 [![last commit][last-commit]][last-commit-url]
 [![downloads][downloads]][npm-url]
@@ -314,6 +315,9 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 [dependabot]: https://api.dependabot.com/badges/status?host=github&repo=aem-design/npm-compose-webpack
 [dependabot-url]: https://dependabot.com
+
+[codefactor]: https://www.codefactor.io/repository/github/aem-design/npm-compose-webpack/badge
+[codefactor-url]: https://www.codefactor.io/repository/github/aem-design/npm-compose-webpack
 
 [repo-size]: https://img.shields.io/github/repo-size/aem-design/npm-compose-webpack
 [repo-size-url]: https://github.com/aem-design/npm-compose-webpack
