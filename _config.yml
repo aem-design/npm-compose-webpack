@@ -14,6 +14,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: "@aem-design/compose-webpack v2.x"
+title_alt: "Compose webpack"
 description: A near zero-config solution to have a modern front end developer workflow for AEM
 baseurl: ""
 url: "https://webpack.aem.design"
