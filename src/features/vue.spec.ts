@@ -57,9 +57,7 @@ describe('vue feature', () => {
 
     expect(MockedVueLoaderPlugin).toHaveBeenCalledTimes(1)
 
-    expect(plugins).toHaveProperty([0], new MockedVueLoaderPlugin)
-
-    expect(MockedVueLoaderPlugin).toHaveBeenCalledTimes(2)
+    expect(plugins[0]).toBeInstanceOf(MockedVueLoaderPlugin)
   })
 
   test('should return the correct webpack rules', () => {

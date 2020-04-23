@@ -44,9 +44,7 @@ describe('typescript feature', () => {
 
     expect(MockedTsconfigPathsPlugin).toHaveBeenCalledTimes(1)
 
-    expect(arbitraryChanges).toHaveProperty(['resolve', 'plugins', 0], new MockedTsconfigPathsPlugin)
-
-    expect(MockedTsconfigPathsPlugin).toHaveBeenCalledTimes(2)
+    expect(arbitraryChanges?.resolve?.plugins?.[0]).toBeInstanceOf(MockedTsconfigPathsPlugin)
 
     expect(getConfigurable('resolveExtensions')).toContain('.ts')
   })
