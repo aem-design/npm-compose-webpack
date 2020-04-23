@@ -18,9 +18,8 @@ export interface FeatureEnvironment extends Environment {
 
 export abstract class FeatureContract {
   public abstract getFeatureDependencies(): DependenciesMap;
-
-  protected abstract aliases(): WebpackAliases;
-  protected abstract arbitraryUpdates(): webpack.Configuration;
-  protected abstract plugins(): webpack.Plugin[];
-  protected abstract rules(): webpack.RuleSetRule[];
+  public abstract aliases(): WebpackAliases;
+  public abstract arbitraryUpdates(): webpack.Configuration;
+  public abstract plugins(): webpack.Plugin[];
+  public abstract rules(): webpack.RuleSetRule[];
 }

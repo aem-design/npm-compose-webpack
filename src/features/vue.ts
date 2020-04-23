@@ -39,13 +39,13 @@ export default class Vue extends Feature {
     }
   }
 
-  protected aliases(): WebpackAliases {
+  public aliases(): WebpackAliases {
     return {
       vue$: this.env.mode === 'development' ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.min.js',
     }
   }
 
-  protected arbitraryUpdates(): webpack.Configuration {
+  public arbitraryUpdates(): webpack.Configuration {
     setConfigurable('assetFilters', ['vue'])
 
     return {
@@ -62,7 +62,7 @@ export default class Vue extends Feature {
     }
   }
 
-  protected plugins(): webpack.Plugin[] {
+  public plugins(): webpack.Plugin[] {
     const VueLoaderPlugin = require(resolveDependency('vue-loader/lib/plugin'))
 
     return [
@@ -70,7 +70,7 @@ export default class Vue extends Feature {
     ]
   }
 
-  protected rules(): webpack.RuleSetRule[] {
+  public rules(): webpack.RuleSetRule[] {
     return [
       {
         exclude : /node_modules/,
