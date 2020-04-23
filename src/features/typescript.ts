@@ -42,8 +42,6 @@ export default class TypeScript extends Feature {
 
     return {
       resolve: {
-        extensions: ['.ts', '.tsx'],
-
         plugins: [
           new TsconfigPathsPlugin({
             configFile: this.configFile,

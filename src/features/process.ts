@@ -18,7 +18,9 @@ import {
   mergeStrategy,
 } from '../config'
 
-import installDependencies from '../support/dependencies'
+import {
+  installDependencies,
+} from '../support/dependencies'
 
 import {
   exit,

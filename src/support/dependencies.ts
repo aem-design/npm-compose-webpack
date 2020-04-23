@@ -52,7 +52,7 @@ export function resolveDependency(dependency: string, catchError = false, fallba
   return require.resolve(dependency, { paths: [process.cwd()] })
 }
 
-export default function installDependencies(dependenciesMap: DependenciesMap): InstallStatus {
+export function installDependencies(dependenciesMap: DependenciesMap): InstallStatus {
   const dependencyTypes = Object.keys(dependenciesMap)
 
   const missingDependencies =

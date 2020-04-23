@@ -3,10 +3,17 @@ import { DependencyType } from '../types/enums'
 
 import Vue from './vue'
 
+jest.mock('../support/dependencies')
+
+const MockedVueLoaderPlugin = jest.fn()
+jest.mock('vue-loader/lib/plugin', () => MockedVueLoaderPlugin, { virtual: true })
+
 describe('vue feature', () => {
   let instance: Vue
 
   beforeEach(() => {
+    MockedVueLoaderPlugin.mockClear()
+
     // @ts-ignore
     instance = new Vue({
       mode: 'development',
@@ -45,12 +52,14 @@ describe('vue feature', () => {
     expect(getConfigurable('assetFilters')).toContainEqual('vue')
   })
 
-  test('should create a new instance of VueLoaderPlugin', () => {
-    jest.doMock('vue-loader/lib/plugin', () => jest.fn(() => 1), { virtual: true })
+  test('should set correct webpack plugins configuration', () => {
+    const plugins = instance.plugins()
 
-    const VueLoaderPlugin = require('vue-loader/lib/plugin')
+    expect(MockedVueLoaderPlugin).toHaveBeenCalledTimes(1)
 
-    expect(VueLoaderPlugin()).toStrictEqual(1)
+    expect(plugins).toHaveProperty([0], new MockedVueLoaderPlugin)
+
+    expect(MockedVueLoaderPlugin).toHaveBeenCalledTimes(2)
   })
 
   test('should return the correct webpack rules', () => {
