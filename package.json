@@ -35,6 +35,7 @@
   "types": "dist/types",
   "sideEffects": false,
   "name": "@aem-design/compose-webpack",
+  "homepage": "https://webpack.aem.design",
   "repository": {
     "type": "git",
     "url": "https://github.com/aem-design/npm-compose-webpack"
