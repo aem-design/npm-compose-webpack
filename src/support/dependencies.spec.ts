@@ -1,5 +1,3 @@
-import { existsSync } from 'fs'
-import { resolve } from 'path'
 import mockConsole from 'jest-mock-console'
 
 import {
@@ -8,6 +6,7 @@ import {
 } from '../types/enums'
 
 import {
+  constructCommand,
   installDependencies,
   resolveDependency,
 } from './dependencies'
@@ -21,16 +20,6 @@ jest.mock('@aem-design/compose-support', () => ({
 }))
 
 describe('dependencies', () => {
-  let restoreConsoleMock
-
-  beforeAll(() => {
-    restoreConsoleMock = mockConsole()
-  })
-
-  test('existsSync was called for yarn.lock', () => {
-    expect(existsSync).toHaveBeenCalledWith(resolve(process.cwd(), 'yarn.lock'))
-  })
-
   test('should resolve dependencies', () => {
     const spy = jest.spyOn(require, 'resolve')
 
@@ -45,15 +34,32 @@ describe('dependencies', () => {
   })
 
   test('can install dependencies', () => {
+    const restoreConsoleMock = mockConsole()
+
     const installStatus = installDependencies({
       [DependencyType.DEV]     : ['yo'],
       [DependencyType.NON_DEV] : [],
     })
 
     expect(installStatus).toEqual(InstallStatus.RESTART)
+
+    restoreConsoleMock()
   })
 
-  afterAll(() => {
-    restoreConsoleMock()
+  test('dependencies install should be skipped', () => {
+    const installStatus = installDependencies({
+      [DependencyType.DEV]     : ['path'],
+      [DependencyType.NON_DEV] : ['fs'],
+    })
+
+    expect(installStatus).toEqual(InstallStatus.SKIPPED)
+  })
+
+  test('npm install command should be generated for non dev dependencies', () => {
+    expect(constructCommand(['yo'], DependencyType.NON_DEV)).toEqual('npm install yo')
+  })
+
+  test('npm install command should be generated for dev dependencies', () => {
+    expect(constructCommand(['yo'], DependencyType.DEV)).toEqual('npm install yo --save-dev')
   })
 })
