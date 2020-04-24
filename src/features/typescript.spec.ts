@@ -5,15 +5,10 @@ import TypeScript from './typescript'
 
 jest.mock('../support/dependencies')
 
-const MockedTsconfigPathsPlugin = jest.fn()
-jest.mock('tsconfig-paths-webpack-plugin', () => MockedTsconfigPathsPlugin, { virtual: true })
-
 describe('typescript feature', () => {
   let instance: TypeScript
 
   beforeEach(() => {
-    MockedTsconfigPathsPlugin.mockClear()
-
     // @ts-ignore
     instance = new TypeScript({
       mode: 'development',
@@ -40,6 +35,9 @@ describe('typescript feature', () => {
   })
 
   test('should set correct arbitrary webpack configuration', () => {
+    const MockedTsconfigPathsPlugin = jest.fn()
+    jest.mock('tsconfig-paths-webpack-plugin', () => MockedTsconfigPathsPlugin, { virtual: true })
+
     const arbitraryChanges = instance.arbitraryUpdates()
 
     expect(MockedTsconfigPathsPlugin).toHaveBeenCalledTimes(1)

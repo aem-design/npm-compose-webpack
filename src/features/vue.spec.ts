@@ -5,15 +5,10 @@ import Vue from './vue'
 
 jest.mock('../support/dependencies')
 
-const MockedVueLoaderPlugin = jest.fn()
-jest.mock('vue-loader/lib/plugin', () => MockedVueLoaderPlugin, { virtual: true })
-
 describe('vue feature', () => {
   let instance: Vue
 
   beforeEach(() => {
-    MockedVueLoaderPlugin.mockClear()
-
     // @ts-ignore
     instance = new Vue({
       mode: 'development',
@@ -47,12 +42,16 @@ describe('vue feature', () => {
   })
 
   test('should set correct arbitrary webpack configuration', () => {
-    expect(instance.arbitraryUpdates()).toHaveProperty('optimization.splitChunks.cacheGroups.vue.name', 'vue')
+    expect(instance.arbitraryUpdates())
+      .toHaveProperty('optimization.splitChunks.cacheGroups.vue.name', 'vue')
 
     expect(getConfigurable('assetFilters')).toContainEqual('vue')
   })
 
   test('should set correct webpack plugins configuration', () => {
+    const MockedVueLoaderPlugin = jest.fn()
+    jest.mock('vue-loader/lib/plugin', () => MockedVueLoaderPlugin, { virtual: true })
+
     const plugins = instance.plugins()
 
     expect(MockedVueLoaderPlugin).toHaveBeenCalledTimes(1)

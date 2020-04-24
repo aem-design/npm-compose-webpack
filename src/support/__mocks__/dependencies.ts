@@ -6,7 +6,7 @@ import {
 
 function installDependencies(dependenciesMap: DependenciesMap) {
   if (dependenciesMap.dev.includes('tsconfig-paths-webpack-plugin')) {
-    // return InstallStatus.RESTART
+    return InstallStatus.RESTART
   }
 
   return InstallStatus.SKIPPED
