@@ -4,7 +4,7 @@ import {
   InstallStatus,
 } from '../../types/enums'
 
-function installDependencies(dependenciesMap: DependenciesMap) {
+export function installDependencies(dependenciesMap: DependenciesMap) {
   if (dependenciesMap.dev.includes('tsconfig-paths-webpack-plugin')) {
     return InstallStatus.RESTART
   }
@@ -12,11 +12,6 @@ function installDependencies(dependenciesMap: DependenciesMap) {
   return InstallStatus.SKIPPED
 }
 
-function resolveDependency(dependency: string) {
+export function resolveDependency(dependency: string) {
   return dependency
-}
-
-module.exports = {
-  installDependencies,
-  resolveDependency,
 }
