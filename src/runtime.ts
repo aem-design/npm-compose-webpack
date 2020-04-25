@@ -320,8 +320,6 @@ export default (
       plugins: plugins.ComposeDefaults(paths),
 
       resolve: {
-        extensions: getConfigurable('resolveExtensions'),
-
         // Resolve modules from the child project too so we don't get errors complaining about missing
         // dependencies which aren't anything to do with our script.
         modules: [
@@ -366,6 +364,13 @@ export default (
       if (featureConfig) {
         config = featureConfig
       }
+    }
+
+    /**
+     * Set the resolve extensions
+     */
+    if (config.resolve) {
+      config.resolve.extensions = getConfigurable('resolveExtensions')
     }
 
     /**
