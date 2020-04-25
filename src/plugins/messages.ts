@@ -13,7 +13,7 @@ const pluginName = 'compose-messages'
  * All credit and inspiration goes to https://github.com/lukeed/webpack-messages
  */
 export default class ComposeMessages implements webpack.Plugin {
-  public apply(compiler: webpack.Compiler) {
+  public apply(compiler: webpack.Compiler): void {
     const onStart = () => {
       console.log()
       logger.info('Building...')

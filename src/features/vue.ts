@@ -66,7 +66,7 @@ export default class Vue extends Feature {
     const VueLoaderPlugin = require(resolveDependency('vue-loader/lib/plugin'))
 
     return [
-      new VueLoaderPlugin(),
+      new VueLoaderPlugin() as webpack.Plugin,
     ]
   }
 

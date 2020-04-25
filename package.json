@@ -109,6 +109,7 @@
     "css-loader": "^3.4.2",
     "cssnano": "^4.1.10",
     "eslint-loader": "^4.0.0",
+    "eslint-plugin-jest": "^23.8.2",
     "eslint-webpack-plugin": "^0.1.0",
     "exports-loader": "^0.7.0",
     "extract-loader": "^5.0.1",

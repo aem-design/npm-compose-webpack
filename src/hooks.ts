@@ -22,7 +22,7 @@ export type RegisteredHooks = Record<Hook, HookExecutor[]>
 /**
  * Register a new `HookExecutor` callback for the given `hook`.
  */
-export function registerHook(hook: Hook, executor: HookExecutor) {
+export function registerHook(hook: Hook, executor: HookExecutor): void {
   const registeredHook = registeredHooks[hook]
 
   if (!registeredHook) {
@@ -36,7 +36,7 @@ export function registerHook(hook: Hook, executor: HookExecutor) {
  * Executes the given `HookExecutor`'s for `hook` and the `type`. Optional environment variables
  * can be passed through to help aid the callback functions.
  */
-export function executeHook(hook: Hook, type: HookType, env?: EnvironmentConfig) {
+export function executeHook(hook: Hook, type: HookType, env?: EnvironmentConfig): void {
   const registeredHook = registeredHooks[hook]
 
   if (!registeredHook) {

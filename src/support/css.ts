@@ -52,7 +52,7 @@ export default (
         ...(options.sass?.options ?? {}),
       } as sass.Options,
 
-      ...(options.sass?.loader || {}),
+      ...(options.sass?.loader ?? {}),
     },
   },
 ])

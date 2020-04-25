@@ -21,8 +21,8 @@ function getHMRConfiguration(project: Project): webpack.Entry {
   const additionalEntries = project.additionalEntries
 
   const fileMap: typeof mappedEntries = {
-    footer: _get(project, 'fileMap.footer', []),
-    header: _get(project, 'fileMap.header', []),
+    header: _get(project, 'fileMap.header', []) as string[],
+    footer: _get(project, 'fileMap.footer', []) as string[],
   }
 
   if (additionalEntries && fileMap) {

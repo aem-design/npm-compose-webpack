@@ -78,7 +78,7 @@ export const mergeStrategy: Record<string, 'append' | 'prepend' | 'replace'> = {
 /**
  * Sets the required projects map. If none are supplied, the default map will be used instead.
  */
-export function setProjects(incomingProjects: ProjectsConfiguration | null = null) {
+export function setProjects(incomingProjects: ProjectsConfiguration | null = null): void {
   if (!incomingProjects || Object.keys(incomingProjects).length === 0) {
     projects = defaultProjects
   } else {
@@ -117,7 +117,7 @@ export function setupEnvironment(env: webpack.ParserOptions): Environment {
 
     hmr     : env.watch === true,
     mode    : env.dev === true ? 'development' : 'production',
-    project : env.project,
+    project : env.project as string,
   } as Environment
 
   // Ensure the project is valid
@@ -167,7 +167,7 @@ export function getMavenConfiguration(): MavenConfigMap {
  * Assigns the `value` to the `key` given. Built-in checks enable merging for some obejct
  * types, otherwise `value` overrides the previous value set.
  */
-export function setConfigurable<T extends keyof WebpackConfigurables, R extends WebpackConfigurables[T]>(key: T, value: R) {
+export function setConfigurable<T extends keyof WebpackConfigurables, R extends WebpackConfigurables[T]>(key: T, value: R): void {
   if (!_has(webpackConfigurables, key)) {
     throw new Error(`Unable to update webpack configurable for ${key} as it is invalid!`)
   }
@@ -186,10 +186,10 @@ export function setConfigurable<T extends keyof WebpackConfigurables, R extends 
 /**
  * Retrieve the stored value by the `key` given.
  */
-export function getConfigurable<T extends keyof WebpackConfigurables>(key: T) {
+export function getConfigurable<T extends keyof WebpackConfigurables, R extends WebpackConfigurables[T]>(key: T): R {
   if (!_has(webpackConfigurables, key)) {
     throw new Error(`Unable to get webpack configurable for ${key} as it is invalid!`)
   }
 
-  return _get(webpackConfigurables, key)
+  return _get(webpackConfigurables, key) as R
 }

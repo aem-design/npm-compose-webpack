@@ -28,7 +28,7 @@ export function constructCommand(dependencies: string[], type: DependencyType): 
   return `npm install ${dependencies.join(' ')}${isDev ? ' --save-dev' : ''}`
 }
 
-export function executeInstallation(dependenciesMap: DependenciesMap) {
+export function executeInstallation(dependenciesMap: DependenciesMap): void {
   execSync(constructCommand(
     dependenciesMap[DependencyType.DEV],
     DependencyType.DEV,
@@ -56,7 +56,7 @@ export function installDependencies(dependenciesMap: DependenciesMap): InstallSt
   const dependencyTypes = Object.keys(dependenciesMap)
 
   const missingDependencies =
-    _flatten(dependencyTypes.map<string>((type) => dependenciesMap[type]))
+    _flatten(dependencyTypes.map((type) => dependenciesMap[type] as string[]))
     .filter((dependency) => {
       try {
         return resolveDependency(dependency).length === 0

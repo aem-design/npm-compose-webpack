@@ -216,4 +216,6 @@ export interface CSSLoaderOptions {
   };
 }
 
-export type DependenciesMap = Record<DependencyType, string[]>
+export type DependenciesMap = {
+  [key in DependencyType]: string[];
+}
