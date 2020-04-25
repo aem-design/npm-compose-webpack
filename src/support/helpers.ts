@@ -78,11 +78,6 @@ export interface ComposeIfUtils extends IfUtils {
 }
 
 /**
- * Single exit point for the application.
- */
-export const exit = process.exit
-
-/**
  * Gets the Maven configuration from the file system and returns the value requested.
  */
 export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: propPath, pom }: MavenConfig<R>): R {

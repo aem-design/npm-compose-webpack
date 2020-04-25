@@ -353,12 +353,16 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
      * Detect opt-in features
      */
     if (configuration.features) {
-      config = processFeatures({
+      const featureConfig = processFeatures({
         environment,
         features: configuration.features,
         paths,
         webpackConfig: config,
       })
+
+      if (featureConfig) {
+        config = featureConfig
+      }
     }
 
     /**

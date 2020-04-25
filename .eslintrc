@@ -9,6 +9,7 @@
     "arrow-body-style": "off",
     "class-methods-use-this": "off",
     "no-console": "off",
+    "no-process-exit": "off",
     "strict": ["error", "safe"],
 
     "filenames/match-exported": "off",

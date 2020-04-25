@@ -54,19 +54,19 @@ export default class Feature extends FeatureContract {
     }
   }
 
-  protected aliases(): WebpackAliases {
+  public aliases(): WebpackAliases {
     return {}
   }
 
-  protected arbitraryUpdates(): webpack.Configuration {
+  public arbitraryUpdates(): webpack.Configuration {
     return {}
   }
 
-  protected plugins(): webpack.Plugin[] {
+  public plugins(): webpack.Plugin[] {
     return []
   }
 
-  protected rules(): webpack.RuleSetRule[] {
+  public rules(): webpack.RuleSetRule[] {
     return []
   }
 }

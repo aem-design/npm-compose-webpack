@@ -18,11 +18,9 @@ import {
   mergeStrategy,
 } from '../config'
 
-import installDependencies from '../support/dependencies'
-
 import {
-  exit,
-} from '../support/helpers'
+  installDependencies,
+} from '../support/dependencies'
 
 import FeatureMap from './map'
 
@@ -31,7 +29,7 @@ export default function processFeatures({ environment, features, paths, webpackC
   features: FeatureList;
   paths: RuntimePaths;
   webpackConfig: RuntimeConfiguration;
-}): RuntimeConfiguration {
+}): RuntimeConfiguration | null {
   const skippedFeatures: string[] = []
 
   let status!: InstallStatus
@@ -61,7 +59,10 @@ export default function processFeatures({ environment, features, paths, webpackC
       console.log()
       logger.error('Failed to install dependencies:', ex.message)
 
-      exit(1)
+      process.exit(1)
+
+      // Not in the final output, used to ensure the tests pass using mocks
+      return null
     }
   }
 
@@ -73,7 +74,10 @@ export default function processFeatures({ environment, features, paths, webpackC
     console.log()
     logger.info('It appears some dependencies were just installed, please re-run the same command again to continue!')
 
-    exit(0)
+    process.exit(0)
+
+    // Not in the final output, used to ensure the tests pass using mocks
+    return null
   }
 
   return updatedConfig

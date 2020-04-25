@@ -25,20 +25,23 @@ export default class TypeScript extends Feature {
 
   public getFeatureDependencies(): DependenciesMap {
     return {
-      [DependencyType.DEV]     : ['tsconfig-paths-webpack-plugin', 'ts-loader', 'typescript'],
-      [DependencyType.NON_DEV] : [],
+      [DependencyType.DEV]: [
+        'tsconfig-paths-webpack-plugin',
+        'ts-loader',
+        'typescript',
+      ],
+
+      [DependencyType.NON_DEV]: [],
     }
   }
 
-  protected arbitraryUpdates(): webpack.Configuration {
+  public arbitraryUpdates(): webpack.Configuration {
     const TsconfigPathsPlugin = require(resolveDependency('tsconfig-paths-webpack-plugin'))
 
     setConfigurable('resolveExtensions', ['.ts', '.tsx'])
 
     return {
       resolve: {
-        extensions: ['.ts', '.tsx'],
-
         plugins: [
           new TsconfigPathsPlugin({
             configFile: this.configFile,
@@ -48,7 +51,7 @@ export default class TypeScript extends Feature {
     }
   }
 
-  protected rules(): webpack.RuleSetRule[] {
+  public rules(): webpack.RuleSetRule[] {
     return [
       {
         exclude : /node_modules/,

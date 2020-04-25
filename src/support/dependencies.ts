@@ -18,7 +18,7 @@ import {
 // Internal
 const isUsingYarn = existsSync(resolve(process.cwd(), 'yarn.lock'))
 
-function constructCommand(dependencies: string[], type: DependencyType): string {
+export function constructCommand(dependencies: string[], type: DependencyType): string {
   const isDev = type === DependencyType.DEV
 
   if (isUsingYarn) {
@@ -28,7 +28,7 @@ function constructCommand(dependencies: string[], type: DependencyType): string 
   return `npm install ${dependencies.join(' ')}${isDev ? ' --save-dev' : ''}`
 }
 
-function executeInstallation(dependenciesMap: DependenciesMap) {
+export function executeInstallation(dependenciesMap: DependenciesMap) {
   execSync(constructCommand(
     dependenciesMap[DependencyType.DEV],
     DependencyType.DEV,
@@ -52,7 +52,7 @@ export function resolveDependency(dependency: string, catchError = false, fallba
   return require.resolve(dependency, { paths: [process.cwd()] })
 }
 
-export default function installDependencies(dependenciesMap: DependenciesMap): InstallStatus {
+export function installDependencies(dependenciesMap: DependenciesMap): InstallStatus {
   const dependencyTypes = Object.keys(dependenciesMap)
 
   const missingDependencies =
