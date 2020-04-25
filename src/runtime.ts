@@ -350,7 +350,7 @@ export default (
           },
         ],
       },
-    } as RuntimeConfiguration, configurationForWebpack)
+    }, configurationForWebpack) as RuntimeConfiguration
 
     /**
      * Detect opt-in features

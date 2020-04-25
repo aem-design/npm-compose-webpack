@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - master
-    tags-ignore:
-      - v*
+    tags:
+      - 'v*.*.*-beta.*'
+      - '!v*.*.*'
 
 jobs:
   draft_new_release:
