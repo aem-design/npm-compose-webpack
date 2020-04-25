@@ -1,8 +1,10 @@
 import {
   getConfigurable,
+  getConfiguration,
   getProjectConfiguration,
   getProjectPath,
   setConfigurable,
+  setConfiguration,
   setProjects,
   setupEnvironment,
 } from './config'
@@ -51,11 +53,14 @@ describe('config', () => {
   })
 
   test('should return expected project paths', () => {
-    expect(getProjectPath(ConfigurationType.PATH_PUBLIC)).toMatch(new RegExp(`/public/${environment.project}$`))
+    expect(getProjectPath(ConfigurationType.PATH_PUBLIC))
+      .toMatch(new RegExp(`/public/${environment.project}$`))
 
-    expect(getProjectPath(ConfigurationType.PATH_PUBLIC_AEM)).toMatch(new RegExp(`^/${environment.project}$`))
+    expect(getProjectPath(ConfigurationType.PATH_PUBLIC_AEM))
+      .toMatch(new RegExp(`^/${environment.project}$`))
 
-    expect(getProjectPath(ConfigurationType.PATH_SOURCE)).toMatch(new RegExp(`/src/${environment.project}$`))
+    expect(getProjectPath(ConfigurationType.PATH_SOURCE))
+      .toMatch(new RegExp(`/src/${environment.project}$`))
   })
 
   test('custom project should be set', () => {
@@ -85,5 +90,23 @@ describe('config', () => {
 
     // @ts-ignore
     expect(() => getConfigurable('foo')).toThrow(/Unable to get webpack configurable/)
+  })
+
+  test('invalid configuration key should throw an error', () => {
+    expect(setConfiguration).toThrow(/Unable to set configuration/)
+
+    expect(getConfiguration).toThrow(/Unable to get configuration/)
+
+    // @ts-ignore
+    expect(() => setConfiguration('foo', 'bar')).toThrow(/Unable to set configuration/)
+
+    // @ts-ignore
+    expect(() => getConfiguration('foo')).toThrow(/Unable to get configuration/)
+  })
+
+  test('configuration for maven project key should be set', () => {
+    setConfiguration(ConfigurationType.MAVEN_PROJECT, 'foo bar')
+
+    expect(getConfiguration(ConfigurationType.MAVEN_PROJECT)).toEqual('foo bar')
   })
 })
