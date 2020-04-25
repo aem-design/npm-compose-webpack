@@ -6,7 +6,6 @@ import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import createConfig from 'webpack-dev-server/lib/utils/createConfig'
 import defaultPort from 'webpack-dev-server/lib/utils/defaultPort'
-import wds from 'webpack-dev-server/node_modules/@types/webpack'
 import yargs from 'yargs'
 
 import runtime from '../runtime'
@@ -99,7 +98,7 @@ const webpackInstance      = webpack(webpackConfiguration)
 
 if (args.watch) {
   const devServer = new WebpackDevServer(
-    webpackInstance as unknown as wds.Compiler,
+    webpackInstance,
     createConfig(webpackConfiguration, {
       ...args,
 
