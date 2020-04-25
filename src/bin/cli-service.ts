@@ -85,9 +85,9 @@ const configFilePath = resolve(process.cwd(), args.config)
 
 if (existsSync(configFilePath)) {
   try {
-    composeConfiguration = require(configFilePath)
+    composeConfiguration = require(configFilePath) as ComposeConfiguration
   } catch (ex) {
-    throw new Error(`Unable to load compose configuration file: ${ex.message}`)
+    throw new Error(`Unable to load compose configuration file: ${(ex as Error).message}`)
   }
 }
 

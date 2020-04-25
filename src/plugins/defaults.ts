@@ -29,6 +29,8 @@ import {
 import ComposeMessages from './messages'
 
 export default (paths: RuntimePaths): webpack.Plugin[] => {
+  const cssExtractPath = paths.out as string || 'clientlibs-header/css'
+
   return removeEmpty<webpack.Plugin>([
 
     getIfUtilsInstance().ifNotWatch(new ComposeMessages()),
@@ -59,8 +61,8 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
      * @see https://webpack.js.org/plugins/mini-css-extract-plugin/
      */
     new MiniCssExtractPlugin({
-      chunkFilename : `${paths.out || 'clientlibs-header/css'}/[id].css`,
-      filename      : `${paths.out || 'clientlibs-header/css'}/[name].css`,
+      chunkFilename : `${cssExtractPath}/[id].css`,
+      filename      : `${cssExtractPath}/[name].css`,
     }),
 
     /**

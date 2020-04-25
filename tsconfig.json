@@ -26,8 +26,7 @@
   "exclude": [
     "configs",
     "dist",
-    "node_modules",
-    "**/*.spec.ts"
+    "node_modules"
   ],
 
   "include": [

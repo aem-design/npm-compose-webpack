@@ -54,10 +54,10 @@ export default function processFeatures({ environment, features, paths, webpackC
       updatedConfig = merge.smartStrategy(mergeStrategy)(
         updatedConfig,
         featureInstance.defineWebpackConfiguration(),
-      )
+      ) as RuntimeConfiguration
     } catch (ex) {
       console.log()
-      logger.error('Failed to install dependencies:', ex.message)
+      logger.error('Failed to install dependencies:', (ex as Error).message)
 
       process.exit(1)
 

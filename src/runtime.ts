@@ -58,7 +58,10 @@ import {
   getIfUtilsInstance,
 } from './support/helpers'
 
-export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOptions) => {
+export default (
+  configuration: ComposeConfiguration,
+  webpackEnv: WebpackParserOptions
+): () => RuntimeConfiguration => {
   const baseConfiguration = configuration.standard
 
   /**
@@ -213,8 +216,8 @@ export default (configuration: ComposeConfiguration, webpackEnv: WebpackParserOp
       mode,
 
       output: {
-        chunkFilename : `${paths.out || 'clientlibs-footer'}/resources/chunks/[name]${flagProd ? '.[contenthash:8]' : ''}.js`,
-        filename      : `${paths.out || 'clientlibs-footer/js'}/[name].js`,
+        chunkFilename : `${paths.out as string || 'clientlibs-footer'}/resources/chunks/[name]${flagProd ? '.[contenthash:8]' : ''}.js`,
+        filename      : `${paths.out as string || 'clientlibs-footer/js'}/[name].js`,
         path          : paths.project.public,
         publicPath    : `${flagHMR ? '' : paths.aem}/`,
       },

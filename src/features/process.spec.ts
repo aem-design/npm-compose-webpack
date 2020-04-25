@@ -33,6 +33,10 @@ describe('process features', () => {
     restoreConsoleMock = mockConsole()
   })
 
+  afterAll(() => {
+    restoreConsoleMock()
+  })
+
   test('typescript should return a restart signal', () => {
     jest.mock('tsconfig-paths-webpack-plugin', () => jest.fn(), { virtual: true })
 
@@ -73,9 +77,5 @@ describe('process features', () => {
 
       ...featureConfig,
     })).toHaveProperty('resolve.alias.vue$', 'vue/dist/vue.min.js')
-  })
-
-  afterAll(() => {
-    restoreConsoleMock()
   })
 })

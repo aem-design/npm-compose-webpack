@@ -83,7 +83,7 @@ export interface ComposeIfUtils extends IfUtils {
 export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: propPath, pom }: MavenConfig<R>): R {
   let value!: R
 
-  const file = pom || getConfiguration(ConfigurationType.MAVEN_PARENT)
+  const file = pom ?? getConfiguration(ConfigurationType.MAVEN_PARENT)
 
   xmlParser.parseString(getMavenConfigurationFromFile(file), (_: any, { project }: any) => {
     const properties = project.properties[0]
@@ -124,7 +124,7 @@ export function configurationProxy(configuration: ComposeConfiguration): Compose
  */
 export function generateConfiguration<T>(configuration: T, environmentConfiguration?: RuntimeEnvironment): T {
   if (configuration instanceof Function) {
-    return configuration(environmentConfiguration || baseEnvironmentConfig)
+    return configuration(environmentConfiguration ?? baseEnvironmentConfig) as T
   }
 
   return configuration || {} as T

@@ -5,6 +5,10 @@
     "@chrisblossom/eslint-config"
   ],
 
+  "plugins": [
+    "jest"
+  ],
+
   "rules": {
     "arrow-body-style": "off",
     "class-methods-use-this": "off",
@@ -29,11 +33,16 @@
     "promise/prefer-await-to-callbacks": "off",
 
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/method-signature-style": "off",
     "@typescript-eslint/no-angle-bracket-type-assertion": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-object-literal-type-assertion": "off",
     "@typescript-eslint/no-require-imports": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
     "@typescript-eslint/no-triple-slash-reference": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/prefer-interface": "off",
     "@typescript-eslint/strict-boolean-expressions": "off"
