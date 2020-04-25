@@ -3,7 +3,7 @@
   "description": "Webpack configuration and helpers for the AEM.Design compose module",
   "engines": {
     "node": ">= 10.x",
-    "yarn": ">= 1.10.x"
+    "yarn": ">= 1.10.x < 2.x"
   },
   "bin": {
     "aemdesign-compose": "dist/bin/cli-service.js"
@@ -11,6 +11,8 @@
   "files": [
     "configs/",
     "dist/",
+    "!dist/**/__mocks__/",
+    "!dist/**/*.spec.*",
     "support/"
   ],
   "keywords": [
