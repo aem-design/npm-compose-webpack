@@ -72,8 +72,8 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
      */
     getIfUtilsInstance().ifStylelint(new StyleLintPlugin({
       context       : resolve(paths.project.src, 'scss'),
+      emitErrors    : false,
       // @ts-ignore
-      emitError     : false,
       emitWarning   : true,
       // @ts-check
       failOnError   : false,
