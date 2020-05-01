@@ -26,9 +26,9 @@ export default class TypeScript extends Feature {
   public getFeatureDependencies(): DependenciesMap {
     return {
       [DependencyType.DEV]: [
-        'tsconfig-paths-webpack-plugin',
-        'ts-loader',
-        'typescript',
+        'tsconfig-paths-webpack-plugin@^3.2.0',
+        'ts-loader@^7.0.2',
+        'typescript@^3.8.3',
       ],
 
       [DependencyType.NON_DEV]: [],

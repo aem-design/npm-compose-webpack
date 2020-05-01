@@ -38,8 +38,6 @@ describe('process features', () => {
   })
 
   test('typescript should return a restart signal', () => {
-    jest.mock('tsconfig-paths-webpack-plugin', () => jest.fn(), { virtual: true })
-
     const mockExit = mockProcessExit()
 
     // @ts-ignore
@@ -53,8 +51,6 @@ describe('process features', () => {
   })
 
   test('typescript should return a missing dependency', () => {
-    jest.unmock('tsconfig-paths-webpack-plugin')
-
     const mockExit = mockProcessExit()
 
     // @ts-ignore

@@ -62,4 +62,8 @@ describe('dependencies', () => {
   test('npm install command should be generated for dev dependencies', () => {
     expect(constructCommand(['yo'], DependencyType.DEV)).toEqual('npm install yo --save-dev')
   })
+
+  test('version constraint is honoured in the install command', () => {
+    expect(constructCommand(['yo@1.0.0'], DependencyType.DEV)).toEqual('npm install yo@1.0.0 --save-dev')
+  })
 })

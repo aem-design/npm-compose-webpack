@@ -58,8 +58,10 @@ export function installDependencies(dependenciesMap: DependenciesMap): InstallSt
   const missingDependencies =
     _flatten(dependencyTypes.map((type) => dependenciesMap[type] as string[]))
     .filter((dependency) => {
+      const [moduleName] = dependency.split('@')
+
       try {
-        return resolveDependency(dependency).length === 0
+        return resolveDependency(moduleName).length === 0
       } catch (_) {
         return true
       }

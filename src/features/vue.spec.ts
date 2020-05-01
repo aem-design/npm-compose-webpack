@@ -26,14 +26,14 @@ describe('vue feature', () => {
     const dependencies = instance.getFeatureDependencies()
 
     expect(dependencies).toHaveProperty(DependencyType.DEV, [
-      'vue-loader',
-      'vue-style-loader',
-      'vue-template-compiler',
+      'vue-loader@^15.9.1',
+      'vue-style-loader@^4.1.2',
+      'vue-template-compiler@^2.6.11',
     ])
 
     expect(dependencies).toHaveProperty(DependencyType.NON_DEV, [
-      'vue-property-decorator',
-      'vue',
+      'vue-property-decorator@^8.4.2',
+      'vue@^2.6.11',
     ])
   })
 

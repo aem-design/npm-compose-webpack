@@ -26,9 +26,9 @@ describe('typescript feature', () => {
     const dependencies = instance.getFeatureDependencies()
 
     expect(dependencies).toHaveProperty(DependencyType.DEV, [
-      'tsconfig-paths-webpack-plugin',
-      'ts-loader',
-      'typescript',
+      'tsconfig-paths-webpack-plugin@^3.2.0',
+      'ts-loader@^7.0.2',
+      'typescript@^3.8.3',
     ])
 
     expect(dependencies).toHaveProperty(DependencyType.NON_DEV, [])

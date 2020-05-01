@@ -27,14 +27,14 @@ export default class Vue extends Feature {
   public getFeatureDependencies(): DependenciesMap {
     return {
       [DependencyType.DEV]: [
-        'vue-loader',
-        'vue-style-loader',
-        'vue-template-compiler',
+        'vue-loader@^15.9.1',
+        'vue-style-loader@^4.1.2',
+        'vue-template-compiler@^2.6.11',
       ],
 
       [DependencyType.NON_DEV]: [
-        'vue-property-decorator',
-        'vue',
+        'vue-property-decorator@^8.4.2',
+        'vue@^2.6.11',
       ],
     }
   }
