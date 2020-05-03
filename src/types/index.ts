@@ -66,6 +66,7 @@ export interface Configuration {
 
 export interface Environment extends WebpackParserOptions {
   analyzer: boolean;
+  aem: AEMEnvironment;
   clean: boolean;
   eslint: boolean;
   hmr: boolean;
@@ -74,6 +75,15 @@ export interface Environment extends WebpackParserOptions {
   project: string;
   stylelint: boolean;
   watch: boolean;
+}
+
+export interface AEMEnvironment<P = number | false> {
+  paths: {
+    app: string;
+    shared: string;
+  };
+
+  port: P;
 }
 
 export type ProjectsConfiguration = Record<string, Project>

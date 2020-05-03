@@ -14,6 +14,7 @@ import TerserPlugin from 'terser-webpack-plugin'
 import { logger } from '@aem-design/compose-support'
 
 import {
+  AEMEnvironment,
   ComposeConfiguration,
   RuntimeConfiguration,
 } from './types'
@@ -114,15 +115,27 @@ export default (
     }
 
     /**
+     * Define the configuration for AEM.
+     */
+    const aemConfiguration: AEMEnvironment<number> = {
+      paths: {
+        app    : appsPath,
+        shared : sharedAppsPath,
+      },
+
+      port: environment.aem.port || authorPort,
+    }
+
+    /**
      * Set any user-defined projects.
      */
     setProjects(baseConfiguration.projects ?? null)
 
     logger.info(chalk.bold('Maven configuration'))
     logger.info('-------------------')
-    logger.info(chalk.bold('Author Port         :'), authorPort)
-    logger.info(chalk.bold('Apps Path           :'), appsPath)
-    logger.info(chalk.bold('Shared Apps Path    :'), sharedAppsPath)
+    logger.info(chalk.bold('Author Port         :'), aemConfiguration.port)
+    logger.info(chalk.bold('Apps Path           :'), aemConfiguration.paths.app)
+    logger.info(chalk.bold('Shared Apps Path    :'), aemConfiguration.paths.shared)
     logger.info('')
 
     setConfiguration(
@@ -337,14 +350,13 @@ export default (
         host        : '0.0.0.0',
         open        : false,
         overlay     : true,
-        port        : 4504,
+        port        : aemConfiguration.port + 2, // Default is '4502 + 2' = 4504
 
         proxy: [
           // Default AEM proxy
-          // TODO: Make this configurable
           {
             context : () => true,
-            target  : `http://localhost:${authorPort}`,
+            target  : `http://localhost:${aemConfiguration.port}`,
           },
         ],
       },

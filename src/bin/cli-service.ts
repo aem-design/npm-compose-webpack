@@ -17,6 +17,11 @@ import {
 const args = yargs
   .alias('h', 'help')
   .alias('v', 'version')
+  .option('aem.port', {
+    default     : false,
+    description : 'Specify a different author port.',
+    type        : 'number',
+  })
   .option('analyzer', {
     default     : false,
     description : 'Enable the Bundle Analyzer plugin?',

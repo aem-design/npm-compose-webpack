@@ -3,6 +3,7 @@ import _get from 'lodash/get'
 import _has from 'lodash/has'
 import _set from 'lodash/set'
 import webpack from 'webpack'
+import { MergeStrategy } from 'webpack-merge'
 
 import {
   Configuration,
@@ -56,6 +57,15 @@ let projects: ProjectsConfiguration = {}
  * Environment configuration for Webpack.
  */
 export let environment: Environment = {
+  aem: {
+    paths: {
+      app    : '',
+      shared : '',
+    },
+
+    port: false,
+  },
+
   analyzer  : false,
   clean     : false,
   eslint    : true,
@@ -70,9 +80,10 @@ export let environment: Environment = {
 /**
  * Merge strategy for `webpack-merge`.
  */
-export const mergeStrategy: Record<string, 'append' | 'prepend' | 'replace'> = {
-  'module.rules' : 'append',
-  'plugins'      : 'append',
+export const mergeStrategy: Record<string, MergeStrategy> = {
+  'devServer.proxy' : 'prepend',
+  'module.rules'    : 'append',
+  'plugins'         : 'append',
 }
 
 /**
