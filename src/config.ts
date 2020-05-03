@@ -1,6 +1,9 @@
 import { resolve } from 'path'
 import _get from 'lodash/get'
 import _has from 'lodash/has'
+import _isEmpty from 'lodash/isEmpty'
+import _mergeWith from 'lodash/mergeWith'
+import _omitBy from 'lodash/omitBy'
 import _set from 'lodash/set'
 import webpack from 'webpack'
 import { MergeStrategy } from 'webpack-merge'
@@ -80,19 +83,64 @@ export let environment: Environment = {
 /**
  * Merge strategy for `webpack-merge`.
  */
-export const mergeStrategy: Record<string, MergeStrategy> = {
+export const mergeStrategy: { [key: string]: MergeStrategy } = {
   'devServer.proxy' : 'prepend',
   'module.rules'    : 'append',
   'plugins'         : 'append',
 }
 
 /**
+ * Merge a default and overriden project together.
+ */
+function projectsCustomiser(defaultProject: Project, overridenProject: Project): Project {
+  const defaultProjectKeys   = Object.keys(defaultProject)
+  const overridenProjectKeys = Object.keys(overridenProject)
+
+  const defaultAdditionalEntries    = defaultProject.additionalEntries ?? {}
+  const overriddenAdditionalEntries = overridenProject.additionalEntries ?? {}
+
+  return {
+    entryFile  : overridenProject.entryFile ?? defaultProject.entryFile,
+    outputName : overridenProject.outputName ?? defaultProject.outputName,
+
+    additionalEntries: {
+      ...Object.keys(overriddenAdditionalEntries).reduce((acc, key) => {
+        acc[key] = defaultAdditionalEntries[key]
+          ? [...defaultAdditionalEntries[key], ...overriddenAdditionalEntries[key]]
+          : overriddenAdditionalEntries[key]
+
+        return acc
+      }, defaultAdditionalEntries)
+    },
+
+    fileMap: _omitBy({
+      footer: [...(defaultProject.fileMap?.footer ?? []), ...(overridenProject.fileMap?.footer ?? [])],
+      header: [...(defaultProject.fileMap?.header ?? []), ...(overridenProject.fileMap?.header ?? [])],
+    }, _isEmpty),
+
+    // Merge in anything else that doesn't match a known key
+    ...overridenProjectKeys.reduce((acc, key) => {
+      if (!defaultProjectKeys.includes(key)) {
+        acc[key] = overridenProject[key]
+      }
+
+      return acc
+    }, {})
+  }
+}
+
+/**
  * Sets the required projects map. If none are supplied, the default map will be used instead.
  */
-export function setProjects(incomingProjects: ProjectsConfiguration | null = null): void {
-  if (!incomingProjects || Object.keys(incomingProjects).length === 0) {
-    projects = defaultProjects
-  } else {
+export function setProjects(incomingProjects: ProjectsConfiguration | null = null, merge = false): void {
+  const validProjectsConfig    = incomingProjects && Object.keys(incomingProjects).length
+  const shouldMergeWithDefault = merge && validProjectsConfig !== null && validProjectsConfig > 0
+
+  if (shouldMergeWithDefault || !validProjectsConfig) {
+    projects = shouldMergeWithDefault
+      ? _mergeWith(defaultProjects, incomingProjects, projectsCustomiser)
+      : defaultProjects
+  } else if (incomingProjects) {
     projects = incomingProjects
   }
 }

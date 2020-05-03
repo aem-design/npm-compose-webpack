@@ -172,6 +172,11 @@ export interface StandardConfiguration {
   banner: BannerConfiguration;
 
   /**
+   * Should the custom (provided) configuration be merged with the default configuration?
+   */
+  mergeProjects: boolean;
+
+  /**
    * Configuration for the your projects.
    *
    * @example

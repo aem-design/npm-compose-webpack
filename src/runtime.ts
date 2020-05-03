@@ -129,9 +129,12 @@ export default (
     /**
      * Set any user-defined projects.
      */
-    setProjects(baseConfiguration.projects ?? null)
+    setProjects(baseConfiguration.projects ?? null, baseConfiguration.mergeProjects)
 
-    logger.info(chalk.bold('Maven configuration'))
+    /**
+     * Output some debug information about our AEM configuration
+     */
+    logger.info(chalk.bold('AEM Configuration'))
     logger.info('-------------------')
     logger.info(chalk.bold('Author Port         :'), aemConfiguration.port)
     logger.info(chalk.bold('Apps Path           :'), aemConfiguration.paths.app)
