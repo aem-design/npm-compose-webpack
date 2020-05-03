@@ -133,21 +133,16 @@ export default (
     setProjects(baseConfiguration.projects ?? null, baseConfiguration.mergeProjects)
 
     /**
-     * Output some debug information about our AEM configuration
+     * Set the base path for the project in AEM
      */
-    logger.info(chalk.bold('AEM Configuration'))
-    logger.info('-------------------')
-    logger.info(chalk.bold('Author Port         :'), aemConfiguration.port)
-    logger.info(chalk.bold('Apps Path           :'), aemConfiguration.paths.app)
-    logger.info(chalk.bold('Shared Apps Path    :'), aemConfiguration.paths.shared)
-    logger.info('')
-
     setConfiguration(
       ConfigurationType.PATH_PUBLIC_AEM,
-      `/etc.clientlibs/${appsPath}/clientlibs/${project}`,
+      `/etc.clientlibs/${aemConfiguration.paths.app}/clientlibs/${project}`,
     )
 
-    // Define the project paths
+    /**
+     * Define the project paths
+     */
     const paths = {
       aem: flagHMR ? '/' : getConfiguration(ConfigurationType.PATH_PUBLIC_AEM),
       out: flagHMR ? getConfiguration(ConfigurationType.PATH_PUBLIC_AEM).substr(1) : false,
