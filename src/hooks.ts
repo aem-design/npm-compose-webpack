@@ -1,6 +1,7 @@
 import { Hook, HookType } from './types/enums'
 
 import {
+  Project,
   RuntimeEnvironment,
 } from './types'
 
@@ -13,8 +14,8 @@ const registeredHooks: Partial<RegisteredHooks> = {
 export type EnvironmentConfig = Partial<RuntimeEnvironment>
 
 export interface HookExecutor {
-  after?(env?: EnvironmentConfig): void;
-  before?(env?: EnvironmentConfig): void;
+  after?(env?: EnvironmentConfig, project?: Project): void;
+  before?(env?: EnvironmentConfig, project?: Project): void;
 }
 
 export type RegisteredHooks = Record<Hook, HookExecutor[]>
@@ -36,7 +37,7 @@ export function registerHook(hook: Hook, executor: HookExecutor): void {
  * Executes the given `HookExecutor`'s for `hook` and the `type`. Optional environment variables
  * can be passed through to help aid the callback functions.
  */
-export function executeHook(hook: Hook, type: HookType, env?: EnvironmentConfig): void {
+export function executeHook(hook: Hook, type: HookType, env?: EnvironmentConfig, project?: Project): void {
   const registeredHook = registeredHooks[hook]
 
   if (!registeredHook) {
@@ -45,11 +46,11 @@ export function executeHook(hook: Hook, type: HookType, env?: EnvironmentConfig)
 
   for (const executor of registeredHook) {
     if (type === HookType.AFTER && executor.after) {
-      executor.after(env)
+      executor.after(env, project)
     }
 
     if (type === HookType.BEFORE && executor.before) {
-      executor.before(env)
+      executor.before(env, project)
     }
   }
 }

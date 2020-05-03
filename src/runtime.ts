@@ -37,6 +37,7 @@ import {
   getConfiguration,
   getConfigurable,
   getMavenConfiguration,
+  getProjectConfiguration,
   getProjectPath,
 
   setConfiguration,
@@ -179,9 +180,19 @@ export default (
     }
 
     /**
+     * Output some debug information about our AEM configuration
+     */
+    logger.info(chalk.bold('AEM Configuration'))
+    logger.info('-------------------')
+    logger.info(chalk.bold('Author Port         :'), aemConfiguration.port)
+    logger.info(chalk.bold('Apps Path           :'), aemConfiguration.paths.app)
+    logger.info(chalk.bold('Shared Apps Path    :'), aemConfiguration.paths.shared)
+    logger.info('')
+
+    /**
      * Post-init (before) hooks
      */
-    executeHook(Hook.POST_INIT, HookType.BEFORE, environmentConfiguration)
+    executeHook(Hook.POST_INIT, HookType.BEFORE, environmentConfiguration, getProjectConfiguration())
 
     // Webpack configuration
     const entry = EntryConfiguration(flagHMR)
