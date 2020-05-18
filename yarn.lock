@@ -4521,15 +4521,15 @@ eslint-visitor-keys@^1.0.0, eslint-visitor-keys@^1.1.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.1.0.tgz#e2a82cea84ff246ad6fb57f9bde5b46621459ec2"
   integrity sha512-8y9YjtM1JBJU/A9Kc+SbaOV4y29sSWckBwMHa+FGtVj5gN/sbnKDf6xJUl+8g7FAij9LVaP8C24DUiH/f/2Z9A==
 
-eslint-webpack-plugin@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-webpack-plugin/-/eslint-webpack-plugin-0.1.0.tgz#d97f074fdcd93dfc9e524efbedaef5d72fb2a33c"
-  integrity sha512-Zx1i8Xccx1Y7V2Ek6eh1eO7/N3BtmF7kpMWOhMLQUbBCHgidw0jz/7c1jKpcKcp+maOpghlXLt6M3msbMPCs9g==
+eslint-webpack-plugin@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-webpack-plugin/-/eslint-webpack-plugin-1.0.0.tgz#033fbefa064f88f120b841d40e30eb25e09726c2"
+  integrity sha512-9lAhF+BrLDHLbso0f3sznvCyMqL/RzmNW4JgyxZL0LAmBdvSkdP1aOxgH+SMmfD2Was8ZQ85UxK18KTo0/WdXQ==
   dependencies:
     arrify "^2.0.1"
     fs-extra "^8.1.0"
     micromatch "^4.0.2"
-    schema-utils "^2.6.1"
+    schema-utils "^2.6.6"
 
 eslint@^6.8.0:
   version "6.8.0"
