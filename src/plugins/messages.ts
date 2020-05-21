@@ -1,5 +1,3 @@
-/* eslint-disable eslint-comments/no-unlimited-disable */
-
 import chalk from 'chalk'
 import webpack from 'webpack'
 import format from 'webpack-format-messages'
@@ -39,7 +37,6 @@ export default class ComposeMessages implements webpack.Plugin {
       }
     }
 
-    // eslint-disable-next-line
     if (compiler.hooks !== void 0) {
       compiler.hooks.compile.tap(pluginName, onStart)
       compiler.hooks.invalid.tap(pluginName, () => onStart())

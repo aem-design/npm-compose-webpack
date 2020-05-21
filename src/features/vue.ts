@@ -73,9 +73,8 @@ export default class Vue extends Feature {
   public rules(): webpack.RuleSetRule[] {
     return [
       {
-        exclude : /node_modules/,
-        loader  : 'vue-loader',
-        test    : /\.vue$/,
+        loader : 'vue-loader',
+        test   : /\.vue$/,
       },
       {
         include : [resolve(this.env.paths.project.src, 'js/components')],

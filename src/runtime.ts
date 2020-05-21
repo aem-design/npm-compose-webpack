@@ -182,12 +182,6 @@ export default (
     logger.info(chalk.bold('Author Port         :'), aemConfiguration.port)
     logger.info(chalk.bold('Apps Path           :'), aemConfiguration.paths.app)
     logger.info(chalk.bold('Shared Apps Path    :'), aemConfiguration.paths.shared)
-    logger.info('')
-
-    /**
-     * Post-init (before) hooks
-     */
-    executeHook(Hook.POST_INIT, HookType.BEFORE, environmentConfiguration, getProjectConfiguration())
 
     // Webpack configuration
     const entry = EntryConfiguration(flagHMR)
@@ -219,6 +213,12 @@ export default (
     console.log()
     console.log(entryCodeFrame)
     console.log()
+    logger.info('')
+
+    /**
+     * Post-init (before) hooks
+     */
+    executeHook(Hook.POST_INIT, HookType.BEFORE, environmentConfiguration, getProjectConfiguration())
 
     /**
      * Clean the public directory for the project first...
@@ -397,7 +397,7 @@ export default (
     /**
      * Post-init (after) hooks
      */
-    executeHook(Hook.POST_INIT, HookType.AFTER, environmentConfiguration)
+    executeHook(Hook.POST_INIT, HookType.AFTER, environmentConfiguration, getProjectConfiguration())
 
     return config
   }
