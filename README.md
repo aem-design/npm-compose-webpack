@@ -21,6 +21,8 @@
 
 # @aem-design/compose-webpack
 
+[![Join the chat at https://gitter.im/aem-design/compose-webpack](https://badges.gitter.im/aem-design/compose-webpack.svg)](https://gitter.im/aem-design/compose-webpack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Webpack configuration module to help bootstrap and get AEM projects running fast and efficiently.
 
 </div>
