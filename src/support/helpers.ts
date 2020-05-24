@@ -131,12 +131,21 @@ export function generateConfiguration<T>(configuration: T, environmentConfigurat
 }
 
 /**
- * Attempts to resolve the `expected` path otherwise uses the `fallback` path.
+ * Attempts to resolve `filename` in the given paths (if any) otherwise uses the `fallback` path
+ * which is relative to the root of `@aem-design/compose-webpack` package.
  */
-export function resolveConfigFile(expected: string, fallback: string): string {
-  try {
-    return require.resolve(expected, { paths: [process.cwd()] })
-  } catch (_) {
-    return resolve(__dirname, '../../', fallback)
+export function resolveConfigFile(
+  filename: string,
+  fallback: string,
+  paths: string[] = [],
+): string {
+  for (const path of [...paths, process.cwd()]) {
+    try {
+      return require.resolve(filename, { paths: [path] })
+    } catch (_) {
+      // Keep going through the paths
+    }
   }
+
+  return resolve(__dirname, '../../', fallback)
 }

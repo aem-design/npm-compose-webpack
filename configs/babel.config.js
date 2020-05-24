@@ -12,8 +12,6 @@ module.exports = {
 
       corejs,
     }],
-
-    '@babel/preset-typescript'
   ],
 
   plugins: [

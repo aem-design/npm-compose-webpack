@@ -16,7 +16,8 @@ export default class Bootstrap extends Feature {
       ],
 
       [DependencyType.NON_DEV]: [
-        'bootstrap@^4.4.1',
+        'bootstrap@^4.5.0',
+        'jquery@^3.5.1',
         'popper.js@^1.16.1',
       ],
     }

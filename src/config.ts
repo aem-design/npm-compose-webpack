@@ -212,7 +212,8 @@ export function getMavenConfiguration(): MavenConfigMap {
     }),
 
     authorPort: getMavenConfigurationValueByPath<number>({
-      path: 'crx.port',
+      parser : (value) => parseInt(value[0], 10),
+      path   : 'crx.port',
     }),
 
     sharedAppsPath: getMavenConfigurationValueByPath<string>({

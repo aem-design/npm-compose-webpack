@@ -263,7 +263,8 @@ export default (
             ],
           },
           {
-            test: /\.css$/,
+            exclude : /node_modules/,
+            test    : /\.css$/,
 
             use: [
               MiniCssExtractPlugin.loader,

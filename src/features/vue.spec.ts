@@ -26,14 +26,18 @@ describe('vue feature', () => {
     const dependencies = instance.getFeatureDependencies()
 
     expect(dependencies).toHaveProperty(DependencyType.DEV, [
+      '@vue/cli-plugin-babel@^4.3.1',
+      '@vue/cli-plugin-eslint@^4.3.1',
+      '@vue/eslint-config-typescript@^5.0.2',
+      'babel-preset-vue@^2.0.2',
       'vue-loader@^15.9.1',
       'vue-style-loader@^4.1.2',
       'vue-template-compiler@^2.6.11',
     ])
 
     expect(dependencies).toHaveProperty(DependencyType.NON_DEV, [
-      'vue-property-decorator@^8.4.2',
       'vue@^2.6.11',
+      'vue-property-decorator@^8.4.2',
     ])
   })
 
