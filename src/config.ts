@@ -9,6 +9,7 @@ import webpack from 'webpack'
 import { MergeStrategy } from 'webpack-merge'
 
 import {
+  CommandLineFlags,
   Configuration,
   Environment,
   MavenConfigMap,
@@ -170,13 +171,15 @@ export function setConfiguration<T extends ConfigurationType, V extends Configur
 /**
  * Stores our current Webpack configuration and environment variables.
  */
-export function setupEnvironment(env: webpack.ParserOptions): Environment {
+export function setupEnvironment(env: webpack.ParserOptions, flags: CommandLineFlags = {}): Environment {
   environment = {
     ...env,
 
-    hmr     : env.watch === true,
-    mode    : env.dev === true ? 'development' : 'production',
-    project : env.project as string,
+    eslint    : flags.eslint ?? (env.eslint || false),
+    hmr       : env.watch === true,
+    mode      : env.dev   === true ? 'development' : 'production',
+    project   : env.project as string,
+    stylelint : flags.stylelint ?? (env.stylelint || false),
   } as Environment
 
   // Ensure the project is valid

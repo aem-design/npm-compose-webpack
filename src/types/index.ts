@@ -103,7 +103,21 @@ export type RuntimeForWebpack<T = WebpackConfiguration> = ((env: RuntimeEnvironm
 
 export type FeatureList = (keyof typeof Features)[]
 
+export type CommandLineFlags = Partial<Pick<Environment, 'eslint' | 'stylelint'>>
+
 export interface ComposeConfiguration {
+  /**
+   * Override CLI flags which are forced 100% of the time for each and every build.
+   *
+   * @example
+   * {
+   *   cliFlags: {
+   *     eslint: false,
+   *   },
+   * }
+   */
+  cliFlags: CommandLineFlags;
+
   /**
    * Additional features that you would like. All dependencies and configurations are done so
    * automatically behind the scenes.

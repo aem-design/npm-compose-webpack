@@ -86,9 +86,7 @@ export default (
    * Begin Webpack!!
    */
   return (): RuntimeConfiguration => {
-    const environment = setupEnvironment({
-      ...webpackEnv,
-    })
+    const environment = setupEnvironment({ ...webpackEnv }, configuration.cliFlags)
 
     /**
      * Pre-init (after) hooks
