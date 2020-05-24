@@ -29,15 +29,22 @@ export function constructCommand(dependencies: string[], type: DependencyType): 
 }
 
 export function executeInstallation(dependenciesMap: DependenciesMap): void {
-  execSync(constructCommand(
-    dependenciesMap[DependencyType.DEV],
-    DependencyType.DEV,
-  ))
+  const dependencies    = dependenciesMap[DependencyType.NON_DEV]
+  const devDependencies = dependenciesMap[DependencyType.DEV]
 
-  execSync(constructCommand(
-    dependenciesMap[DependencyType.NON_DEV],
-    DependencyType.NON_DEV,
-  ))
+  if (devDependencies.length) {
+    execSync(constructCommand(
+      devDependencies,
+      DependencyType.DEV,
+    ))
+  }
+
+  if (dependencies.length) {
+    execSync(constructCommand(
+      dependencies,
+      DependencyType.NON_DEV,
+    ))
+  }
 }
 
 export function resolveDependency(dependency: string, catchError = false, fallback = ''): string {
