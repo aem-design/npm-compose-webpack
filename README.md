@@ -18,6 +18,7 @@
 [![last commit][last-commit]][last-commit-url]
 [![downloads][downloads]][npm-url]
 [![contributors][contributors]][contributors-url]
+[![gitter][gitter]][gitter-url]
 
 # @aem-design/compose-webpack
 
@@ -86,3 +87,6 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 [contributors]: https://img.shields.io/github/contributors/aem-design/npm-compose-webpack.svg
 [contributors-url]: https://github.com/aem-design/npm-compose-webpack/graphs/contributors
+
+[gitter]: https://badges.gitter.im/aem-design/compose-webpack.svg
+[gitter-url]: https://gitter.im/aem-design/compose-webpack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
