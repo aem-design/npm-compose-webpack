@@ -3,7 +3,7 @@ import webpack from 'webpack'
 
 import { removeEmpty } from 'webpack-config-utils'
 
-import CopyWebpackPlugin from 'copy-webpack-plugin'
+import CopyPlugin from 'copy-webpack-plugin'
 import ESLintPlugin from 'eslint-webpack-plugin'
 import LodashPlugin from 'lodash-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
@@ -41,18 +41,23 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
      *
      * @see https://webpack.js.org/plugins/copy-webpack-plugin
      */
-    new CopyWebpackPlugin([
-      {
-        context : resolve(paths.project.src, 'resources'),
-        from    : './**/*.*',
-        to      : resolve(paths.project.public, 'clientlibs-header/resources'),
-      },
-      {
-        context : resolve(paths.project.src, 'css'),
-        from    : './*.css',
-        to      : resolve(paths.project.public, 'clientlibs-header/css'),
-      },
-    ]),
+    new CopyPlugin({
+      // @ts-expect-error
+      patterns: [
+        {
+          context          : resolve(paths.project.src),
+          from             : 'resources',
+          to               : resolve(paths.project.public, 'clientlibs-header/resources'),
+          noErrorOnMissing : true,
+        },
+        {
+          context          : resolve(paths.project.src),
+          from             : 'css/*.css',
+          to               : resolve(paths.project.public, 'clientlibs-header/css'),
+          noErrorOnMissing : true,
+        },
+      ],
+    }),
 
     /**
      * CSS extraction.
