@@ -94,7 +94,7 @@
     "@types/rimraf": "^3.0.0",
     "@types/sass": "^1.16.0",
     "@types/stylelint-webpack-plugin": "^0.1.5",
-    "@types/terser-webpack-plugin": "^2.2.0",
+    "@types/terser-webpack-plugin": "^3.0.0",
     "@types/webpack": "^4.41.13",
     "@types/webpack-bundle-analyzer": "^3.8.0",
     "@types/webpack-config-utils": "^2.3.0",
