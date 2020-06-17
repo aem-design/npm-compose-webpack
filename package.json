@@ -49,11 +49,11 @@
     "access": "public"
   },
   "scripts": {
-    "build": "npm run clean && npm run build.compile && npm run build.types",
-    "build.compile": "cross-env NODE_ENV=production tsc --declaration false",
-    "build.types": "cross-env NODE_ENV=production tsc --emitDeclarationOnly --declaration true --declarationDir dist/types",
+    "build": "npm run clean && npm run build.compile",
+    "build.compile": "cross-env NODE_ENV=production microbundle build --target node --no-compress --tsconfig tsconfig.withtypes.json src/*.ts",
+    "build.types": "cross-env NODE_ENV=production tsc --project tsconfig.withtypes.json --emitDeclarationOnly",
     "clean": "rm -rf dist",
-    "dev": "npm run clean && cross-env NODE_ENV=development tsc --watch --declaration true --declarationDir dist/types",
+    "dev": "npm run clean && cross-env NODE_ENV=development microbundle watch --target node --tsconfig tsconfig.withtypes.json",
     "lint": "eslint '**/*.ts'",
     "postbuild": "chmod +x dist/bin/cli-service.js",
     "postversion": "npm run test && git push && git push --tags",
@@ -152,6 +152,7 @@
     "cross-env": "^7.0.2",
     "eslint": "^7.1.0",
     "husky": "^4.2.5",
+    "microbundle": "^0.12.1",
     "typescript": "^3.9.3"
   },
   "peerDependencies": {
