@@ -30,18 +30,18 @@ export default class Bootstrap extends Feature {
        * @see https://github.com/shakacode/bootstrap-loader#bootstrap-4-internal-dependency-solution
        */
       new webpack.ProvidePlugin({
-        Alert     : 'exports-loader?Alert!bootstrap/js/dist/alert',
-        Button    : 'exports-loader?Button!bootstrap/js/dist/button',
-        Carousel  : 'exports-loader?Carousel!bootstrap/js/dist/carousel',
-        Collapse  : 'exports-loader?Collapse!bootstrap/js/dist/collapse',
-        Dropdown  : 'exports-loader?Dropdown!bootstrap/js/dist/dropdown',
-        Modal     : 'exports-loader?Modal!bootstrap/js/dist/modal',
-        Popover   : 'exports-loader?Popover!bootstrap/js/dist/popover',
+        Alert     : 'exports-loader?exports=Alert!bootstrap/js/dist/alert',
+        Button    : 'exports-loader?exports=Button!bootstrap/js/dist/button',
+        Carousel  : 'exports-loader?exports=Carousel!bootstrap/js/dist/carousel',
+        Collapse  : 'exports-loader?exports=Collapse!bootstrap/js/dist/collapse',
+        Dropdown  : 'exports-loader?exports=Dropdown!bootstrap/js/dist/dropdown',
+        Modal     : 'exports-loader?exports=Modal!bootstrap/js/dist/modal',
+        Popover   : 'exports-loader?exports=Popover!bootstrap/js/dist/popover',
         Popper    : ['popper.js', 'default'],
-        Scrollspy : 'exports-loader?Scrollspy!bootstrap/js/dist/scrollspy',
-        Tab       : 'exports-loader?Tab!bootstrap/js/dist/tab',
-        Tooltip   : 'exports-loader?Tooltip!bootstrap/js/dist/tooltip',
-        Util      : 'exports-loader?Util!bootstrap/js/dist/util',
+        Scrollspy : 'exports-loader?exports=Scrollspy!bootstrap/js/dist/scrollspy',
+        Tab       : 'exports-loader?exports=Tab!bootstrap/js/dist/tab',
+        Tooltip   : 'exports-loader?exports=Tooltip!bootstrap/js/dist/tooltip',
+        Util      : 'exports-loader?exports=Util!bootstrap/js/dist/util',
       }),
     ]
   }
