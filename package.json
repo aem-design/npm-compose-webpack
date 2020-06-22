@@ -117,7 +117,7 @@
     "extract-loader": "^5.0.1",
     "figlet": "^1.4.0",
     "file-loader": "^6.0.0",
-    "imports-loader": "^0.8.0",
+    "imports-loader": "^1.0.0",
     "jest": "^26.0.1",
     "jest-fetch-mock": "^3.0.3",
     "jest-mock-console": "^1.0.0",
