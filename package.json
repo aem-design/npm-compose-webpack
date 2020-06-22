@@ -59,6 +59,7 @@
     "postversion": "npm run test && git push && git push --tags",
     "prepack": "npm run build",
     "test": "jest",
+    "test:watch": "jest --watchAll",
     "test:coverage": "cross-env NODE_ENV=test jest --collectCoverageFrom=\"src/**/*.ts\" --coverage"
   },
   "husky": {
