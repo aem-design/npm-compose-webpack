@@ -42,7 +42,6 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
      * @see https://webpack.js.org/plugins/copy-webpack-plugin
      */
     new CopyPlugin({
-      // @ts-expect-error
       patterns: [
         {
           context          : resolve(paths.project.src),
