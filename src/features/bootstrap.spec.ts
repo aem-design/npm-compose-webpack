@@ -35,6 +35,6 @@ describe('typescript feature', () => {
 
     expect(plugins[0]).toBeInstanceOf(webpack.ProvidePlugin)
 
-    expect(plugins[0]).toHaveProperty(['definitions', 'Alert'], 'exports-loader?Alert!bootstrap/js/dist/alert')
+    expect(plugins[0]).toHaveProperty(['definitions', 'Alert'], 'exports-loader?exports=Alert!bootstrap/js/dist/alert')
   })
 })
