@@ -5,7 +5,6 @@ import { removeEmpty } from 'webpack-config-utils'
 
 import CopyPlugin from 'copy-webpack-plugin'
 import ESLintPlugin from 'eslint-webpack-plugin'
-import LodashPlugin from 'lodash-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
@@ -110,19 +109,6 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
      * @see https://webpack.js.org/plugins/hashed-module-ids-plugin
      */
     new webpack.HashedModuleIdsPlugin(),
-
-    /**
-     * Lodash tree-shaking helper!
-     *
-     * Make sure we aren't including the entire Lodash library but instead just a small subset of the
-     * library to keep our vendor weight down.
-     *
-     * @see https://www.npmjs.com/package/lodash-webpack-plugin
-     */
-    new LodashPlugin({
-      collections : true,
-      shorthands  : true,
-    }),
 
     /**
      * Define custom environment variables that can be exposed within the code base.
