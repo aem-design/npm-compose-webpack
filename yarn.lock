@@ -1577,19 +1577,11 @@
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
 
 "@types/stylelint-webpack-plugin@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@types/stylelint-webpack-plugin/-/stylelint-webpack-plugin-2.0.1.tgz#3f3ef68b0b33d3928edfb019285852204455ff99"
-  integrity sha512-DSJUqy2RU0QROdY+bqXJ7KziGi5n+iui15DTbKbme+DrNMTQZuG/dGVyFrvUfQ1VDpwMIsemFuQB3fNtQzaDyg==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/stylelint-webpack-plugin/-/stylelint-webpack-plugin-2.1.0.tgz#2d07e8c9dee4c34355372e44ffdcffc45111b137"
+  integrity sha512-yNCBkjgglLZ6+IAwNF/WjgcPR0lHumn2URBt5hAcjxdUvm+2eY+fSz2IzBt6iJGGZ8E56hofg6mUGdU9QaRmjg==
   dependencies:
-    "@types/stylelint" "*"
-    "@types/webpack" "*"
-
-"@types/stylelint@*":
-  version "9.10.1"
-  resolved "https://registry.yarnpkg.com/@types/stylelint/-/stylelint-9.10.1.tgz#211832381e43fd0774217b59f02ab389d82643ea"
-  integrity sha512-au+n/CjGixNopJmh51GeZSkqf/ahwOBkzcvizHPe3flfwWag0T+/L7uHD0Hjx7ZhmXGFSEwOCqEybD4domcyRw==
-  dependencies:
-    postcss "7.x.x"
+    stylelint-webpack-plugin "*"
 
 "@types/tapable@*":
   version "1.0.5"
@@ -8547,7 +8539,7 @@ postcss-value-parser@^4.0.0, postcss-value-parser@^4.0.2, postcss-value-parser@^
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.1.0.tgz#443f6a20ced6481a2bda4fa8532a6e55d789a2cb"
   integrity sha512-97DXOFbQJhk71ne5/Mt6cOu6yxsSfM0QGQyl0L25Gca4yGWEGJaig7l7gbCX623VqTBNGLRLaVUCnNkcedlRSQ==
 
-postcss@7.x.x, postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.16, postcss@^7.0.2, postcss@^7.0.21, postcss@^7.0.26, postcss@^7.0.27, postcss@^7.0.30, postcss@^7.0.32, postcss@^7.0.5, postcss@^7.0.6, postcss@^7.0.7:
+postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.16, postcss@^7.0.2, postcss@^7.0.21, postcss@^7.0.26, postcss@^7.0.27, postcss@^7.0.30, postcss@^7.0.32, postcss@^7.0.5, postcss@^7.0.6, postcss@^7.0.7:
   version "7.0.32"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.32.tgz#4310d6ee347053da3433db2be492883d62cec59d"
   integrity sha512-03eXong5NLnNCD05xscnGKGDZ98CyzoqPSMjOe6SuoQY7Z2hIj0Ld1g/O/UQRuOle2aRtiIRDg9tDcTGAkLfKw==
@@ -9985,7 +9977,7 @@ stylehacks@^4.0.0:
     postcss "^7.0.0"
     postcss-selector-parser "^3.0.0"
 
-stylelint-webpack-plugin@^2.1.0:
+stylelint-webpack-plugin@*, stylelint-webpack-plugin@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/stylelint-webpack-plugin/-/stylelint-webpack-plugin-2.1.0.tgz#ea4727d83a6d5e3c8784f2bb147bbd9de8e88ec3"
   integrity sha512-nx6pF+s4kWuXj2pAhPiMjAsRZqsPphamy2rwUuPiKmb1FRYtXZL0jl+iwoqc/W3hMaia+UMiGJBzkjXKLXmSmA==
