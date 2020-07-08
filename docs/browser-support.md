@@ -11,13 +11,14 @@ has_toc: false
 # Browser Support
 {: .no_toc }
 
-Code will be compiled down to ES5 with support for browsers futher back but compatibility may vary for you. We currently support:
+While this package doesn't explicitly have support for specific browsers we try to maintain a zero-configuration approach that enables tools such as Babel to build ES5 compatible outputs without the need for additional configuration.
+
+Please refer to the [.browserslistrc](https://github.com/aem-design/aemdesign-aem-support/blob/master/aemdesign-aem-compose/.browserslistrc) in the AEM.Design Compose project which supports:
 
 1. Chrome
 2. Firefox
 3. Safari
 4. Edge
-5. Safari (iOS)
-6. IE 11
-
-**NOTE:** Be aware that IE 11 support will be removed in the very near future. All modern browsers are based on the previous 2 releases but support may extend beyond these.
+5. IE 11
+6. Safari (iOS 9+)
+7. Android 4.4+

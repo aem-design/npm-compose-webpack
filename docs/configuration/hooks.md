@@ -29,6 +29,8 @@ In addition, you are also able to define how your hook is executed by using `bef
 
 ## Example
 ```js
+const { registerHook } = require('@aem-design/compose-webpack')
+
 registerHook('init:pre', {
   before() {
     // Run arbitrary code before the pre-initialisation...
@@ -47,6 +49,8 @@ Not all callbacks are equal due to the point in which they exist in the lifecycl
 As the callbacks are just JavaScript you can use `async`/`await` as they are natively supported in Node.js 10+.
 
 ```js
+const { registerHook } = require('@aem-design/compose-webpack')
+
 registerHook('init:pre', {
   before: async () => {
     const response = await fetch('https://webpack.aem.design')
