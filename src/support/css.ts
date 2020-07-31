@@ -19,8 +19,10 @@ export default (
     loader: 'css-loader',
 
     options: {
+      esModule      : false,
       importLoaders : 2,
       sourceMap     : mode === 'development',
+      url           : false,
     },
   },
   {

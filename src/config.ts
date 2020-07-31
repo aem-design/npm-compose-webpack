@@ -6,7 +6,7 @@ import _mergeWith from 'lodash/mergeWith'
 import _omitBy from 'lodash/omitBy'
 import _set from 'lodash/set'
 import webpack from 'webpack'
-import { MergeStrategy } from 'webpack-merge'
+import { CustomizeRule } from 'webpack-merge/dist/types'
 
 import {
   CommandLineFlags,
@@ -84,10 +84,10 @@ export let environment: Environment = {
 /**
  * Merge strategy for `webpack-merge`.
  */
-export const mergeStrategy: { [key: string]: MergeStrategy } = {
-  'devServer.proxy' : 'prepend',
-  'module.rules'    : 'append',
-  'plugins'         : 'append',
+export const mergeStrategy: { [key: string]: CustomizeRule } = {
+  'devServer.proxy' : CustomizeRule.Prepend,
+  'module.rules'    : CustomizeRule.Append,
+  'plugins'         : CustomizeRule.Append,
 }
 
 /**

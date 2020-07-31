@@ -1,8 +1,15 @@
 import webpack from 'webpack'
+import wds from 'webpack-dev-server'
 
 import {
   WebpackIgnoredProps,
 } from './enums'
+
+declare module "webpack" {
+	interface Configuration {
+		devServer?: wds.Configuration;
+	}
+}
 
 export type WebpackAliases = webpack.Resolve['alias']
 

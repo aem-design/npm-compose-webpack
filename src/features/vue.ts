@@ -100,7 +100,7 @@ export default class Vue extends Feature {
           ...css(this.env, {
             sass: {
               loader: {
-                prependData: `@import 'setup';`,
+                additionalData: `@import 'setup';`,
               },
 
               options: {

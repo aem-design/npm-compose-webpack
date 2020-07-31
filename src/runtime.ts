@@ -5,7 +5,12 @@ import figlet from 'figlet'
 import _get from 'lodash/get'
 import _has from 'lodash/has'
 import rimraf from 'rimraf'
-import merge from 'webpack-merge'
+
+import {
+  customizeArray,
+  customizeObject,
+  mergeWithCustomize,
+} from 'webpack-merge'
 
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
@@ -65,6 +70,11 @@ export default (
   webpackEnv: WebpackParserOptions
 ): () => RuntimeConfiguration => {
   const baseConfiguration = configuration.standard
+
+  /**
+   * Show the current version of the package to easier identification
+   */
+  console.log('compose-webpack: v%s\n', require('../package.json').version)
 
   /**
    * Support banner
@@ -229,7 +239,10 @@ export default (
       console.log()
     }
 
-    let config: RuntimeConfiguration = merge.smartStrategy(mergeStrategy)({
+    let config: RuntimeConfiguration = mergeWithCustomize({
+      customizeArray  : customizeArray(mergeStrategy),
+      customizeObject : customizeObject(mergeStrategy),
+    })({
       context: paths.src,
       devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
       entry,
