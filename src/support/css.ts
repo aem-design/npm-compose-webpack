@@ -23,6 +23,10 @@ export default (
       importLoaders : 2,
       sourceMap     : mode === 'development',
       url           : false,
+
+      modules: {
+        compileType: 'icss',
+      },
     },
   },
   {
