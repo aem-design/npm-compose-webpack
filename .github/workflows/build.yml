@@ -10,17 +10,22 @@ on:
 
 jobs:
   build:
-    name: Verify build and tests
-    runs-on: ubuntu-latest
+    name: Build and test using node ${{ matrix.node }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node: [10, 12]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
-      - name: Setup Node.js v10.x
+      - name: Setup node
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: ${{ matrix.node }}
           registry-url: https://npm.pkg.github.com/
           scope: '@aem-design'
         env:
