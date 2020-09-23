@@ -23,7 +23,7 @@ export default class Bootstrap extends Feature {
     }
   }
 
-  public plugins(): webpack.Plugin[] {
+  public plugins(): webpack.WebpackPluginInstance[] {
     return [
       /**
        * @see https://webpack.js.org/plugins/provide-plugin

@@ -195,6 +195,7 @@ export default (
     const entry = EntryConfiguration(flagHMR)
     const mode  = getIfUtilsInstance().ifDev('development', 'production')
 
+    logger.info('')
     logger.info(chalk.bold('Webpack Configuration'))
     logger.info('---------------------')
     logger.info(chalk.bold('Compilation Mode    :'), mode)
@@ -244,7 +245,7 @@ export default (
       customizeObject : customizeObject(mergeStrategy),
     })({
       context: paths.src,
-      devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
+      devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'eval-cheap-module-source-map'),
       entry,
       mode,
 
@@ -305,28 +306,32 @@ export default (
       },
 
       optimization: {
+        moduleIds: 'hashed',
+
         minimizer: [
+          // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
           new TerserPlugin({
             cache           : true,
             extractComments : false,
             sourceMap       : false,
 
             terserOptions: {
-              ecma     : 6,
+              ecma     : 2015,
               safari10 : true,
-              warnings : false,
 
               compress: {
-                drop_console: true,
+                drop_console  : true,
+                drop_debugger : true,
               },
 
-              output: {
+              format: {
                 beautify: false,
                 comments: false,
               },
             },
           }),
 
+          // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
           new OptimizeCSSAssetsPlugin({
             canPrint     : true,
             cssProcessor : require('cssnano'),

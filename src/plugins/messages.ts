@@ -10,7 +10,7 @@ const pluginName = 'compose-messages'
 /**
  * All credit and inspiration goes to https://github.com/lukeed/webpack-messages
  */
-export default class ComposeMessages implements webpack.Plugin {
+export default class ComposeMessages implements webpack.WebpackPluginInstance {
   public apply(compiler: webpack.Compiler): void {
     const onStart = () => {
       console.log()
@@ -37,15 +37,9 @@ export default class ComposeMessages implements webpack.Plugin {
       }
     }
 
-    if (compiler.hooks !== void 0) {
-      compiler.hooks.compile.tap(pluginName, onStart)
-      compiler.hooks.invalid.tap(pluginName, () => onStart())
-      compiler.hooks.done.tap(pluginName, onComplete)
-    } else {
-      compiler.plugin('compile', onStart)
-      compiler.plugin('invalid', () => onStart())
-      compiler.plugin('done', onComplete)
-    }
+    compiler.hooks.compile.tap(pluginName, onStart)
+    compiler.hooks.invalid.tap(pluginName, () => onStart())
+    compiler.hooks.done.tap(pluginName, onComplete)
   }
 
   private printError(message: string, errors: string[], warning = false) {

@@ -11,7 +11,7 @@ declare module "webpack" {
   }
 }
 
-export type WebpackAliases = webpack.Resolve['alias']
+export type WebpackAliases = webpack.ResolveOptions['alias']
 
 export type WebpackConfiguration = Omit<webpack.Configuration, keyof typeof WebpackIgnoredProps>
 
@@ -20,4 +20,4 @@ export interface WebpackConfigurables {
   resolveExtensions: string[];
 }
 
-export type WebpackParserOptions = Omit<webpack.ParserOptions, 'system'>
+export type WebpackParserOptions = Record<string, any>

@@ -103,6 +103,7 @@ const webpackInstance      = webpack(webpackConfiguration)
 
 if (args.watch) {
   const devServer = new WebpackDevServer(
+    // @ts-expect-error it appears 'webpack-dev-server' and the 'webpack' @types are no compatible at this time. Check again soon!
     webpackInstance,
     createConfig(webpackConfiguration, {
       ...args,

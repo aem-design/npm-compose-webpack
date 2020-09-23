@@ -89,13 +89,15 @@ export interface AEMEnvironment<P = number | false> {
 export type ProjectsConfiguration = Record<string, Project>
 
 export interface Project {
-  additionalEntries?: AdditionalEntries;
+  additionalEntries?: ThisType<AdditionalEntries>;
   entryFile: string;
   fileMap?: FileMap;
   outputName: string;
 }
 
-export type AdditionalEntries = Record<string, string[]>
+export interface AdditionalEntries {
+  [entry: string]: string | string[];
+}
 
 export type FileMap = Partial<Record<'header' | 'footer', string[]>>
 

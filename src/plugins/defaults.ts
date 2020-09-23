@@ -27,13 +27,14 @@ import {
 
 import ComposeMessages from './messages'
 
-export default (paths: RuntimePaths): webpack.Plugin[] => {
+export default (paths: RuntimePaths): webpack.WebpackPluginInstance[] => {
   const cssExtractPath = paths.out as string || 'clientlibs-header/css'
 
-  return removeEmpty<webpack.Plugin>([
+  // @ts-expect-error some plugins haven't been updated with webpack 5 defintions so their exports are mismatched
+  return removeEmpty<webpack.WebpackPluginInstance>([
 
     getIfUtilsInstance().ifNotWatch(new ComposeMessages()),
-    getIfUtilsInstance().ifNotMaven(new webpack.ProgressPlugin()),
+    getIfUtilsInstance().ifNotMaven(new webpack.ProgressPlugin({})),
 
     /**
      * Copies static assets from our source folder into the public structure for AEM.
@@ -101,14 +102,6 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
       fix         : false,
       quiet       : false,
     })),
-
-    /**
-     * Ensure all chunks that are generated have a unique ID assigned to them instead of pseudo-random
-     * ones which are good but don't provide enough uniqueness.
-     *
-     * @see https://webpack.js.org/plugins/hashed-module-ids-plugin
-     */
-    new webpack.HashedModuleIdsPlugin(),
 
     /**
      * Define custom environment variables that can be exposed within the code base.

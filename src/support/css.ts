@@ -14,7 +14,7 @@ import {
 export default (
   { mode }: Environment & { paths: RuntimePaths },
   options: CSSLoaderOptions = {},
-): webpack.RuleSetUseItem[] => ([
+): webpack.RuleSetRule[] => ([
   {
     loader: 'css-loader',
 
@@ -30,8 +30,7 @@ export default (
     },
   },
   {
-    ident  : 'postcss',
-    loader : 'postcss-loader',
+    loader: 'postcss-loader',
 
     options: {
       sourceMap: mode === 'development',

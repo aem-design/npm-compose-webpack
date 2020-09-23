@@ -31,9 +31,10 @@ export default class Vue extends Feature {
       [DependencyType.DEV]: [
         '@vue/cli-plugin-babel@^4.3.1',
         '@vue/cli-plugin-eslint@^4.3.1',
+        '@vue/compiler-sfc@^3.0.0',
         '@vue/eslint-config-typescript@^5.0.2',
         'babel-preset-vue@^2.0.2',
-        'vue-loader@^15.9.1',
+        'vue-loader@^v16.0.0-beta.8',
         'vue-style-loader@^4.1.2',
         'vue-template-compiler@^2.6.11',
       ],
@@ -68,11 +69,11 @@ export default class Vue extends Feature {
     }
   }
 
-  public plugins(): webpack.Plugin[] {
-    const VueLoaderPlugin = require(resolveDependency('vue-loader/lib/plugin'))
+  public plugins(): webpack.WebpackPluginInstance[] {
+    const { VueLoaderPlugin } = require(resolveDependency('vue-loader'))
 
     return [
-      new VueLoaderPlugin() as webpack.Plugin,
+      new VueLoaderPlugin() as webpack.WebpackPluginInstance,
     ]
   }
 

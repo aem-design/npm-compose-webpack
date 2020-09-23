@@ -61,9 +61,16 @@ export default (flagHMR: boolean): webpack.Entry => {
     return getHMRConfiguration(project)
   }
 
-  return {
+  let entries = {
     [project.outputName]: `./${environment.project}/js/${project.entryFile}`,
-
-    ...project.additionalEntries,
   }
+
+  if (project.additionalEntries) {
+    entries = {
+      ...entries,
+      ...project.additionalEntries,
+    }
+  }
+
+  return entries
 }

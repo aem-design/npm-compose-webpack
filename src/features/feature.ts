@@ -62,7 +62,7 @@ export default class Feature extends FeatureContract {
     return {}
   }
 
-  public plugins(): webpack.Plugin[] {
+  public plugins(): webpack.WebpackPluginInstance[] {
     return []
   }
 
