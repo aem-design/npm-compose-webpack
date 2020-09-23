@@ -6,7 +6,7 @@ import _flatten from 'lodash/flatten'
 
 import { logger } from '@aem-design/compose-support'
 
-import {
+import type {
   DependenciesMap,
 } from '../types'
 

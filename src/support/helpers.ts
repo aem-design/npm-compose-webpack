@@ -6,7 +6,7 @@ import xml2js from 'xml2js'
 
 import { getIfUtils, IfUtils, IfUtilsFn } from 'webpack-config-utils'
 
-import {
+import type {
   ComposeConfiguration,
   RuntimeEnvironment,
 } from '../types'
@@ -15,7 +15,7 @@ import {
   ConfigurationType,
 } from '../types/enums'
 
-import {
+import type {
   MavenConfig,
   SavedMavenConfig,
 } from '../types/maven'

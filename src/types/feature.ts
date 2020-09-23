@@ -1,11 +1,11 @@
 import webpack from 'webpack'
 
-import {
+import type {
   WebpackAliases,
   WebpackConfiguration,
 } from './webpack'
 
-import {
+import type {
   DependenciesMap,
   Environment,
   RuntimePaths,
