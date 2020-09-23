@@ -18,7 +18,7 @@ import TerserPlugin from 'terser-webpack-plugin'
 
 import { logger } from '@aem-design/compose-support'
 
-import {
+import type {
   AEMEnvironment,
   ComposeConfiguration,
   RuntimeConfiguration,
@@ -31,7 +31,7 @@ import {
   WebpackIgnoredProps
 } from './types/enums'
 
-import {
+import type {
   WebpackConfiguration,
   WebpackParserOptions,
 } from './types/webpack'

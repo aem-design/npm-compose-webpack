@@ -2,7 +2,9 @@ import { resolve } from 'path'
 import _get from 'lodash/get'
 import webpack from 'webpack'
 
-import { Project } from './types'
+import type {
+  Project,
+} from './types'
 
 import {
   environment,

@@ -1,6 +1,9 @@
-import { Hook, HookType } from './types/enums'
-
 import {
+  Hook,
+  HookType,
+} from './types/enums'
+
+import type {
   Project,
   RuntimeEnvironment,
 } from './types'

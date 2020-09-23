@@ -1,7 +1,7 @@
 import sass from 'sass'
 import webpack from 'webpack'
 
-import {
+import type {
   CSSLoaderOptions,
   Environment,
   RuntimePaths,

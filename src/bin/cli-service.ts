@@ -10,7 +10,7 @@ import yargs from 'yargs'
 
 import runtime from '../runtime'
 
-import {
+import type {
   ComposeConfiguration,
 } from '../types'
 

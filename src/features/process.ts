@@ -8,7 +8,7 @@ import {
 
 import { logger } from '@aem-design/compose-support'
 
-import {
+import type {
   Environment,
   FeatureList,
   RuntimeConfiguration,

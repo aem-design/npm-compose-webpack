@@ -3,11 +3,11 @@ import webpack from 'webpack'
 
 import css from '../support/css'
 
-import {
+import type {
   DependenciesMap,
 } from '../types'
 
-import {
+import type {
   WebpackAliases,
 } from '../types/webpack'
 
@@ -19,7 +19,9 @@ import {
   resolveDependency,
 } from '../support/dependencies'
 
-import { DependencyType } from '../types/enums'
+import {
+  DependencyType,
+} from '../types/enums'
 
 import Feature from './feature'
 
