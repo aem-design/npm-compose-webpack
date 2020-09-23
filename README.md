@@ -6,7 +6,6 @@
 <br>
 
 [![build][build]][build-url]
-[![travis ci][travis]][travis-url]
 [![npm][npm]][npm-url]
 [![node][node]][node-url]
 [![deps][deps]][deps-url]
@@ -52,9 +51,6 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 [build]: https://github.com/aem-design/npm-compose-webpack/workflows/Build/badge.svg
 [build-url]: https://github.com/aem-design/npm-compose-webpack/actions?workflow=Build
-
-[travis]: https://travis-ci.com/aem-design/npm-compose-webpack.svg?branch=develop
-[travis-url]: https://travis-ci.com/aem-design/npm-compose-webpack
 
 [npm]: https://img.shields.io/npm/v/@aem-design/compose-webpack.svg
 [npm-url]: https://npmjs.com/package/@aem-design/compose-webpack
