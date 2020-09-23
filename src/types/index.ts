@@ -2,19 +2,19 @@ import sass from 'sass'
 import webpack from 'webpack'
 import wds from 'webpack-dev-server'
 
-import {
+import type {
   ConfigurationType,
   DependencyType,
   Features,
 } from './enums'
 
-import {
+import type {
   MavenConfig,
   MavenConfigMap,
   SavedMavenConfig,
 } from './maven'
 
-import {
+import type {
   WebpackConfiguration,
   WebpackParserOptions,
 } from './webpack'

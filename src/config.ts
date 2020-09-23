@@ -8,7 +8,7 @@ import _set from 'lodash/set'
 import webpack from 'webpack'
 import { CustomizeRule } from 'webpack-merge/dist/types'
 
-import {
+import type {
   CommandLineFlags,
   Configuration,
   Environment,
@@ -21,7 +21,7 @@ import {
   ConfigurationType,
 } from './types/enums'
 
-import {
+import type {
   WebpackConfigurables,
 } from './types/webpack'
 

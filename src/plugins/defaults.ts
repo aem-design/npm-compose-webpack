@@ -9,7 +9,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
-import {
+import type {
   RuntimePaths,
 } from '../types'
 

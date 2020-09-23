@@ -13,7 +13,7 @@ import {
   FeatureEnvironment,
 } from '../types/feature'
 
-import {
+import type {
   WebpackAliases,
 } from '../types/webpack'
 

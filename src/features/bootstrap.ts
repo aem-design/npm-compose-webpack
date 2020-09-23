@@ -1,6 +1,6 @@
 import webpack from 'webpack'
 
-import {
+import type {
   DependenciesMap,
 } from '../types'
 
