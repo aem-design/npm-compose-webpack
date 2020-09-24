@@ -13,7 +13,7 @@ import {
   FeatureEnvironment,
 } from '../types/feature'
 
-import {
+import type {
   WebpackAliases,
 } from '../types/webpack'
 
@@ -62,7 +62,7 @@ export default class Feature extends FeatureContract {
     return {}
   }
 
-  public plugins(): webpack.Plugin[] {
+  public plugins(): webpack.WebpackPluginInstance[] {
     return []
   }
 

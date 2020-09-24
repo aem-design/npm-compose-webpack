@@ -1,7 +1,7 @@
 import sass from 'sass'
 import webpack from 'webpack'
 
-import {
+import type {
   CSSLoaderOptions,
   Environment,
   RuntimePaths,
@@ -14,18 +14,23 @@ import {
 export default (
   { mode }: Environment & { paths: RuntimePaths },
   options: CSSLoaderOptions = {},
-): webpack.RuleSetUseItem[] => ([
+): webpack.RuleSetRule[] => ([
   {
     loader: 'css-loader',
 
     options: {
+      esModule      : false,
       importLoaders : 2,
       sourceMap     : mode === 'development',
+      url           : false,
+
+      modules: {
+        compileType: 'icss',
+      },
     },
   },
   {
-    ident  : 'postcss',
-    loader : 'postcss-loader',
+    loader: 'postcss-loader',
 
     options: {
       sourceMap: mode === 'development',

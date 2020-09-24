@@ -28,9 +28,10 @@ describe('vue feature', () => {
     expect(dependencies).toHaveProperty(DependencyType.DEV, [
       '@vue/cli-plugin-babel@^4.3.1',
       '@vue/cli-plugin-eslint@^4.3.1',
+      '@vue/compiler-sfc@^3.0.0',
       '@vue/eslint-config-typescript@^5.0.2',
       'babel-preset-vue@^2.0.2',
-      'vue-loader@^15.9.1',
+      'vue-loader@^v16.0.0-beta.8',
       'vue-style-loader@^4.1.2',
       'vue-template-compiler@^2.6.11',
     ])
@@ -53,14 +54,17 @@ describe('vue feature', () => {
   })
 
   test('should set correct webpack plugins configuration', () => {
-    const MockedVueLoaderPlugin = jest.fn()
-    jest.mock('vue-loader/lib/plugin', () => MockedVueLoaderPlugin, { virtual: true })
+    const MockedVueLoaderPlugin = {
+      VueLoaderPlugin: jest.fn(),
+    }
+
+    jest.mock('vue-loader', () => MockedVueLoaderPlugin, { virtual: true })
 
     const plugins = instance.plugins()
 
-    expect(MockedVueLoaderPlugin).toHaveBeenCalledTimes(1)
+    expect(MockedVueLoaderPlugin.VueLoaderPlugin).toHaveBeenCalledTimes(1)
 
-    expect(plugins[0]).toBeInstanceOf(MockedVueLoaderPlugin)
+    expect(plugins[0]).toBeInstanceOf(MockedVueLoaderPlugin.VueLoaderPlugin)
   })
 
   test('should return the correct webpack rules', () => {

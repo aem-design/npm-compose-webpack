@@ -1,10 +1,17 @@
 import webpack from 'webpack'
+import wds from 'webpack-dev-server'
 
-import {
+import type {
   WebpackIgnoredProps,
 } from './enums'
 
-export type WebpackAliases = webpack.Resolve['alias']
+declare module "webpack" {
+  interface Configuration {
+    devServer?: wds.Configuration;
+  }
+}
+
+export type WebpackAliases = webpack.ResolveOptions['alias']
 
 export type WebpackConfiguration = Omit<webpack.Configuration, keyof typeof WebpackIgnoredProps>
 
@@ -13,4 +20,4 @@ export interface WebpackConfigurables {
   resolveExtensions: string[];
 }
 
-export type WebpackParserOptions = Omit<webpack.ParserOptions, 'system'>
+export type WebpackParserOptions = Record<string, any>

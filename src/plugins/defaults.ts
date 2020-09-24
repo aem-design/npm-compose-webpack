@@ -5,12 +5,11 @@ import { removeEmpty } from 'webpack-config-utils'
 
 import CopyPlugin from 'copy-webpack-plugin'
 import ESLintPlugin from 'eslint-webpack-plugin'
-import LodashPlugin from 'lodash-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
-import {
+import type {
   RuntimePaths,
 } from '../types'
 
@@ -28,13 +27,15 @@ import {
 
 import ComposeMessages from './messages'
 
-export default (paths: RuntimePaths): webpack.Plugin[] => {
+export default (paths: RuntimePaths): webpack.WebpackPluginInstance[] => {
   const cssExtractPath = paths.out as string || 'clientlibs-header/css'
 
-  return removeEmpty<webpack.Plugin>([
+  // TODO: Remove this when fixed
+  // @ts-expect-error some plugins haven't been updated with webpack 5 defintions so their exports are mismatched
+  return removeEmpty<webpack.WebpackPluginInstance>([
 
     getIfUtilsInstance().ifNotWatch(new ComposeMessages()),
-    getIfUtilsInstance().ifNotMaven(new webpack.ProgressPlugin()),
+    getIfUtilsInstance().ifNotMaven(new webpack.ProgressPlugin({})),
 
     /**
      * Copies static assets from our source folder into the public structure for AEM.
@@ -42,7 +43,6 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
      * @see https://webpack.js.org/plugins/copy-webpack-plugin
      */
     new CopyPlugin({
-      // @ts-expect-error
       patterns: [
         {
           context          : resolve(paths.project.src),
@@ -105,27 +105,6 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
     })),
 
     /**
-     * Ensure all chunks that are generated have a unique ID assigned to them instead of pseudo-random
-     * ones which are good but don't provide enough uniqueness.
-     *
-     * @see https://webpack.js.org/plugins/hashed-module-ids-plugin
-     */
-    new webpack.HashedModuleIdsPlugin(),
-
-    /**
-     * Lodash tree-shaking helper!
-     *
-     * Make sure we aren't including the entire Lodash library but instead just a small subset of the
-     * library to keep our vendor weight down.
-     *
-     * @see https://www.npmjs.com/package/lodash-webpack-plugin
-     */
-    new LodashPlugin({
-      collections : true,
-      shorthands  : true,
-    }),
-
-    /**
      * Define custom environment variables that can be exposed within the code base.
      *
      * @see https://webpack.js.org/plugins/define-plugin
@@ -143,13 +122,6 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
      */
     getIfUtilsInstance().ifAnalyzer(new BundleAnalyzerPlugin({
       openAnalyzer: false,
-    })),
-
-    /**
-     * @see https://webpack.js.org/plugins/loader-options-plugin
-     */
-    getIfUtilsInstance().ifProd(new webpack.LoaderOptionsPlugin({
-      minimize: true,
     })),
 
   ])

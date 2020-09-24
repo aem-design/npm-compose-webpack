@@ -5,10 +5,9 @@ import _isEmpty from 'lodash/isEmpty'
 import _mergeWith from 'lodash/mergeWith'
 import _omitBy from 'lodash/omitBy'
 import _set from 'lodash/set'
-import webpack from 'webpack'
-import { MergeStrategy } from 'webpack-merge'
+import { CustomizeRule } from 'webpack-merge/dist/types'
 
-import {
+import type {
   CommandLineFlags,
   Configuration,
   Environment,
@@ -21,8 +20,9 @@ import {
   ConfigurationType,
 } from './types/enums'
 
-import {
+import type {
   WebpackConfigurables,
+  WebpackParserOptions,
 } from './types/webpack'
 
 import {
@@ -84,10 +84,10 @@ export let environment: Environment = {
 /**
  * Merge strategy for `webpack-merge`.
  */
-export const mergeStrategy: { [key: string]: MergeStrategy } = {
-  'devServer.proxy' : 'prepend',
-  'module.rules'    : 'append',
-  'plugins'         : 'append',
+export const mergeStrategy: { [key: string]: CustomizeRule } = {
+  'devServer.proxy' : CustomizeRule.Prepend,
+  'module.rules'    : CustomizeRule.Append,
+  'plugins'         : CustomizeRule.Append,
 }
 
 /**
@@ -171,7 +171,7 @@ export function setConfiguration<T extends ConfigurationType, V extends Configur
 /**
  * Stores our current Webpack configuration and environment variables.
  */
-export function setupEnvironment(env: webpack.ParserOptions, flags: CommandLineFlags = {}): Environment {
+export function setupEnvironment(env: WebpackParserOptions, flags: CommandLineFlags = {}): Environment {
   environment = {
     ...env,
 

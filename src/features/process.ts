@@ -1,9 +1,14 @@
 import chalk from 'chalk'
-import merge from 'webpack-merge'
+
+import {
+  customizeArray,
+  customizeObject,
+  mergeWithCustomize,
+} from 'webpack-merge'
 
 import { logger } from '@aem-design/compose-support'
 
-import {
+import type {
   Environment,
   FeatureList,
   RuntimeConfiguration,
@@ -51,7 +56,10 @@ export default function processFeatures({ environment, features, paths, webpackC
         skippedFeatures.push(feature)
       }
 
-      updatedConfig = merge.smartStrategy(mergeStrategy)(
+      updatedConfig = mergeWithCustomize({
+        customizeArray  : customizeArray(mergeStrategy),
+        customizeObject : customizeObject(mergeStrategy),
+      })(
         updatedConfig,
         featureInstance.defineWebpackConfiguration(),
       ) as RuntimeConfiguration

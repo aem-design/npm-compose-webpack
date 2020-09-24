@@ -2,7 +2,9 @@ import { resolve } from 'path'
 import _get from 'lodash/get'
 import webpack from 'webpack'
 
-import { Project } from './types'
+import type {
+  Project,
+} from './types'
 
 import {
   environment,
@@ -59,9 +61,16 @@ export default (flagHMR: boolean): webpack.Entry => {
     return getHMRConfiguration(project)
   }
 
-  return {
+  let entries = {
     [project.outputName]: `./${environment.project}/js/${project.entryFile}`,
-
-    ...project.additionalEntries,
   }
+
+  if (project.additionalEntries) {
+    entries = {
+      ...entries,
+      ...project.additionalEntries,
+    }
+  }
+
+  return entries
 }

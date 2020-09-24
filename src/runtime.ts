@@ -5,7 +5,12 @@ import figlet from 'figlet'
 import _get from 'lodash/get'
 import _has from 'lodash/has'
 import rimraf from 'rimraf'
-import merge from 'webpack-merge'
+
+import {
+  customizeArray,
+  customizeObject,
+  mergeWithCustomize,
+} from 'webpack-merge'
 
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
@@ -13,7 +18,7 @@ import TerserPlugin from 'terser-webpack-plugin'
 
 import { logger } from '@aem-design/compose-support'
 
-import {
+import type {
   AEMEnvironment,
   ComposeConfiguration,
   RuntimeConfiguration,
@@ -26,7 +31,7 @@ import {
   WebpackIgnoredProps
 } from './types/enums'
 
-import {
+import type {
   WebpackConfiguration,
   WebpackParserOptions,
 } from './types/webpack'
@@ -65,6 +70,11 @@ export default (
   webpackEnv: WebpackParserOptions
 ): () => RuntimeConfiguration => {
   const baseConfiguration = configuration.standard
+
+  /**
+   * Show the current version of the package to easier identification
+   */
+  console.log('compose-webpack: v%s\n', require('../package.json').version)
 
   /**
    * Support banner
@@ -185,6 +195,7 @@ export default (
     const entry = EntryConfiguration(flagHMR)
     const mode  = getIfUtilsInstance().ifDev('development', 'production')
 
+    logger.info('')
     logger.info(chalk.bold('Webpack Configuration'))
     logger.info('---------------------')
     logger.info(chalk.bold('Compilation Mode    :'), mode)
@@ -229,9 +240,12 @@ export default (
       console.log()
     }
 
-    let config: RuntimeConfiguration = merge.smartStrategy(mergeStrategy)({
+    let config: RuntimeConfiguration = mergeWithCustomize({
+      customizeArray  : customizeArray(mergeStrategy),
+      customizeObject : customizeObject(mergeStrategy),
+    })({
       context: paths.src,
-      devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'),
+      devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'eval-cheap-module-source-map'),
       entry,
       mode,
 
@@ -292,28 +306,34 @@ export default (
       },
 
       optimization: {
+        moduleIds: 'deterministic',
+
         minimizer: [
+          // TODO: Remove this when fixed
+          // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
           new TerserPlugin({
             cache           : true,
             extractComments : false,
             sourceMap       : false,
 
             terserOptions: {
-              ecma     : 6,
+              ecma     : 2015,
               safari10 : true,
-              warnings : false,
 
               compress: {
-                drop_console: true,
+                drop_console  : true,
+                drop_debugger : true,
               },
 
-              output: {
+              format: {
                 beautify: false,
                 comments: false,
               },
             },
           }),
 
+          // TODO: Remove this when fixed
+          // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
           new OptimizeCSSAssetsPlugin({
             canPrint     : true,
             cssProcessor : require('cssnano'),
@@ -332,8 +352,8 @@ export default (
           chunks: 'all',
 
           cacheGroups: {
-            default: false,
-            vendors: false,
+            default        : false,
+            defaultVendors : false,
           },
         },
       },

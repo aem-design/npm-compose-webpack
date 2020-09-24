@@ -31,19 +31,19 @@ describe('css', () => {
     expect(_get(loaders, '[1].options.config.path', null)).toContain('configs/postcss.config.js')
   })
 
-  test('should return have correct Sass prependData', () => {
+  test('should return have correct Sass additionalData', () => {
     // @ts-ignore
     const loaders = css({
       mode: 'development',
     }, {
       sass: {
         loader: {
-          prependData: '$mock: true;',
+          additionalData: '$mock: true;',
         },
       },
     })
 
-    expect(loaders).toHaveProperty([2, 'options', 'prependData'], '$mock: true;')
+    expect(loaders).toHaveProperty([2, 'options', 'additionalData'], '$mock: true;')
   })
 
   test('should throw property read error', () => {

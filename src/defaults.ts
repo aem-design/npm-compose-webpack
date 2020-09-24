@@ -1,4 +1,6 @@
-import { ProjectsConfiguration } from './types'
+import type {
+  ProjectsConfiguration,
+} from './types'
 
 export const defaultProjects: ProjectsConfiguration = {
   core: {

@@ -1,4 +1,6 @@
-import { DependenciesMap } from '../../types'
+import type {
+  DependenciesMap,
+} from '../../types'
 
 import {
   InstallStatus,

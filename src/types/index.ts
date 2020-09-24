@@ -2,19 +2,19 @@ import sass from 'sass'
 import webpack from 'webpack'
 import wds from 'webpack-dev-server'
 
-import {
+import type {
   ConfigurationType,
   DependencyType,
   Features,
 } from './enums'
 
-import {
+import type {
   MavenConfig,
   MavenConfigMap,
   SavedMavenConfig,
 } from './maven'
 
-import {
+import type {
   WebpackConfiguration,
   WebpackParserOptions,
 } from './webpack'
@@ -89,13 +89,15 @@ export interface AEMEnvironment<P = number | false> {
 export type ProjectsConfiguration = Record<string, Project>
 
 export interface Project {
-  additionalEntries?: AdditionalEntries;
+  additionalEntries?: ThisType<AdditionalEntries>;
   entryFile: string;
   fileMap?: FileMap;
   outputName: string;
 }
 
-export type AdditionalEntries = Record<string, string[]>
+export interface AdditionalEntries {
+  [entry: string]: string | string[];
+}
 
 export type FileMap = Partial<Record<'header' | 'footer', string[]>>
 
