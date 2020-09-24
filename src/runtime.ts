@@ -352,8 +352,8 @@ export default (
           chunks: 'all',
 
           cacheGroups: {
-            default: false,
-            vendors: false,
+            default        : false,
+            defaultVendors : false,
           },
         },
       },
