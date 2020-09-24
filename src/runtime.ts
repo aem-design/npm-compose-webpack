@@ -309,6 +309,7 @@ export default (
         moduleIds: 'hashed',
 
         minimizer: [
+          // TODO: Remove this when fixed
           // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
           new TerserPlugin({
             cache           : true,
@@ -331,6 +332,7 @@ export default (
             },
           }),
 
+          // TODO: Remove this when fixed
           // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
           new OptimizeCSSAssetsPlugin({
             canPrint     : true,

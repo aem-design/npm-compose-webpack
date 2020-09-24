@@ -65,7 +65,9 @@ describe('process features', () => {
   })
 
   test('vue should return a valid webpack configuration', () => {
-    jest.mock('vue-loader', () => jest.fn(), { virtual: true })
+    jest.mock('vue-loader', () => ({
+      VueLoaderPlugin: jest.fn(),
+    }), { virtual: true })
 
     // @ts-ignore
     expect(processFeatures({

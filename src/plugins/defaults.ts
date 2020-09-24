@@ -30,6 +30,7 @@ import ComposeMessages from './messages'
 export default (paths: RuntimePaths): webpack.WebpackPluginInstance[] => {
   const cssExtractPath = paths.out as string || 'clientlibs-header/css'
 
+  // TODO: Remove this when fixed
   // @ts-expect-error some plugins haven't been updated with webpack 5 defintions so their exports are mismatched
   return removeEmpty<webpack.WebpackPluginInstance>([
 
