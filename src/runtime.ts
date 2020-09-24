@@ -74,7 +74,9 @@ export default (
   /**
    * Show the current version of the package to easier identification
    */
-  console.log('compose-webpack: v%s\n', require('../package.json').version)
+  console.log('compose-webpack: v%s\n', require(
+    resolve(process.cwd(), 'node_modules/@aem-design/compose-webpack/package.json')
+  ).version)
 
   /**
    * Support banner
@@ -325,6 +327,7 @@ export default (
                 drop_debugger : true,
               },
 
+              // @ts-expect-error why!?
               format: {
                 beautify: false,
                 comments: false,

@@ -3,6 +3,8 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
+    "declaration": true,
+    "declarationDir": "dist/types",
     "esModuleInterop": true,
 
     "lib": [
@@ -13,7 +15,7 @@
 
     "paths": {},
 
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": false,
     "outDir": "dist",
@@ -21,7 +23,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es5"
+    "target": "esnext"
   },
 
   "exclude": [

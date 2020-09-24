@@ -11,10 +11,6 @@ import type {
   RuntimeEnvironment,
 } from '../types'
 
-import {
-  ConfigurationType,
-} from '../types/enums'
-
 import type {
   MavenConfig,
   SavedMavenConfig,
@@ -22,8 +18,6 @@ import type {
 
 import {
   environment,
-
-  getConfiguration,
 } from '../config'
 
 // Internal
@@ -83,9 +77,7 @@ export interface ComposeIfUtils extends IfUtils {
 export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: propPath, pom }: MavenConfig<R>): R {
   let value!: R
 
-  const file = pom ?? getConfiguration(ConfigurationType.MAVEN_PARENT)
-
-  xmlParser.parseString(getMavenConfigurationFromFile(file), (_: any, { project }: any) => {
+  xmlParser.parseString(getMavenConfigurationFromFile(pom), (_: any, { project }: any) => {
     const properties = project.properties[0]
 
     value = _get(properties, propPath, fallback)

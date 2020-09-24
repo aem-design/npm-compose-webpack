@@ -8,7 +8,7 @@ export interface MavenConfig<R> {
   fallback?: R;
   parser?: (value: any) => R;
   path: string;
-  pom?: string;
+  pom: string;
 }
 
 export type SavedMavenConfig = Record<string, string>
