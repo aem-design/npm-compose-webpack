@@ -327,8 +327,7 @@ export default (
                 drop_debugger : true,
               },
 
-              // @ts-expect-error why!?
-              format: {
+              output: {
                 beautify: false,
                 comments: false,
               },
