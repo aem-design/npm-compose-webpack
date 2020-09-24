@@ -306,7 +306,7 @@ export default (
       },
 
       optimization: {
-        moduleIds: 'hashed',
+        moduleIds: 'deterministic',
 
         minimizer: [
           // TODO: Remove this when fixed

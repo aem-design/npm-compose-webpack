@@ -124,12 +124,5 @@ export default (paths: RuntimePaths): webpack.WebpackPluginInstance[] => {
       openAnalyzer: false,
     })),
 
-    /**
-     * @see https://webpack.js.org/plugins/loader-options-plugin
-     */
-    getIfUtilsInstance().ifProd(new webpack.LoaderOptionsPlugin({
-      minimize: true,
-    })),
-
   ])
 }
