@@ -6,6 +6,7 @@ on:
       - master
     tags:
       - 'v*.*.*-beta.*'
+      - 'v*.*.*-rc.*'
 
 jobs:
   draft_new_release:
