@@ -4,7 +4,11 @@ import { resolve } from 'path'
 import _get from 'lodash/get'
 import xml2js from 'xml2js'
 
-import { getIfUtils, IfUtils, IfUtilsFn } from 'webpack-config-utils'
+import {
+  getIfUtils,
+  IfUtils,
+  IfUtilsFn,
+} from 'webpack-config-utils'
 
 import type {
   ComposeConfiguration,
@@ -54,7 +58,7 @@ function getMavenConfigurationFromFile(filePath: string): string {
     return mavenConfigs[filePath]
   }
 
-  mavenConfigs[filePath] = readFileSync(resolve(__dirname, filePath), 'utf-8')
+  mavenConfigs[filePath] = readFileSync(resolve(filePath), 'utf-8')
   return mavenConfigs[filePath]
 }
 

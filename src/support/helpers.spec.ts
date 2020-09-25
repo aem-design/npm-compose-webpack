@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import {
   setupEnvironment,
 } from '../config'
@@ -8,7 +10,10 @@ import {
   configurationProxy,
   generateConfiguration,
   getIfUtilsInstance,
+  getMavenConfigurationValueByPath,
 } from './helpers'
+
+jest.mock('fs')
 
 describe('helpers', () => {
   test('should return our original configuration object', () => {
@@ -48,5 +53,41 @@ describe('helpers', () => {
     // expect(getIfUtilsInstance().ifMock(true, false)).toBe(true)
 
     expect(environment.mode).toEqual('mock')
+  })
+
+  test('can load pom xml configuration', () => {
+    // @ts-expect-error no types exist for mocks
+    fs.readFileSync.mockReturnValue(`<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <properties>
+    <mock.prop>foo</mock.prop>
+  </properties>
+</project>`)
+
+    expect(getMavenConfigurationValueByPath({
+      fallback : null,
+      path     : 'mock.prop',
+      pom      : 'mock.xml',
+    })).toStrictEqual('foo')
+  })
+
+  test('stored xml configuration is loaded', () => {
+    // @ts-expect-error no types exist for mocks
+    fs.readFileSync.mockClear()
+
+    expect(getMavenConfigurationValueByPath({
+      fallback : null,
+      path     : 'mock.prop',
+      pom      : 'mock.xml',
+    })).toStrictEqual('foo')
+  })
+
+  test('parser returns custom value', () => {
+    expect(getMavenConfigurationValueByPath({
+      fallback : null,
+      parser   : (value) => `${value}.bar`,
+      path     : 'mock.prop',
+      pom      : 'mock.xml',
+    })).toStrictEqual('foo.bar')
   })
 })

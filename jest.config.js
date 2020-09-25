@@ -10,6 +10,7 @@ module.exports = {
   reporters            : ['default'],
   roots                : ['<rootDir>/src'],
   testRegex            : '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
+  verbose              : true,
 
   globals: {
     'ts-jest': {
