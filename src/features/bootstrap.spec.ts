@@ -10,7 +10,7 @@ describe('bootstrap feature', () => {
   let instance: Bootstrap
 
   beforeEach(() => {
-    // @ts-expect-error
+    // @ts-expect-error feature constructors expect an env object
     instance = new Bootstrap()
   })
 

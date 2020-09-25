@@ -6,7 +6,7 @@ describe('base feature', () => {
   let instance: Feature
 
   beforeEach(() => {
-    // @ts-ignore
+    // @ts-expect-error several other properties are missing for 'env'
     instance = new Feature({
       mode: 'development',
     })

@@ -13,6 +13,7 @@ import {
 
 export default (
   { mode }: Environment & { paths: RuntimePaths },
+  // eslint-disable-next-line
   options: CSSLoaderOptions = {},
 ): webpack.RuleSetRule[] => ([
   {

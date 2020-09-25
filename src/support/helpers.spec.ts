@@ -19,7 +19,7 @@ describe('helpers', () => {
   test('should return our original configuration object', () => {
     const config = { foo: 'bar' }
 
-    // @ts-expect-error
+    // @ts-expect-error only part of the 'config' object is given
     expect(configurationProxy(config)).toEqual(config)
 
     expect(generateConfiguration(config)).toEqual(config)
@@ -32,7 +32,7 @@ describe('helpers', () => {
   test('should return our environment mode', () => {
     const environment = { mode: 'development' }
 
-    // @ts-expect-error
+    // @ts-expect-error only a partial environment object is available
     expect(generateConfiguration<(env: typeof environment) => string>((env) => env.mode, environment))
       .toEqual('development')
   })
@@ -44,7 +44,7 @@ describe('helpers', () => {
       project : 'mock_project',
     })
 
-    // @ts-expect-error
+    // @ts-expect-error 'mock' is not a valid environment mode
     environment.mode = 'mock'
 
     expect(getIfUtilsInstance().ifDevelopment(true, false)).toBe(false)

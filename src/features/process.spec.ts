@@ -40,7 +40,7 @@ describe('process features', () => {
   test('typescript should return a restart signal', () => {
     const mockExit = mockProcessExit()
 
-    // @ts-ignore
+    // @ts-expect-error part of the configuration is omitted on purpose as it isn't required
     expect(processFeatures({
       features: ['typescript'],
 
@@ -53,7 +53,7 @@ describe('process features', () => {
   test('typescript should return a missing dependency', () => {
     const mockExit = mockProcessExit()
 
-    // @ts-ignore
+    // @ts-expect-error several other properties are missing for 'env'
     expect(processFeatures({
       features: ['typescript'],
 
@@ -69,7 +69,7 @@ describe('process features', () => {
       VueLoaderPlugin: jest.fn(),
     }), { virtual: true })
 
-    // @ts-ignore
+    // @ts-expect-error several other properties are missing for 'env'
     expect(processFeatures({
       features: ['vue'],
 

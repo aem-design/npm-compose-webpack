@@ -22,7 +22,7 @@ describe('config', () => {
       project : 'mock_project',
     })
 
-    // @ts-ignore
+    // @ts-expect-error 'mock' is not a real environment mode
     environment.mode = 'mock'
 
     setProjects()
@@ -39,7 +39,6 @@ describe('config', () => {
   })
 
   test('empty environment configuration setup throws an error', () => {
-    // @ts-ignore
     expect(() => setupEnvironment({})).toThrow(/Specify a project/)
   })
 
@@ -85,10 +84,10 @@ describe('config', () => {
 
     expect(getConfigurable).toThrow(/Unable to get webpack configurable/)
 
-    // @ts-ignore
+    // @ts-expect-error 'foo' is actually invalid
     expect(() => setConfigurable('foo', ['bar'])).toThrow(/Unable to update webpack configurable/)
 
-    // @ts-ignore
+    // @ts-expect-error 'foo' is actually invalid
     expect(() => getConfigurable('foo')).toThrow(/Unable to get webpack configurable/)
   })
 
@@ -97,10 +96,10 @@ describe('config', () => {
 
     expect(getConfiguration).toThrow(/Unable to get configuration/)
 
-    // @ts-ignore
+    // @ts-expect-error 'foo' is actually invalid
     expect(() => setConfiguration('foo', 'bar')).toThrow(/Unable to set configuration/)
 
-    // @ts-ignore
+    // @ts-expect-error 'foo' is actually invalid
     expect(() => getConfiguration('foo')).toThrow(/Unable to get configuration/)
   })
 

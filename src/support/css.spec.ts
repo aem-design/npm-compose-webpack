@@ -6,7 +6,7 @@ describe('css', () => {
   test('should return valid css loaders', () => {
     const spy = jest.spyOn(require, 'resolve')
 
-    // @ts-ignore
+    // @ts-expect-error only part of the 'env' object is given
     const loaders = css({
       mode: 'development',
     }, {
@@ -25,14 +25,14 @@ describe('css', () => {
   })
 
   test('should return fallback PostCSS config path', () => {
-    // @ts-ignore
+    // @ts-expect-error only part of the 'env' object is given
     const loaders = css({ mode: 'development' })
 
     expect(_get(loaders, '[1].options.config.path', null)).toContain('configs/postcss.config.js')
   })
 
   test('should return have correct Sass additionalData', () => {
-    // @ts-ignore
+    // @ts-expect-error only part of the 'env' object is given
     const loaders = css({
       mode: 'development',
     }, {

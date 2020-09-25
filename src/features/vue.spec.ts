@@ -9,12 +9,11 @@ describe('vue feature', () => {
   let instance: Vue
 
   beforeEach(() => {
-    // @ts-ignore
     instance = new Vue({
       mode: 'development',
 
       paths: {
-        // @ts-ignore
+        // @ts-expect-error only part of the project object is mocked
         project: {
           src: 'mocked/path',
         },

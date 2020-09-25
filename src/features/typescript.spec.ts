@@ -9,12 +9,11 @@ describe('typescript feature', () => {
   let instance: TypeScript
 
   beforeEach(() => {
-    // @ts-ignore
     instance = new TypeScript({
       mode: 'development',
 
       paths: {
-        // @ts-ignore
+        // @ts-expect-error only part of the project object is mocked
         project: {
           src: 'mocked/path',
         },
@@ -39,8 +38,14 @@ describe('typescript feature', () => {
 
   test('should set correct arbitrary webpack configuration', () => {
     const MockedTsconfigPathsPlugin = jest.fn()
-    jest.mock('tsconfig-paths-webpack-plugin', () => MockedTsconfigPathsPlugin, { virtual: true })
 
+    jest.mock(
+      'tsconfig-paths-webpack-plugin',
+      () => MockedTsconfigPathsPlugin,
+      { virtual: true }
+    )
+
+    // eslint-disable-next-line
     const arbitraryChanges = instance.arbitraryUpdates()
 
     expect(MockedTsconfigPathsPlugin).toHaveBeenCalledTimes(1)

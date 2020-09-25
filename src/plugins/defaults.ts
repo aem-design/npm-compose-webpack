@@ -78,15 +78,11 @@ export default (paths: RuntimePaths): webpack.WebpackPluginInstance[] => {
     getIfUtilsInstance().ifStylelint(new StyleLintPlugin({
       context       : resolve(paths.project.src, 'scss'),
       emitErrors    : false,
-      // @ts-ignore
       emitWarning   : true,
-      // @ts-check
       failOnError   : false,
       files         : ['**/*.scss'],
       quiet         : false,
-      // @ts-ignore
       stylelintPath : resolveDependency('stylelint', true, require.resolve('stylelint')),
-      // @ts-check
     })),
 
     /**

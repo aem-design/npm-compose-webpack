@@ -13,7 +13,6 @@ describe('hooks', () => {
     })
 
     test('before hook executes', () => {
-      // @ts-ignore
       executeHook(Hook.PRE_INIT, HookType.BEFORE, {})
       executeHook(Hook.PRE_INIT, HookType.BEFORE, {})
 
@@ -29,7 +28,6 @@ describe('hooks', () => {
     })
 
     test('after hook executes', () => {
-      // @ts-ignore
       executeHook(Hook.POST_INIT, HookType.AFTER, {})
       executeHook(Hook.POST_INIT, HookType.AFTER, {})
 
@@ -49,7 +47,6 @@ describe('hooks', () => {
     })
 
     test('async callback succeeds', () => {
-      // @ts-ignore
       executeHook(Hook.PRE_INIT, HookType.AFTER, {})
 
       expect(MockAsyncCallback).toHaveBeenCalledTimes(1)
