@@ -6,7 +6,7 @@ about: It doesn't work for me. 🤔
 <!-- 
 
 Before sending a bug report please check if the latest release (if you're not already using it) fixes your problem. Alternatively, you could
-install the latest snapshot version from the master branch.
+install the latest snapshot version from the main branch.
  -->
 
 ## Bug Report
