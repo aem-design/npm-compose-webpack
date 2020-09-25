@@ -38,7 +38,7 @@ describe('dependencies', () => {
 
     const installStatus = installDependencies({
       [DependencyType.DEV]     : ['yo'],
-      [DependencyType.NON_DEV] : [],
+      [DependencyType.NON_DEV] : ['foo'],
     })
 
     expect(installStatus).toEqual(InstallStatus.RESTART)

@@ -109,4 +109,91 @@ describe('config', () => {
 
     expect(getConfiguration(ConfigurationType.MAVEN_PROJECT)).toEqual('foo bar')
   })
+
+  test('invalid project configuration should return default configuration', () => {
+    setProjects({}, true)
+
+    environment.project = 'styleguide'
+
+    expect(getProjectConfiguration()).toHaveProperty('entryFile', 'styleguide.ts')
+  })
+
+  test('incoming project configuration should merge with default core project', () => {
+    setProjects({
+      core: {
+        entryFile  : 'mock.ts',
+        outputName : 'mock',
+
+        additionalEntries: {
+          'foo': ['es6-promise/auto'],
+          'bar': ['classlist.js'],
+
+          'vendorlib/common': [
+            'bootstrap/foo',
+          ],
+        },
+
+        fileMap: {
+          footer: ['foo'],
+          header: ['bar'],
+        },
+      },
+    }, true)
+
+    environment.project = 'core'
+
+    expect(getProjectConfiguration()).toHaveProperty('entryFile', 'mock.ts')
+    expect(getProjectConfiguration()).toHaveProperty('outputName', 'mock')
+
+    expect(getProjectConfiguration()).toHaveProperty(['additionalEntries', 'bar', 0], 'classlist.js')
+    expect(getProjectConfiguration()).toHaveProperty(['additionalEntries', 'vendorlib/common', 7], 'bootstrap/foo')
+
+    expect(getProjectConfiguration()).toHaveProperty(['fileMap', 'footer', 0], 'foo')
+  })
+
+  test('incoming project configuration should merge with default styleguide project', () => {
+    setProjects({
+      styleguide: {
+        entryFile  : 'mock.ts',
+        outputName : 'mock',
+
+        additionalEntries: {
+          'foo': ['bar'],
+        },
+
+        fileMap: {
+          footer: undefined,
+          header: ['foo'],
+        },
+      },
+    }, true)
+
+    environment.project = 'styleguide'
+
+    expect(getProjectConfiguration()).toHaveProperty('entryFile', 'mock.ts')
+    expect(getProjectConfiguration()).toHaveProperty('outputName', 'mock')
+
+    expect(getProjectConfiguration()).toHaveProperty(['additionalEntries', 'foo', 0], 'bar')
+
+    expect(getProjectConfiguration()).toHaveProperty(['fileMap', 'header', 0], 'foo')
+  })
+
+  test('incoming project with invalid configuration should merge with default core project', () => {
+    setProjects({
+      core: {
+        entryFile  : null as unknown as string,
+        fileMap    : undefined,
+        outputName : null as unknown as string,
+      },
+    }, true)
+
+    environment.project = 'core'
+
+    expect(getProjectConfiguration()).toHaveProperty('entryFile', 'mock.ts')
+    expect(getProjectConfiguration()).toHaveProperty('outputName', 'mock')
+
+    expect(getProjectConfiguration()).toHaveProperty(['additionalEntries', 'vendorlib/common', 0], './core/js/vendor.ts')
+
+    expect(getProjectConfiguration()).toHaveProperty(['fileMap', 'header', 0], 'vendorlib/common')
+  })
 })
