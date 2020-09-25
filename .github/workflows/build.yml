@@ -3,7 +3,7 @@ name: Build
 on:
   pull_request:
     branches-ignore:
-      - master
+      - main
   push:
     branches:
       - develop

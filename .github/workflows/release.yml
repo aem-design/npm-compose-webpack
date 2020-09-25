@@ -3,7 +3,7 @@ name: Draft New Release
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - 'v*.*.*-beta.*'
       - 'v*.*.*-rc.*'
