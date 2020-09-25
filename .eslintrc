@@ -32,6 +32,8 @@
 
     "promise/prefer-await-to-callbacks": "off",
 
+    "jest/no-test-callback": "off",
+
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/class-name-casing": "off",
     "@typescript-eslint/explicit-function-return-type": "off",

@@ -6,7 +6,7 @@ import Bootstrap from './bootstrap'
 
 jest.mock('../support/dependencies')
 
-describe('typescript feature', () => {
+describe('bootstrap feature', () => {
   let instance: Bootstrap
 
   beforeEach(() => {
