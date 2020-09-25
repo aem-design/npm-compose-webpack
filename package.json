@@ -56,7 +56,7 @@
     "build.compile.cli": "cross-env NODE_ENV=production microbundle build --format cjs --no-sourcemap --target node --no-compress --tsconfig tsconfig.json --entry src/bin/cli-service.ts --output dist/bin/cli-service.js",
     "clean": "rm -rf dist",
     "dev": "npm run clean && npm run dev.watch",
-    "dev.watch": "cross-env NODE_ENV=development microbundle watch --entry src/index.ts --entry src/bin/cli-service.ts --format cjs --target node --no-compress --no-pkg-main --tsconfig tsconfig.json",
+    "dev.watch": "npm run clean && cross-env NODE_ENV=development tsc --watch --declaration true --declarationDir dist/types",
     "lint": "eslint '**/*.ts'",
     "postbuild": "chmod +x dist/bin/cli-service.js",
     "postversion": "npm run test && git push && git push --tags",
