@@ -1,17 +1,18 @@
 import {
   Hook,
   HookType,
-} from './types/enums'
+} from '../types/enums'
 
 import type {
   Project,
   RuntimeEnvironment,
-} from './types'
+} from '../types'
 
 // Internal
 const registeredHooks: Partial<RegisteredHooks> = {
-  [Hook.POST_INIT] : [],
-  [Hook.PRE_INIT]  : [],
+  [Hook.COMPILER_READY] : [],
+  [Hook.POST_INIT]      : [],
+  [Hook.PRE_INIT]       : [],
 }
 
 export type EnvironmentConfig = Partial<RuntimeEnvironment>

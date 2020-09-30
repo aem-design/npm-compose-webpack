@@ -17,7 +17,7 @@ import {
   registerWebpackCompiler,
 } from '../support/compiler'
 
-import { executeHook } from '../hooks'
+import { executeHook } from '../support/hooks'
 
 import runtime from '../runtime'
 

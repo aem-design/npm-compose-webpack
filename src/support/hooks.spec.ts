@@ -1,10 +1,34 @@
 import { enableFetchMocks } from 'jest-fetch-mock'
 
-import { Hook, HookType } from './types/enums'
+import { Hook, HookType } from '../types/enums'
 
 import { executeHook, registerHook } from './hooks'
 
 describe('hooks', () => {
+  describe('compiler:ready', () => {
+    const MockAfterCallback = jest.fn(() => 'compiler:ready.after')
+    const MockBeforeCallback = jest.fn(() => 'compiler:ready.before')
+
+    registerHook(Hook.COMPILER_READY, {
+      after  : MockAfterCallback,
+      before : MockBeforeCallback,
+    })
+
+    test('before hook executes', () => {
+      executeHook(Hook.COMPILER_READY, HookType.BEFORE, {})
+      executeHook(Hook.COMPILER_READY, HookType.BEFORE, {})
+
+      expect(MockBeforeCallback).toHaveBeenCalledTimes(2)
+    })
+
+    test('after hook executes', () => {
+      executeHook(Hook.COMPILER_READY, HookType.AFTER, {})
+      executeHook(Hook.COMPILER_READY, HookType.AFTER, {})
+
+      expect(MockAfterCallback).toHaveBeenCalledTimes(2)
+    })
+  })
+
   describe('before pre:init', () => {
     const MockBeforeCallback = jest.fn(() => 'pre:init.before')
 

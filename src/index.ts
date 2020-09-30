@@ -8,7 +8,7 @@ import {
   getIfUtilsInstance as ifUtil,
 } from './support/helpers'
 
-import { registerHook } from './hooks'
+import { registerHook } from './support/hooks'
 
 import css from './support/css'
 

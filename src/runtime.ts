@@ -55,7 +55,7 @@ import EntryConfiguration from './entry'
 
 import processFeatures from './features/process'
 
-import { executeHook } from './hooks'
+import { executeHook } from './support/hooks'
 
 import * as plugins from './plugins'
 
