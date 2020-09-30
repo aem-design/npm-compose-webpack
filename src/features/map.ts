@@ -1,8 +1,8 @@
-import Feature, { FeatureEnvironment } from './feature'
+import Feature, { FeatureEnvironment } from '@/features/feature'
 
-import Bootstrap from './bootstrap'
-import TypeScript from './typescript'
-import Vue from './vue'
+import Bootstrap from '@/features/bootstrap'
+import TypeScript from '@/features/typescript'
+import Vue from '@/features/vue'
 
 const featureMap: Record<string, (env: FeatureEnvironment) => InstanceType<typeof Feature>> = {
   bootstrap  : (env) => new Bootstrap(env),

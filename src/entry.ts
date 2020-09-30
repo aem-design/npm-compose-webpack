@@ -4,13 +4,13 @@ import webpack from 'webpack'
 
 import type {
   Project,
-} from './types'
+} from '@/types'
 
 import {
   environment,
 
   getProjectConfiguration,
-} from './config'
+} from '@/config'
 
 function getHMRConfiguration(project: Project): webpack.Entry {
   const mappedEntries: {

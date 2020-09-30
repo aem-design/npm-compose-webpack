@@ -6,18 +6,18 @@ import type {
   ConfigurationType,
   DependencyType,
   Features,
-} from './enums'
+} from '@/types/enums'
 
 import type {
   MavenConfig,
   MavenConfigMap,
   SavedMavenConfig,
-} from './maven'
+} from '@/types/maven'
 
 import type {
   WebpackConfiguration,
   WebpackParserOptions,
-} from './webpack'
+} from '@/types/webpack'
 
 export {
   MavenConfig,
@@ -139,7 +139,7 @@ export interface ComposeConfiguration {
    *   // banner, projects...
    * }
    */
-  standard: StandardConfiguration;
+  standard: Partial<StandardConfiguration>;
 
   /**
    * Extend the default Webpack configuration provided.

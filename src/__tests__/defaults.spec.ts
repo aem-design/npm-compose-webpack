@@ -1,4 +1,4 @@
-import { defaultProjects as projects } from './defaults'
+import { defaultProjects as projects } from '@/defaults'
 
 describe('defaults', () => {
   test('should have the correct output name for core', () => {

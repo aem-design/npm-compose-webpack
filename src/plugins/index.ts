@@ -1,4 +1,4 @@
-import ComposeDefaults from './defaults'
+import ComposeDefaults from '@/plugins/defaults'
 
 export {
   ComposeDefaults,

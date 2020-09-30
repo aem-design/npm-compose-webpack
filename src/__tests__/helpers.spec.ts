@@ -2,16 +2,16 @@ import fs from 'fs'
 
 import {
   setupEnvironment,
-} from '../config'
+} from '@/config'
 
-import { Environment } from '../types'
+import { Environment } from '@/types'
 
 import {
   configurationProxy,
   generateConfiguration,
   getIfUtilsInstance,
   getMavenConfigurationValueByPath,
-} from './helpers'
+} from '@/support/helpers'
 
 jest.mock('fs')
 

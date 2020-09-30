@@ -5,11 +5,11 @@ import type {
   CSSLoaderOptions,
   Environment,
   RuntimePaths,
-} from '../types'
+} from '@/types'
 
 import {
   resolveConfigFile,
-} from './helpers'
+} from '@/support/helpers'
 
 export default (
   { mode }: Environment & { paths: RuntimePaths },

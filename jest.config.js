@@ -1,12 +1,12 @@
 const { pathsToModuleNameMapper } = require('ts-jest/utils')
 
-const { compilerOptions } = require('./tsconfig')
+const { compilerOptions } = require('./tsconfig.json')
 
 module.exports = {
   collectCoverage      : true,
   preset               : 'ts-jest',
   moduleFileExtensions : ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  moduleNameMapper     : pathsToModuleNameMapper(compilerOptions.paths),
+  moduleNameMapper     : pathsToModuleNameMapper(compilerOptions.paths, { prefix: process.cwd() }),
   reporters            : ['default'],
   roots                : ['<rootDir>/src'],
   testRegex            : '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',

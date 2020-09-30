@@ -29,7 +29,6 @@ export enum DependencyType {
 }
 
 export enum WebpackIgnoredProps {
-  'context',
   'devtool',
   'devServer.contentBase',
   'entry',

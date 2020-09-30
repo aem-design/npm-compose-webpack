@@ -1,7 +1,7 @@
-import { getConfigurable } from '../config'
-import { DependencyType } from '../types/enums'
+import { getConfigurable } from '@/config'
+import { DependencyType } from '@/types/enums'
 
-import TypeScript from './typescript'
+import TypeScript from '@/features/typescript'
 
 jest.mock('../support/dependencies')
 

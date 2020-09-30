@@ -13,16 +13,16 @@ import {
 import type {
   ComposeConfiguration,
   RuntimeEnvironment,
-} from '../types'
+} from '@/types'
 
 import type {
   MavenConfig,
   SavedMavenConfig,
-} from '../types/maven'
+} from '@/types/maven'
 
 import {
   environment,
-} from '../config'
+} from '@/config'
 
 // Internal
 const envVars = [

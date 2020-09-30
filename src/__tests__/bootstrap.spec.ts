@@ -1,10 +1,10 @@
 import webpack from 'webpack'
 
-import { DependencyType } from '../types/enums'
+import { DependencyType } from '@/types/enums'
 
-import Bootstrap from './bootstrap'
+import Bootstrap from '@/features/bootstrap'
 
-jest.mock('../support/dependencies')
+jest.mock('@/support/dependencies')
 
 describe('bootstrap feature', () => {
   let instance: Bootstrap

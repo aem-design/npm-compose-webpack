@@ -1,7 +1,7 @@
-import FeatureMap from './map'
-import Bootstrap from './bootstrap'
-import TypeScript from './typescript'
-import Vue from './vue'
+import FeatureMap from '@/map'
+import Bootstrap from '@/bootstrap'
+import TypeScript from '@/typescript'
+import Vue from '@/vue'
 
 describe('feature map', () => {
   test('bootstrap feature should create Bootstrap instance', () => {

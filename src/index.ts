@@ -1,16 +1,16 @@
 import {
   getWebpackCompiler,
-} from './support/compiler'
+} from '@/support/compiler'
 
 import {
   configurationProxy as configuration,
   getMavenConfigurationValueByPath as getMavenValueByPath,
   getIfUtilsInstance as ifUtil,
-} from './support/helpers'
+} from '@/support/helpers'
 
-import { registerHook } from './support/hooks'
+import { registerHook } from '@/support/hooks'
 
-import css from './support/css'
+import css from '@/support/css'
 
 const support = {
   loaders: {

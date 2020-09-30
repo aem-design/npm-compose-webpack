@@ -3,9 +3,9 @@ import { resolve } from 'path'
 import {
   setupEnvironment,
   setProjects,
-} from './config'
+} from '@/config'
 
-import EntryConfiguration from './entry'
+import EntryConfiguration from '@/entry'
 
 describe('entry', () => {
   beforeAll(() => {

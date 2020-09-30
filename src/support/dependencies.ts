@@ -8,12 +8,12 @@ import { logger } from '@aem-design/compose-support'
 
 import type {
   DependenciesMap,
-} from '../types'
+} from '@/types'
 
 import {
   DependencyType,
   InstallStatus,
-} from '../types/enums'
+} from '@/types/enums'
 
 // Internal
 const isUsingYarn = existsSync(resolve(process.cwd(), 'yarn.lock'))

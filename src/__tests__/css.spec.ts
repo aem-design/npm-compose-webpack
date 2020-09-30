@@ -1,6 +1,6 @@
 import _get from 'lodash/get'
 
-import css from './css'
+import css from '@/css'
 
 describe('css', () => {
   test('should return valid css loaders', () => {

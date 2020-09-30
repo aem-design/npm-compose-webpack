@@ -11,19 +11,19 @@ import yargs from 'yargs'
 import {
   Hook,
   HookType,
-} from '../types/enums'
+} from '@/types/enums'
 
 import {
   registerWebpackCompiler,
-} from '../support/compiler'
+} from '@/support/compiler'
 
-import { executeHook } from '../support/hooks'
+import { executeHook } from '@/support/hooks'
 
-import runtime from '../runtime'
+import runtime from '@/runtime'
 
 import type {
   ComposeConfiguration,
-} from '../types'
+} from '@/types'
 
 const args = yargs
   .alias('h', 'help')

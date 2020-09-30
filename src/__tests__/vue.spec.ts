@@ -1,7 +1,7 @@
-import { getConfigurable } from '../config'
-import { DependencyType } from '../types/enums'
+import { getConfigurable } from '@/config'
+import { DependencyType } from '@/types/enums'
 
-import Vue from './vue'
+import Vue from '@/features/vue'
 
 jest.mock('../support/dependencies')
 

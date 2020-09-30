@@ -1,6 +1,6 @@
 import type {
   ProjectsConfiguration,
-} from './types'
+} from '@/types'
 
 export const defaultProjects: ProjectsConfiguration = {
   core: {

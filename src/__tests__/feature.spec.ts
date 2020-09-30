@@ -1,6 +1,6 @@
-import { DependencyType } from '../types/enums'
+import { DependencyType } from '@/types/enums'
 
-import Feature from './feature'
+import Feature from '@/features/feature'
 
 describe('base feature', () => {
   let instance: Feature

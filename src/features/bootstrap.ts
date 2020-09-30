@@ -2,11 +2,11 @@ import webpack from 'webpack'
 
 import type {
   DependenciesMap,
-} from '../types'
+} from '@/types'
 
-import { DependencyType } from '../types/enums'
+import { DependencyType } from '@/types/enums'
 
-import Feature from './feature'
+import Feature from '@/features/feature'
 
 export default class Bootstrap extends Feature {
   public getFeatureDependencies(): DependenciesMap {

@@ -14,24 +14,24 @@ import type {
   MavenConfigMap,
   Project,
   ProjectsConfiguration,
-} from './types'
+} from '@/types'
 
 import {
   ConfigurationType,
-} from './types/enums'
+} from '@/types/enums'
 
 import type {
   WebpackConfigurables,
   WebpackParserOptions,
-} from './types/webpack'
+} from '@/types/webpack'
 
 import {
   getMavenConfigurationValueByPath,
-} from './support/helpers'
+} from '@/support/helpers'
 
 import {
   defaultProjects,
-} from './defaults'
+} from '@/defaults'
 
 // Internal
 const workingDirectory = process.cwd()

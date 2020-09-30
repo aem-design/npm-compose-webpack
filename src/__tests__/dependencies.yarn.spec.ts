@@ -1,6 +1,6 @@
-import { DependencyType } from '../types/enums'
+import { DependencyType } from '@/types/enums'
 
-import { constructCommand } from './dependencies'
+import { constructCommand } from '@/support/dependencies'
 
 describe('dependencies - yarn', () => {
   test('yarn add command should be generated for non dev dependencies', () => {

@@ -23,19 +23,18 @@ import type {
   AEMEnvironment,
   ComposeConfiguration,
   RuntimeConfiguration,
-} from './types'
+} from '@/types'
 
 import {
   ConfigurationType,
   Hook,
   HookType,
   WebpackIgnoredProps
-} from './types/enums'
+} from '@/types/enums'
 
 import type {
-  WebpackConfiguration,
   WebpackParserOptions,
-} from './types/webpack'
+} from '@/types/webpack'
 
 import {
   mergeStrategy,
@@ -49,25 +48,25 @@ import {
   setConfiguration,
   setProjects,
   setupEnvironment,
-} from './config'
+} from '@/config'
 
-import EntryConfiguration from './entry'
+import EntryConfiguration from '@/entry'
 
-import processFeatures from './features/process'
+import processFeatures from '@/features/process'
 
-import { executeHook } from './support/hooks'
+import { executeHook } from '@/support/hooks'
 
-import * as plugins from './plugins'
+import * as plugins from '@/plugins'
 
-import css from './support/css'
+import css from '@/support/css'
 
 import {
   generateConfiguration,
   getIfUtilsInstance,
-} from './support/helpers'
+} from '@/support/helpers'
 
 export default (
-  configuration: ComposeConfiguration,
+  configuration: Partial<ComposeConfiguration>,
   webpackEnv: WebpackParserOptions
 ): () => RuntimeConfiguration => {
   const baseConfiguration = configuration.standard
@@ -75,9 +74,9 @@ export default (
   /**
    * Show the current version of the package and webpack for easier identification
    */
-  console.log('compose-webpack: v%s', require(
-    resolve(process.cwd(), 'node_modules/@aem-design/compose-webpack/package.json')
-  ).version)
+  // console.log('compose-webpack: v%s', require(
+  //   resolve(process.cwd(), 'node_modules/@aem-design/compose-webpack/package.json')
+  // ).version)
 
   console.log('webpack: v%s\n', webpack.version)
 
@@ -143,7 +142,7 @@ export default (
     /**
      * Set any user-defined projects.
      */
-    setProjects(baseConfiguration.projects ?? null, baseConfiguration.mergeProjects)
+    setProjects(baseConfiguration?.projects ?? null, baseConfiguration?.mergeProjects ?? false)
 
     /**
      * Set the base path for the project in AEM
@@ -176,7 +175,7 @@ export default (
     const configurationForWebpack = generateConfiguration(
       configuration.webpack,
       environmentConfiguration,
-    ) as WebpackConfiguration
+    )
 
     // Validate the given webpack configuration (if any) and detect anything marked as forbidden
     const forbiddenProps = Object.keys(WebpackIgnoredProps).filter((x) => !/\d+/.test(x))

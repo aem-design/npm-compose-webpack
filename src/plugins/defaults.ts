@@ -11,21 +11,21 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import type {
   RuntimePaths,
-} from '../types'
+} from '@/types'
 
 import {
   environment,
-} from '../config'
+} from '@/config'
 
 import {
   getIfUtilsInstance,
-} from '../support/helpers'
+} from '@/support/helpers'
 
 import {
   resolveDependency,
-} from '../support/dependencies'
+} from '@/support/dependencies'
 
-import ComposeMessages from './messages'
+import ComposeMessages from '@/plugins/messages'
 
 export default (paths: RuntimePaths): webpack.WebpackPluginInstance[] => {
   const cssExtractPath = paths.out as string || 'clientlibs-header/css'

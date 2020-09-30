@@ -3,9 +3,9 @@ import wds from 'webpack-dev-server'
 
 import type {
   WebpackIgnoredProps,
-} from './enums'
+} from '@/types/enums'
 
-declare module "webpack" {
+declare module 'webpack' {
   interface Configuration {
     devServer?: wds.Configuration;
   }

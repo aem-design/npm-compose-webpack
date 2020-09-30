@@ -1,10 +1,10 @@
 import type {
   DependenciesMap,
-} from '../../types'
+} from '@/types'
 
 import {
   InstallStatus,
-} from '../../types/enums'
+} from '@/types/enums'
 
 export function installDependencies(dependenciesMap: DependenciesMap): InstallStatus {
   if (dependenciesMap.dev.includes('tsconfig-paths-webpack-plugin')) {

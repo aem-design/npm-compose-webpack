@@ -7,10 +7,10 @@ import {
   setConfiguration,
   setProjects,
   setupEnvironment,
-} from './config'
+} from '@/config'
 
-import { Environment } from './types'
-import { ConfigurationType } from './types/enums'
+import { Environment } from '@/types'
+import { ConfigurationType } from '@/types/enums'
 
 describe('config', () => {
   let environment: Environment

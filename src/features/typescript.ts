@@ -2,27 +2,27 @@ import webpack from 'webpack'
 
 import type {
   DependenciesMap,
-} from '../types'
+} from '@/types'
 
 import {
   getProjectPath,
   setConfigurable,
-} from '../config'
+} from '@/config'
 
 import {
   resolveDependency,
-} from '../support/dependencies'
+} from '@/support/dependencies'
 
 import {
   resolveConfigFile,
-} from '../support/helpers'
+} from '@/support/helpers'
 
 import {
   ConfigurationType,
   DependencyType,
-} from '../types/enums'
+} from '@/types/enums'
 
-import Feature from './feature'
+import Feature from '@/features/feature'
 
 export default class TypeScript extends Feature {
   private readonly configFile = resolveConfigFile(

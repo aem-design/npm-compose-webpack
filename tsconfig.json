@@ -13,7 +13,15 @@
       "es6"
     ],
 
-    "paths": {},
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+
+      "@/types/*": [
+        "src/types/*"
+      ]
+    },
 
     "module": "esnext",
     "moduleResolution": "node",

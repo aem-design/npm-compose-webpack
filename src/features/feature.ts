@@ -2,20 +2,20 @@ import webpack from 'webpack'
 
 import {
   DependenciesMap,
-} from '../types'
+} from '@/types'
 
 import {
   DependencyType,
-} from '../types/enums'
+} from '@/types/enums'
 
 import {
   FeatureContract,
   FeatureEnvironment,
-} from '../types/feature'
+} from '@/types/feature'
 
 import type {
   WebpackAliases,
-} from '../types/webpack'
+} from '@/types/webpack'
 
 export {
   FeatureContract,

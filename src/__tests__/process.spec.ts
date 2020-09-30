@@ -1,7 +1,7 @@
 import mockConsole from 'jest-mock-console'
 import { mockProcessExit } from 'jest-mock-process'
 
-import processFeatures from './process'
+import processFeatures from '@/process'
 
 jest.mock('@aem-design/compose-support', () => ({
   logger: {

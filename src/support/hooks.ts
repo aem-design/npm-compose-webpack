@@ -1,19 +1,20 @@
+import _reduce from 'lodash/reduce'
+
 import {
   Hook,
   HookType,
-} from '../types/enums'
+} from '@/types/enums'
 
 import type {
   Project,
   RuntimeEnvironment,
-} from '../types'
+} from '@/types'
 
 // Internal
-const registeredHooks: Partial<RegisteredHooks> = {
-  [Hook.COMPILER_READY] : [],
-  [Hook.POST_INIT]      : [],
-  [Hook.PRE_INIT]       : [],
-}
+const registeredHooks: RegisteredHooks = _reduce<string, RegisteredHooks>(Object.values(Hook), (hooks, hook) => ({
+  ...hooks,
+  [hook]: [],
+}), {} as RegisteredHooks)
 
 export type EnvironmentConfig = Partial<RuntimeEnvironment>
 

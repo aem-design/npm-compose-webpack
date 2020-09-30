@@ -3,13 +3,13 @@ import mockConsole from 'jest-mock-console'
 import {
   DependencyType,
   InstallStatus,
-} from '../types/enums'
+} from '@/types/enums'
 
 import {
   constructCommand,
   installDependencies,
   resolveDependency,
-} from './dependencies'
+} from '@/support/dependencies'
 
 jest.mock('child_process').mock('fs')
 

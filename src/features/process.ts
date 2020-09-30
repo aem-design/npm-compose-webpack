@@ -13,21 +13,21 @@ import type {
   FeatureList,
   RuntimeConfiguration,
   RuntimePaths,
-} from '../types'
+} from '@/types'
 
 import {
   InstallStatus,
-} from '../types/enums'
+} from '@/types/enums'
 
 import {
   mergeStrategy,
-} from '../config'
+} from '@/config'
 
 import {
   installDependencies,
-} from '../support/dependencies'
+} from '@/support/dependencies'
 
-import FeatureMap from './map'
+import FeatureMap from '@/features/map'
 
 export default function processFeatures({ environment, features, paths, webpackConfig }: {
   environment: Environment;

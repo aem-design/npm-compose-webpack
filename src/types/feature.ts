@@ -3,13 +3,13 @@ import webpack from 'webpack'
 import type {
   WebpackAliases,
   WebpackConfiguration,
-} from './webpack'
+} from '@/types/webpack'
 
 import type {
   DependenciesMap,
   Environment,
   RuntimePaths,
-} from '.'
+} from '@/types'
 
 export interface FeatureEnvironment extends Environment {
   paths: RuntimePaths;

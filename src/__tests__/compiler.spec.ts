@@ -3,7 +3,7 @@ import webpack from 'webpack'
 import {
   getWebpackCompiler,
   registerWebpackCompiler,
-} from './compiler'
+} from '@/support/compiler'
 
 describe('compiler', () => {
   const compiler = webpack({})

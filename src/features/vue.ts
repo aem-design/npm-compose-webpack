@@ -1,29 +1,29 @@
 import { resolve } from 'path'
 import webpack from 'webpack'
 
-import css from '../support/css'
+import css from '@/support/css'
 
 import type {
   DependenciesMap,
-} from '../types'
+} from '@/types'
 
 import type {
   WebpackAliases,
-} from '../types/webpack'
+} from '@/types/webpack'
 
 import {
   setConfigurable,
-} from '../config'
+} from '@/config'
 
 import {
   resolveDependency,
-} from '../support/dependencies'
+} from '@/support/dependencies'
 
 import {
   DependencyType,
-} from '../types/enums'
+} from '@/types/enums'
 
-import Feature from './feature'
+import Feature from '@/features/feature'
 
 export default class Vue extends Feature {
   public getFeatureDependencies(): DependenciesMap {

@@ -1,8 +1,8 @@
 import { enableFetchMocks } from 'jest-fetch-mock'
 
-import { Hook, HookType } from '../types/enums'
+import { Hook, HookType } from '@/types/enums'
 
-import { executeHook, registerHook } from './hooks'
+import { executeHook, registerHook } from '@/hooks'
 
 describe('hooks', () => {
   describe('compiler:ready', () => {
