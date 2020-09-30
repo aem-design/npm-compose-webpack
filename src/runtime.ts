@@ -5,6 +5,7 @@ import figlet from 'figlet'
 import _get from 'lodash/get'
 import _has from 'lodash/has'
 import rimraf from 'rimraf'
+import webpack from 'webpack'
 
 import {
   customizeArray,
@@ -72,11 +73,13 @@ export default (
   const baseConfiguration = configuration.standard
 
   /**
-   * Show the current version of the package to easier identification
+   * Show the current version of the package and webpack for easier identification
    */
-  console.log('compose-webpack: v%s\n', require(
+  console.log('compose-webpack: v%s', require(
     resolve(process.cwd(), 'node_modules/@aem-design/compose-webpack/package.json')
   ).version)
+
+  console.log('webpack: v%s\n', webpack.version)
 
   /**
    * Support banner
