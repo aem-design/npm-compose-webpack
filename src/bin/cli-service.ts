@@ -8,6 +8,17 @@ import createConfig from 'webpack-dev-server/lib/utils/createConfig'
 import defaultPort from 'webpack-dev-server/lib/utils/defaultPort'
 import yargs from 'yargs'
 
+import {
+  Hook,
+  HookType,
+} from '../types/enums'
+
+import {
+  registerWebpackCompiler,
+} from '../support/compiler'
+
+import { executeHook } from '../hooks'
+
 import runtime from '../runtime'
 
 import type {
@@ -99,7 +110,15 @@ if (existsSync(configFilePath)) {
  * Start your engines...
  */
 const webpackConfiguration = runtime(composeConfiguration, args)()
-const webpackInstance      = webpack(webpackConfiguration)
+
+executeHook(Hook.COMPILER_READY, HookType.BEFORE, args)
+
+const webpackInstance = webpack(webpackConfiguration)
+
+// Register the webpack compiler so we can use native hooks anywhere
+registerWebpackCompiler(webpackInstance)
+
+executeHook(Hook.COMPILER_READY, HookType.AFTER, args)
 
 if (args.watch) {
   const devServer = new WebpackDevServer(

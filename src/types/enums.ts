@@ -15,6 +15,7 @@ export enum Features {
 export enum Hook {
   POST_INIT = 'init:post',
   PRE_INIT = 'init:pre',
+  COMPILER_READY = 'compiler:ready',
 }
 
 export enum HookType {

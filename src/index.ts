@@ -1,4 +1,8 @@
 import {
+  getWebpackCompiler,
+} from './support/compiler'
+
+import {
   configurationProxy as configuration,
   getMavenConfigurationValueByPath as getMavenValueByPath,
   getIfUtilsInstance as ifUtil,
@@ -17,6 +21,7 @@ const support = {
 export {
   configuration,
   getMavenValueByPath,
+  getWebpackCompiler,
   ifUtil,
   registerHook,
   support,
