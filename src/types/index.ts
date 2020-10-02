@@ -101,7 +101,7 @@ export interface AdditionalEntries {
 
 export type FileMap = Partial<Record<'header' | 'footer', string[]>>
 
-export type RuntimeForWebpack<T = WebpackConfiguration> = ((env: RuntimeEnvironment) => Partial<T>) | Partial<T>
+export type RuntimeForWebpack<T = Partial<WebpackConfiguration>> = ((env: RuntimeEnvironment) => T) | T
 
 export type FeatureList = (keyof typeof Features)[]
 

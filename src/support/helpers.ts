@@ -13,12 +13,17 @@ import {
 import type {
   ComposeConfiguration,
   RuntimeEnvironment,
+  RuntimeForWebpack,
 } from '@/types'
 
 import type {
   MavenConfig,
   SavedMavenConfig,
 } from '@/types/maven'
+
+import {
+  WebpackConfiguration,
+} from '@/types/webpack'
 
 import {
   environment,
@@ -111,19 +116,22 @@ export function getIfUtilsInstance(): ComposeIfUtils {
  * Proxy helper that provides intellisense for generating configurations and allows the
  * environment configuration to be used via a callback function.
  */
-export function configurationProxy(configuration: ComposeConfiguration): ComposeConfiguration {
+export function configurationProxy(configuration: Partial<ComposeConfiguration>): Partial<ComposeConfiguration> {
   return configuration
 }
 
 /**
  * Generates the configuration structure needed for the given `context`.
  */
-export function generateConfiguration<T>(configuration: T, environmentConfiguration?: RuntimeEnvironment): T {
+export function generateConfiguration(
+  configuration: RuntimeForWebpack,
+  environmentConfiguration: RuntimeEnvironment,
+): WebpackConfiguration {
   if (configuration instanceof Function) {
-    return configuration(environmentConfiguration ?? baseEnvironmentConfig) as T
+    return configuration(environmentConfiguration ?? baseEnvironmentConfig)
   }
 
-  return configuration || {} as T
+  return configuration || {}
 }
 
 /**
