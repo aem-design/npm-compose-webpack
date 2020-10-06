@@ -14,7 +14,7 @@ jest.mock('@aem-design/compose-support', () => ({
   },
 }))
 
-describe('runtime', () => {
+xdescribe('runtime', () => {
   const fixturesPath = path.resolve(process.cwd(), 'test/fixtures')
 
   let memoryFileSystem: IFs
