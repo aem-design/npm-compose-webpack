@@ -2,8 +2,9 @@ name: Publish Latest Release
 
 on:
   push:
-    tags:
-      - v*.*.*
+    tags-ignore:
+      - 'v*.*.*-beta.*'
+      - 'v*.*.*-rc.*'
 
 jobs:
   publish_to_npm:
