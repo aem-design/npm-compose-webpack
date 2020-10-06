@@ -63,6 +63,7 @@ describe('helpers', () => {
 
   test('can load pom xml configuration', () => {
     mockFS({
+      // @ts-expect-error 'load' is not yet covered, implemented in upcoming @types update
       'mock.pom.xml': mockFS.load(resolve('mock.pom.xml', fixturesPath)),
     })
 
@@ -85,6 +86,7 @@ describe('helpers', () => {
 
   xtest('parser returns custom value', () => {
     mockFS({
+      // @ts-expect-error 'load' is not yet covered, implemented in upcoming @types update
       'mock.pom.xml': mockFS.load(resolve('mock.pom.xml', fixturesPath)),
     })
 
