@@ -47,9 +47,9 @@ const envVars = [
 const mavenConfigs: SavedMavenConfig = {}
 const xmlParser: xml2js.Parser = new xml2js.Parser()
 
-const baseEnvironmentConfig: Partial<RuntimeEnvironment> = {
+const baseEnvironmentConfig: RuntimeEnvironment = {
   paths: {},
-}
+} as RuntimeEnvironment
 
 let ifUtilsInstance: ComposeIfUtils | null = null
 
@@ -125,7 +125,7 @@ export function configurationProxy(configuration: Partial<ComposeConfiguration>)
  */
 export function generateConfiguration(
   configuration: RuntimeForWebpack,
-  environmentConfiguration: RuntimeEnvironment,
+  environmentConfiguration?: RuntimeEnvironment,
 ): WebpackConfiguration {
   if (configuration instanceof Function) {
     return configuration(environmentConfiguration ?? baseEnvironmentConfig)

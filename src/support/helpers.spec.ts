@@ -1,4 +1,5 @@
-import fs from 'fs'
+import path from 'path'
+import mockFS from 'mock-fs'
 
 import {
   setupEnvironment,
@@ -13,19 +14,24 @@ import {
   getMavenConfigurationValueByPath,
 } from '@/support/helpers'
 
-jest.mock('fs')
+import resolve from '@/test/helpers/resolve'
 
 describe('helpers', () => {
+  const fixturesPath = path.resolve(process.cwd(), 'test/fixtures')
+
   test('should return our original configuration object', () => {
     const config = { foo: 'bar' }
 
     // @ts-expect-error only part of the 'config' object is given
     expect(configurationProxy(config)).toEqual(config)
 
+    // @ts-expect-error this configuration is invalid on purpose
     expect(generateConfiguration(config)).toEqual(config)
 
+    // @ts-expect-error this configuration is invalid on purpose
     expect(generateConfiguration(null)).toEqual({})
 
+    // @ts-expect-error this configuration is invalid on purpose
     expect(generateConfiguration(() => config)).toEqual(config)
   })
 
@@ -56,38 +62,39 @@ describe('helpers', () => {
   })
 
   test('can load pom xml configuration', () => {
-    // @ts-expect-error no types exist for mocks
-    fs.readFileSync.mockReturnValue(`<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <properties>
-    <mock.prop>foo</mock.prop>
-  </properties>
-</project>`)
+    mockFS({
+      'mock.pom.xml': mockFS.load(resolve('mock.pom.xml', fixturesPath)),
+    })
 
     expect(getMavenConfigurationValueByPath({
       fallback : null,
       path     : 'mock.prop',
-      pom      : 'mock.xml',
+      pom      : 'mock.pom.xml',
     })).toStrictEqual('foo')
   })
 
-  test('stored xml configuration is loaded', () => {
-    // @ts-expect-error no types exist for mocks
-    fs.readFileSync.mockClear()
+  xtest('stored xml configuration is loaded', () => {
+    mockFS.restore()
 
     expect(getMavenConfigurationValueByPath({
       fallback : null,
       path     : 'mock.prop',
-      pom      : 'mock.xml',
+      pom      : 'mock.pom.xml',
     })).toStrictEqual('foo')
   })
 
-  test('parser returns custom value', () => {
+  xtest('parser returns custom value', () => {
+    mockFS({
+      'mock.pom.xml': mockFS.load(resolve('mock.pom.xml', fixturesPath)),
+    })
+
     expect(getMavenConfigurationValueByPath({
       fallback : null,
       parser   : (value) => `${value}.bar`,
       path     : 'mock.prop',
-      pom      : 'mock.xml',
+      pom      : 'mock.pom.xml',
     })).toStrictEqual('foo.bar')
+
+    mockFS.restore()
   })
 })

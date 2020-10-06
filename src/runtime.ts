@@ -313,44 +313,45 @@ export default (
       optimization: {
         moduleIds: 'deterministic',
 
-        // minimizer: [
-        //   // TODO: Remove this when fixed
-        //   // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
-        //   new TerserPlugin({
-        //     cache           : true,
-        //     extractComments : false,
-        //     sourceMap       : false,
+        minimizer: [
+          // TODO: Remove this when fixed
+          // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
+          new TerserPlugin({
+            cache           : true,
+            extractComments : false,
+            sourceMap       : false,
 
-        //     terserOptions: {
-        //       ecma     : 2015,
-        //       safari10 : true,
+            terserOptions: {
+              ecma     : 2015,
+              safari10 : true,
 
-        //       compress: {
-        //         drop_console  : true,
-        //         drop_debugger : true,
-        //       },
+              compress: {
+                drop_console  : true,
+                drop_debugger : true,
+              },
 
-        //       output: {
-        //         beautify: false,
-        //         comments: false,
-        //       },
-        //     },
-        //   }),
+              output: {
+                beautify: false,
+                comments: false,
+              },
+            },
+          }),
 
-        //   // TODO: Remove this when fixed
-        //   // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
-        //   new OptimizeCSSAssetsPlugin({
-        //     canPrint: true,
+          // TODO: Remove this when fixed
+          // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
+          new OptimizeCSSAssetsPlugin({
+            canPrint     : true,
+            cssProcessor : require('cssnano'),
 
-        //     cssProcessorPluginOptions: {
-        //       preset: ['default', {
-        //         discardComments: {
-        //           removeAll: true,
-        //         },
-        //       }],
-        //     },
-        //   }),
-        // ],
+            cssProcessorPluginOptions: {
+              preset: ['default', {
+                discardComments: {
+                  removeAll: true,
+                },
+              }],
+            },
+          }),
+        ],
 
         splitChunks: {
           chunks: 'all',

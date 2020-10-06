@@ -44,6 +44,8 @@ jobs:
 
       - name: Run tests with coverage
         run: yarn test:coverage -- --ci --reporters="default"
+        env:
+          NODE_ENV: test
 
       - name: Upload tests coverage report
         uses: codecov/codecov-action@v1

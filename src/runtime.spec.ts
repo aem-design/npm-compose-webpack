@@ -1,17 +1,12 @@
 import path from 'path'
-import mockConsole from 'jest-mock-console'
+import mockConsole, { RestoreConsole } from 'jest-mock-console'
 import mockFS from 'mock-fs'
-import pify from 'pify'
-import MemoryFS from 'memory-fs'
+import { createFsFromVolume, IFs, Volume } from 'memfs'
 import webpack from 'webpack'
 
 import runtime from '@/runtime'
-
-declare module 'webpack' {
-  class Compiler {
-    run(): Promise<any>;
-  }
-}
+import compile from '@/test/helpers/compile'
+import resolve from '@/test/helpers/resolve'
 
 jest.mock('@aem-design/compose-support', () => ({
   logger: {
@@ -20,41 +15,30 @@ jest.mock('@aem-design/compose-support', () => ({
 }))
 
 describe('runtime', () => {
-  const workingDirectory = process.cwd()
+  const fixturesPath = path.resolve(process.cwd(), 'test/fixtures')
 
-  let memoryFileSystem: MemoryFS
+  let memoryFileSystem: IFs
+  let restoreConsoleMock: RestoreConsole
 
   beforeEach(() => {
-    memoryFileSystem = new MemoryFS
+    memoryFileSystem   = createFsFromVolume(new Volume)
+    restoreConsoleMock = mockConsole()
 
     mockFS({
       // aemdesign/compose-webpack package.json
-      [path.resolve(workingDirectory, 'node_modules/@aem-design/compose-webpack/package.json')]: JSON.stringify({
+      [resolve('node_modules/@aem-design/compose-webpack/package.json')]: JSON.stringify({
         version: '0.0.0-mock.0'
       }),
 
       // Project configuration
-      [path.resolve(workingDirectory, 'pom.xml')]: `<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <properties>
-    <package.path.apps>apps</package.path.apps>
-    <package.appsPath>mock-compose</package.appsPath>
-  </properties>
-</project>`,
+      [resolve('pom.xml')]: mockFS.load(resolve('project.pom.xml', fixturesPath)),
 
       // Parent configuration
-      [path.resolve(workingDirectory, '../pom.xml')]: `<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <properties>
-    <crx.port>9000</crx.port>
-  </properties>
-</project>`,
+      [resolve('../pom.xml')]: mockFS.load(resolve('parent.pom.xml', fixturesPath)),
     })
   })
 
-  test('can compile es6 javascript entry', (done) => {
-    const restoreConsoleMock = mockConsole()
-
+  test('can compile es6 javascript entry', async (done) => {
     const compiler = webpack(runtime(
       {
         standard: {
@@ -67,12 +51,12 @@ describe('runtime', () => {
         },
 
         webpack: {
-          context: path.resolve(__dirname, '__tests__/fixtures'),
+          context: fixturesPath,
         },
       },
       {
         aem: {
-          port: 9000,
+          port: false,
         },
 
         prod    : true,
@@ -82,22 +66,19 @@ describe('runtime', () => {
 
     // @ts-expect-error known that the webpack type and 'memory-fs' aren't compatible
     compiler.outputFileSystem = memoryFileSystem
-    compiler.run = pify(compiler.run.bind(compiler))
 
-    compiler.run()
-      .then(() => {
-        console.log(memoryFileSystem.statSync('.'))
+    const stats = await compile(compiler)
 
-        restoreConsoleMock()
-        done()
-      })
-      .catch(() => {
-        restoreConsoleMock()
-        done()
-      })
+    expect(stats.hasErrors()).toBe(false)
+
+    console.log(memoryFileSystem.readdirSync('.'))
+
+    done()
   })
 
   afterEach(() => {
+    restoreConsoleMock()
+
     mockFS.restore()
   })
 })
