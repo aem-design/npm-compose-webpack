@@ -19,6 +19,13 @@ import resolve from '@/test/helpers/resolve'
 describe('helpers', () => {
   const fixturesPath = path.resolve(process.cwd(), 'test/fixtures')
 
+  beforeEach(() => {
+    mockFS({
+      // @ts-expect-error 'load' is not yet covered, implemented in upcoming @types update
+      '/mock.pom.xml': mockFS.load(resolve('mock.pom.xml', fixturesPath)),
+    })
+  })
+
   test('should return our original configuration object', () => {
     const config = { foo: 'bar' }
 
@@ -62,41 +69,33 @@ describe('helpers', () => {
   })
 
   test('can load pom xml configuration', () => {
-    mockFS({
-      // @ts-expect-error 'load' is not yet covered, implemented in upcoming @types update
-      'mock.pom.xml': mockFS.load(resolve('mock.pom.xml', fixturesPath)),
-    })
-
     expect(getMavenConfigurationValueByPath({
       fallback : null,
       path     : 'mock.prop',
-      pom      : 'mock.pom.xml',
+      pom      : '/mock.pom.xml',
     })).toStrictEqual('foo')
   })
 
-  xtest('stored xml configuration is loaded', () => {
+  test('stored xml configuration is loaded', () => {
     mockFS.restore()
 
     expect(getMavenConfigurationValueByPath({
       fallback : null,
       path     : 'mock.prop',
-      pom      : 'mock.pom.xml',
+      pom      : '/mock.pom.xml',
     })).toStrictEqual('foo')
   })
 
-  xtest('parser returns custom value', () => {
-    mockFS({
-      // @ts-expect-error 'load' is not yet covered, implemented in upcoming @types update
-      'mock.pom.xml': mockFS.load(resolve('mock.pom.xml', fixturesPath)),
-    })
-
+  test('parser returns custom value', () => {
     expect(getMavenConfigurationValueByPath({
       fallback : null,
       parser   : (value) => `${value}.bar`,
       path     : 'mock.prop',
-      pom      : 'mock.pom.xml',
+      pom      : '/mock.pom.xml',
     })).toStrictEqual('foo.bar')
+  })
 
+  afterEach(() => {
     mockFS.restore()
   })
 })
