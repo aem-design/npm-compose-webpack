@@ -46,7 +46,7 @@ describe('css', () => {
     expect(loaders).toHaveProperty([2, 'options', 'additionalData'], '$mock: true;')
   })
 
-  test('should throw property read error', () => {
-    expect(css).toThrow(/Cannot read property/)
+  test('should throw destructure property error', () => {
+    expect(css).toThrow(/Cannot destructure property/)
   })
 })
