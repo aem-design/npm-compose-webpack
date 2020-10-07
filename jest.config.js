@@ -26,12 +26,6 @@ const config = {
     color : 'blue',
   },
 
-  globals: {
-    'ts-jest': {
-      tsConfig: 'tsconfig.es5.json',
-    },
-  },
-
   moduleNameMapper: {
     ...pathsToModuleNameMapper(compilerOptions.paths, { prefix : '<rootDir>/' }),
   },

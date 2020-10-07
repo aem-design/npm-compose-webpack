@@ -10,7 +10,7 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "es6"
+      "ES2018"
     ],
 
     "paths": {
@@ -27,15 +27,15 @@
       ]
     },
 
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "noImplicitAny": false,
     "outDir": "dist",
     "pretty": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext"
+    "target": "ES2018"
   },
 
   "exclude": [
