@@ -21,7 +21,6 @@ describe('helpers', () => {
 
   beforeEach(() => {
     mockFS({
-      // @ts-expect-error 'load' is not yet covered, implemented in upcoming @types update
       '/mock.pom.xml': mockFS.load(resolve('mock.pom.xml', fixturesPath)),
     })
   })

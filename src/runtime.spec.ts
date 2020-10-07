@@ -31,11 +31,9 @@ xdescribe('runtime', () => {
       }),
 
       // Project configuration
-      // @ts-expect-error 'load' is not yet covered, implemented in upcoming @types update
       [resolve('pom.xml')]: mockFS.load(resolve('project.pom.xml', fixturesPath)),
 
       // Parent configuration
-      // @ts-expect-error 'load' is not yet covered, implemented in upcoming @types update
       [resolve('../pom.xml')]: mockFS.load(resolve('parent.pom.xml', fixturesPath)),
     })
   })
