@@ -5,7 +5,7 @@ const { compilerOptions } = require('./tsconfig.json')
 /** @typedef {import('ts-jest')} */
 /** @type {import('@jest/types').Config.InitialOptions} */
 const config = {
-  collectCoverage      : process.env.NODE_ENV === 'true',
+  collectCoverage      : process.env.NODE_ENV === 'test',
   preset               : 'ts-jest/presets/js-with-ts',
   moduleFileExtensions : ['ts', 'js', 'json', 'node'],
   reporters            : ['default'],
