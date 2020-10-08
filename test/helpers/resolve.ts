@@ -1,7 +1,7 @@
-import { resolve } from 'path'
+import { join } from 'path'
 
 const workingDirectory = process.cwd()
 
 export default (path: string, baseDir: string = workingDirectory): string => {
-  return resolve(baseDir, path)
+  return join(baseDir, path)
 }

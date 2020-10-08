@@ -1,42 +1,45 @@
 import path from 'path'
 
-import { RuntimeConfiguration } from '@/types'
+import {
+  ComposeConfiguration,
+  RuntimeConfiguration,
+} from '@/types'
+
+import {
+  WebpackParserOptions,
+} from '@/types/webpack'
 
 import runtime from '@/runtime'
 
-interface Configuration {
-  entryFile: string;
-  outputName: string;
-  project: string;
-}
-
 const fixturesPath = path.resolve(__dirname, '../fixtures')
 
-export default ({
-  entryFile,
-  outputName,
-  project,
-}: Configuration): Required<RuntimeConfiguration> => runtime(
-  {
+export function composeConfiguration(config: Partial<ComposeConfiguration>): Partial<ComposeConfiguration> {
+  return {
     standard: {
-      projects: {
-        mock: {
-          entryFile,
-          outputName,
-        },
-      },
+      mergeProjects: false,
     },
 
     webpack: {
       context: fixturesPath,
     },
-  },
+
+    ...config,
+  }
+}
+
+export default (
+  configuration: Partial<ComposeConfiguration>,
+  env: WebpackParserOptions,
+): Required<RuntimeConfiguration> => runtime(
+  configuration,
   {
     aem: {
       port: false,
     },
 
-    dev: true,
-    project,
+    clean : false,
+    dev   : true,
+
+    ...env,
   },
 )() as Required<RuntimeConfiguration>

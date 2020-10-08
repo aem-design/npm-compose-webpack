@@ -4,8 +4,12 @@ import mockFS from 'mock-fs'
 import { createFsFromVolume, IFs, Volume } from 'memfs'
 import webpack from 'webpack'
 
+import { setConfiguration } from '@/config'
+
+import { ConfigurationType } from '@/types/enums'
+
 import compile from '@/test/helpers/compile'
-import configuration from '@/test/helpers/configuration'
+import configuration, { composeConfiguration } from '@/test/helpers/configuration'
 import lazyLoadNodeModules from '@/test/helpers/lazy-load'
 import resolve from '@/test/helpers/resolve'
 
@@ -20,6 +24,17 @@ jest.mock('@aem-design/compose-support', () => ({
 describe('runtime', () => {
   const fixturesPath = path.resolve(process.cwd(), 'test/fixtures')
 
+  const standardComposeConfiguration = composeConfiguration({
+    standard: {
+      projects: {
+        'mock': {
+          entryFile  : 'mock.js',
+          outputName : 'mock',
+        },
+      },
+    },
+  })
+
   let memoryFileSystem: IFs
   let restoreConsoleMock: RestoreConsole
 
@@ -33,12 +48,15 @@ describe('runtime', () => {
       // Project configuration
       [resolve('pom.xml')]: mockFS.load(resolve('project.pom.xml', fixturesPath)),
 
+      // Project configuration (invalid)
+      [resolve('pom.invalid.xml')]: mockFS.load(resolve('project-invalid.pom.xml', fixturesPath)),
+
       // Parent configuration
       [resolve('../pom.xml')]: mockFS.load(resolve('parent.pom.xml', fixturesPath)),
     }
 
     // NOTE: This next bit is required in order to map 'node_modules' while 'mock-fs' is used, this is because 'mock-fs' returns 'null' everytime 'require' is used. It does add an extended period of time during test suite runs due to the amount of modules needing to be loaded.
-    lazyLoadNodeModules(mockedFileSystem, path.resolve(path.join(process.cwd(), 'node_modules')))
+    lazyLoadNodeModules(mockedFileSystem, resolve('node_modules'))
 
     mockFS(mockedFileSystem)
   })
@@ -49,23 +67,65 @@ describe('runtime', () => {
   })
 
   test('can generate a usable webpack configuration', () => {
-    const config = configuration({
-      entryFile:  'mock.js',
-      outputName: 'mock',
-      project:    'mock',
-    })
+    const config = configuration(standardComposeConfiguration, { project: 'mock' })
 
     expect(config.mode).toStrictEqual('development')
 
     expect(config.entry['mock']).toStrictEqual('./mock/js/mock.js')
+
+    // @ts-expect-error need to work out how to ensure 'performance' is the correct type
+    expect(config.performance.assetFilter('foo')).toStrictEqual(true)
+
+    // @ts-expect-error there is a proxy set
+    expect(config.devServer.proxy[0].context()).toStrictEqual(true)
+  })
+
+  test('can generate a usable hmr webpack configuration', () => {
+    const config = configuration(standardComposeConfiguration, {
+      project : 'mock',
+      watch   : true,
+    })
+
+    const rules = config.module.rules as Required<webpack.RuleSetRule>[]
+
+    expect(config.devtool).toStrictEqual('cheap-module-source-map')
+
+    expect(config.output.publicPath).toStrictEqual('/')
+
+    expect(rules[0].use[0]).toStrictEqual('style-loader')
+
+    const fileLoaderOptions = rules[rules.length - 1].options as any
+
+    const fileLoaderPublicPath = fileLoaderOptions.publicPath(
+      null,
+      resolve(fileLoaderOptions.context),
+      resolve(path.join(fileLoaderOptions.context, 'mock/foo/bar.css'))
+    )
+
+    expect(fileLoaderPublicPath).toStrictEqual('/../../..')
+  })
+
+  test('can generate a usable production webpack configuration', () => {
+    const config = configuration(standardComposeConfiguration, {
+      dev     : false,
+      prod    : true,
+      project : 'mock',
+    })
+
+    expect(config.output.chunkFilename).toContain('[contenthash:8]')
   })
 
   xtest('can compile es6 javascript entry', async (done) => {
-    const config = configuration({
-      entryFile:  'basic-es6.js',
-      outputName: 'mock',
-      project:    'mock',
-    })
+    const config = configuration(composeConfiguration({
+      standard: {
+        projects: {
+          'mock': {
+            entryFile  : 'basic-es6.js',
+            outputName : 'mock',
+          },
+        },
+      },
+    }), { project: 'mock' })
 
     const compiler = webpack(config)
 
@@ -79,6 +139,28 @@ describe('runtime', () => {
     console.log(memoryFileSystem.readdirSync('.'))
 
     done()
+  })
+
+  test('error is thrown when disallowed webpack prop is set', () => {
+    const config = () => configuration({
+      ...standardComposeConfiguration,
+
+      webpack: {
+        // @ts-expect-error used to prove disallowed webpack props throw an error
+        entry: 'foo',
+      },
+    }, { project: 'mock' })
+
+    expect(config).toThrowError('Forbidden webpack property detected (entry)')
+  })
+
+  test('error is thrown when pom configuration is invalid', () => {
+    setConfiguration(ConfigurationType.MAVEN_PROJECT, resolve('pom.invalid.xml'))
+
+    const config = () => configuration(standardComposeConfiguration, { project: 'mock' })
+
+    expect(config)
+      .toThrowError('Unable to continue due to missing or invalid Maven configuration values!')
   })
 
   afterEach(() => {

@@ -124,7 +124,7 @@ export default (
      */
     const { appsPath, authorPort, sharedAppsPath } = getMavenConfiguration()
 
-    if (!(authorPort || appsPath || sharedAppsPath)) {
+    if (!authorPort || !appsPath.length || !sharedAppsPath.length) {
       throw new Error('Unable to continue due to missing or invalid Maven configuration values!')
     }
 
