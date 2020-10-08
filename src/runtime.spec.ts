@@ -67,7 +67,11 @@ describe('runtime', () => {
   })
 
   test('can generate a usable webpack configuration', () => {
-    const config = configuration(standardComposeConfiguration, { project: 'mock' })
+    const config = configuration(standardComposeConfiguration, {
+      project: 'mock',
+    })
+
+    const rules = config.module.rules as Required<webpack.RuleSetRule>[]
 
     expect(config.mode).toStrictEqual('development')
 
@@ -78,6 +82,16 @@ describe('runtime', () => {
 
     // @ts-expect-error there is a proxy set
     expect(config.devServer.proxy[0].context()).toStrictEqual(true)
+
+    const fileLoaderOptions = rules[rules.length - 1].options as any
+
+    const fileLoaderPublicPath = fileLoaderOptions.publicPath(
+      null,
+      resolve(fileLoaderOptions.context),
+      resolve(path.join(fileLoaderOptions.context, 'mock/foo.css'))
+    )
+
+    expect(fileLoaderPublicPath).toStrictEqual('../../..')
   })
 
   test('can generate a usable hmr webpack configuration', () => {
@@ -157,7 +171,9 @@ describe('runtime', () => {
   test('error is thrown when pom configuration is invalid', () => {
     setConfiguration(ConfigurationType.MAVEN_PROJECT, resolve('pom.invalid.xml'))
 
-    const config = () => configuration(standardComposeConfiguration, { project: 'mock' })
+    const config = () => configuration(standardComposeConfiguration, {
+      project: 'mock',
+    })
 
     expect(config)
       .toThrowError('Unable to continue due to missing or invalid Maven configuration values!')
