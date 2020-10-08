@@ -53,6 +53,9 @@ describe('runtime', () => {
 
       // Parent configuration
       [resolve('../pom.xml')]: mockFS.load(resolve('parent.pom.xml', fixturesPath)),
+
+      // Webpack entry file
+      [resolve('mock/js/basic-es6.js')]: mockFS.load(resolve('mock/basic-es6.js', fixturesPath)),
     }
 
     // NOTE: This next bit is required in order to map 'node_modules' while 'mock-fs' is used, this is because 'mock-fs' returns 'null' everytime 'require' is used. It does add an extended period of time during test suite runs due to the amount of modules needing to be loaded.
@@ -129,7 +132,7 @@ describe('runtime', () => {
     expect(config.output.chunkFilename).toContain('[contenthash:8]')
   })
 
-  xtest('can compile es6 javascript entry', async (done) => {
+  test('can compile es6 javascript entry', async (done) => {
     const config = configuration(composeConfiguration({
       standard: {
         projects: {
@@ -150,7 +153,10 @@ describe('runtime', () => {
 
     expect(stats.hasErrors()).toBe(false)
 
-    console.log(memoryFileSystem.readdirSync('.'))
+    const fileSystemOutput = memoryFileSystem.readdirSync('public/mock/clientlibs-footer/js')
+
+    expect(fileSystemOutput).toHaveLength(1)
+    expect(fileSystemOutput).toStrictEqual(['mock.js'])
 
     done()
   })

@@ -4,7 +4,7 @@ import mockFS from 'mock-fs'
 
 import type FileSystem from 'mock-fs/lib/filesystem'
 
-function lazyLoadNodeModules(mockedFileSystem: FileSystem.DirectoryItems, from: string, depth = 6): void {
+function lazyLoadNodeModules(mockedFileSystem: FileSystem.DirectoryItems, from: string, depth = 10): void {
   const stat = fs.lstatSync(from)
 
   if (stat.isDirectory() && depth > 0) {

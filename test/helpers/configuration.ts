@@ -1,5 +1,3 @@
-import path from 'path'
-
 import {
   ComposeConfiguration,
   RuntimeConfiguration,
@@ -11,8 +9,6 @@ import {
 
 import runtime from '@/runtime'
 
-const fixturesPath = path.resolve(__dirname, '../fixtures')
-
 export function composeConfiguration(config: Partial<ComposeConfiguration>): Partial<ComposeConfiguration> {
   return {
     standard: {
@@ -20,7 +16,7 @@ export function composeConfiguration(config: Partial<ComposeConfiguration>): Par
     },
 
     webpack: {
-      context: fixturesPath,
+      context: process.cwd(),
     },
 
     ...config,
