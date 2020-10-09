@@ -12,10 +12,6 @@
     ],
 
     "paths": {
-      "@/test/*": [
-        "test/*"
-      ],
-
       "@/types/*": [
         "src/types/*"
       ],
@@ -39,11 +35,11 @@
   "exclude": [
     "configs",
     "dist",
-    "node_modules"
+    "node_modules",
+    "test"
   ],
 
   "include": [
-    "src/**/*",
-    "test/**/*"
+    "src/**/*.ts"
   ]
 }

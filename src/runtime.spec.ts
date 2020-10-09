@@ -8,10 +8,10 @@ import { setConfiguration } from '@/config'
 
 import { ConfigurationType } from '@/types/enums'
 
-import compile from '@/test/helpers/compile'
-import configuration, { composeConfiguration } from '@/test/helpers/configuration'
-import lazyLoadNodeModules from '@/test/helpers/lazy-load'
-import resolve from '@/test/helpers/resolve'
+import compile from '../test/helpers/compile'
+import configuration, { composeConfiguration } from '../test/helpers/configuration'
+import lazyLoadNodeModules from '../test/helpers/lazy-load'
+import resolve from '../test/helpers/resolve'
 
 jest.mock('@aem-design/compose-support', () => ({
   logger: {

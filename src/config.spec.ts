@@ -15,7 +15,7 @@ import {
 import { Environment } from '@/types'
 import { ConfigurationType } from '@/types/enums'
 
-import resolve from '@/test/helpers/resolve'
+import resolve from '../test/helpers/resolve'
 
 describe('config', () => {
   const fixturesPath = resolve('test/fixtures')

@@ -34,8 +34,6 @@
   ],
   "license": "Apache-2.0",
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "esmodule": "dist/index.es.js",
   "types": "dist/types",
   "sideEffects": false,
   "name": "@aem-design/compose-webpack",
@@ -51,10 +49,9 @@
     "access": "public"
   },
   "scripts": {
-    "build": "npm run clean && npm run build.compile && npm run build.types && npm run build.cleanup",
+    "build": "npm run clean && npm run build.compile && npm run build.types",
     "build.compile": "cross-env NODE_ENV=production ttsc --declaration false --project tsconfig.es5.json",
     "build.types": "cross-env NODE_ENV=production ttsc --emitDeclarationOnly --declaration true --declarationDir dist/types --project tsconfig.es5.json",
-    "build.cleanup": "rm -rf dist/test; mv dist/src/* dist/; mv dist/types/src/* dist/types; rm -rf dist/types/test; rm -rf dist/*spec*",
     "clean": "rm -rf dist",
     "dev": "npm run clean && npm run dev.watch",
     "dev.watch": "cross-env NODE_ENV=development ttsc --watch --declaration true --declarationDir dist/types --project tsconfig.es5.json",

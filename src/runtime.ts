@@ -330,7 +330,7 @@ export default (
                 drop_debugger : true,
               },
 
-              output: {
+              format: {
                 beautify: false,
                 comments: false,
               },

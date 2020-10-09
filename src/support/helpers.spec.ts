@@ -14,7 +14,7 @@ import {
   getMavenConfigurationValueByPath,
 } from '@/support/helpers'
 
-import resolve from '@/test/helpers/resolve'
+import resolve from '../../test/helpers/resolve'
 
 describe('helpers', () => {
   const fixturesPath = path.resolve(process.cwd(), 'test/fixtures')
