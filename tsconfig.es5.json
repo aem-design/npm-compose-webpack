@@ -3,6 +3,13 @@
 
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ES5"
+    "target": "ES5",
+
+    "plugins": [
+      {
+        "afterDeclarations": true,
+        "transform": "typescript-transform-paths"
+      }
+    ]
   }
 }
