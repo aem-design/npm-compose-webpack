@@ -35,6 +35,7 @@ export default (
 
     clean : false,
     dev   : true,
+    maven : true,
 
     ...env,
   },
