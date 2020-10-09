@@ -1,7 +1,9 @@
-import mockConsole from 'jest-mock-console'
+import mockConsole, { RestoreConsole } from 'jest-mock-console'
 import { mockProcessExit } from 'jest-mock-process'
 
 import processFeatures from '@/features/process'
+
+jest.mock('child_process')
 
 jest.mock('@aem-design/compose-support', () => ({
   logger: {
@@ -27,14 +29,10 @@ describe('process features', () => {
     webpackConfig: {},
   }
 
-  let restoreConsoleMock
+  let restoreConsoleMock: RestoreConsole
 
   beforeAll(() => {
     restoreConsoleMock = mockConsole()
-  })
-
-  afterAll(() => {
-    restoreConsoleMock()
   })
 
   test('typescript should return a restart signal', () => {
@@ -75,5 +73,27 @@ describe('process features', () => {
 
       ...featureConfig,
     })).toHaveProperty('resolve.alias.vue$', 'vue/dist/vue.min.js')
+  })
+
+  test('consecutive features correct set restart status', () => {
+    const mockExit = mockProcessExit()
+
+    jest.unmock('vue-loader')
+
+    // @ts-expect-error several other properties are missing for 'env'
+    expect(processFeatures({
+      features: ['bootstrap', 'vue', 'typescript'],
+
+      ...featureConfig,
+    })).toBeNull()
+
+    expect(mockExit).toHaveBeenCalledTimes(1)
+    expect(mockExit).toHaveBeenCalledWith(1)
+  })
+
+  afterAll(() => {
+    restoreConsoleMock()
+
+    jest.resetAllMocks()
   })
 })

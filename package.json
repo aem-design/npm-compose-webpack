@@ -148,7 +148,6 @@
     "yargs": "^16.0.3"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.10.4",
     "@chrisblossom/eslint-config": "^7.2.2",
     "@types/mock-fs": "^4.13.0",
     "@types/pify": "^3.0.2",

@@ -1,6 +1,9 @@
+import mockFS from 'mock-fs'
+
 import {
   getConfigurable,
   getConfiguration,
+  getMavenConfiguration,
   getProjectConfiguration,
   getProjectPath,
   setConfigurable,
@@ -12,7 +15,11 @@ import {
 import { Environment } from '@/types'
 import { ConfigurationType } from '@/types/enums'
 
+import resolve from '@/test/helpers/resolve'
+
 describe('config', () => {
+  const fixturesPath = resolve('test/fixtures')
+
   let environment: Environment
 
   beforeEach(() => {
@@ -26,6 +33,16 @@ describe('config', () => {
     environment.mode = 'mock'
 
     setProjects()
+
+    mockFS({
+      'foo.bar': mockFS.load(resolve('project.pom.xml', fixturesPath)),
+
+      // Project configuration
+      [resolve('pom.xml')]: mockFS.load(resolve('project.pom.xml', fixturesPath)),
+
+      // Parent configuration
+      [resolve('../pom.xml')]: mockFS.load(resolve('parent.pom.xml', fixturesPath)),
+    })
   })
 
   test('project should not exist in default configuration', () => {
@@ -40,6 +57,16 @@ describe('config', () => {
 
   test('empty environment configuration setup throws an error', () => {
     expect(() => setupEnvironment({})).toThrow(/Specify a project/)
+  })
+
+  test('custom linter flags are set correctly', () => {
+    const env = setupEnvironment({ project: 'mock' }, {
+      eslint    : true,
+      stylelint : false,
+    })
+
+    expect(env).toHaveProperty('eslint', true)
+    expect(env).toHaveProperty('stylelint', false)
   })
 
   test('empty projects configuration should assign default configuration', () => {
@@ -104,9 +131,9 @@ describe('config', () => {
   })
 
   test('configuration for maven project key should be set', () => {
-    setConfiguration(ConfigurationType.MAVEN_PROJECT, 'foo bar')
+    setConfiguration(ConfigurationType.MAVEN_PROJECT, 'foo.bar')
 
-    expect(getConfiguration(ConfigurationType.MAVEN_PROJECT)).toEqual('foo bar')
+    expect(getConfiguration(ConfigurationType.MAVEN_PROJECT)).toEqual('foo.bar')
   })
 
   test('invalid project configuration should return default configuration', () => {
@@ -194,5 +221,19 @@ describe('config', () => {
     expect(getProjectConfiguration()).toHaveProperty(['additionalEntries', 'vendorlib/common', 0], './core/js/vendor.ts')
 
     expect(getProjectConfiguration()).toHaveProperty(['fileMap', 'header', 0], 'vendorlib/common')
+  })
+
+  test('can read maven pom configurations', () => {
+    const config = getMavenConfiguration()
+
+    expect(config.authorPort).toStrictEqual(9000)
+
+    expect(config.sharedAppsPath).toStrictEqual('mock-apps')
+
+    expect(config.appsPath).toStrictEqual('mock-compose')
+  })
+
+  afterEach(() => {
+    mockFS.restore()
   })
 })

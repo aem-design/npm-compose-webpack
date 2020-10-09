@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
   <properties>
-    <package.path.apps>apps</package.path.apps>
+    <package.path.apps>mock-apps</package.path.apps>
     <package.appsPath>mock-compose</package.appsPath>
   </properties>
 </project>

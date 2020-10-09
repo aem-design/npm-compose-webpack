@@ -22,7 +22,7 @@ jest.mock('@aem-design/compose-support', () => ({
 }))
 
 describe('runtime', () => {
-  const fixturesPath = path.resolve(process.cwd(), 'test/fixtures')
+  const fixturesPath = resolve('test/fixtures')
 
   const standardComposeConfiguration = composeConfiguration({
     standard: {
