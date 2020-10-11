@@ -88,6 +88,7 @@ export const mergeStrategy: { [key: string]: CustomizeRule } = {
   'devServer.proxy' : CustomizeRule.Prepend,
   'module.rules'    : CustomizeRule.Append,
   'plugins'         : CustomizeRule.Append,
+  'target'          : CustomizeRule.Replace,
 }
 
 /**
@@ -177,7 +178,7 @@ export function setupEnvironment(env: WebpackParserOptions, flags: CommandLineFl
 
     eslint    : flags.eslint ?? (env.eslint || false),
     hmr       : env.watch === true,
-    mode      : env.dev   === true ? 'development' : 'production',
+    mode      : env.prod === true ? 'production' : 'development',
     project   : env.project as string,
     stylelint : flags.stylelint ?? (env.stylelint || false),
   } as Environment

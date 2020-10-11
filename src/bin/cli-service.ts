@@ -122,8 +122,6 @@ executeHook(Hook.COMPILER_READY, HookType.AFTER, args)
 
 if (args.watch) {
   const devServer = new WebpackDevServer(
-    // TODO: Remove this when fixed
-    // @ts-expect-error it appears 'webpack-dev-server' and the 'webpack' @types are no compatible at this time. Check again soon!
     webpackInstance,
     createConfig(webpackConfiguration, {
       ...args,

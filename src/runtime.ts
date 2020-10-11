@@ -14,7 +14,6 @@ import {
 } from 'webpack-merge'
 
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 
 import { logger } from '@aem-design/compose-support'
@@ -249,10 +248,11 @@ export default (
       customizeArray  : customizeArray(mergeStrategy),
       customizeObject : customizeObject(mergeStrategy),
     })({
-      context: paths.src,
-      devtool: getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'eval-cheap-module-source-map'),
+      context : paths.src,
+      devtool : getIfUtilsInstance().ifDev(flagHMR ? 'cheap-module-source-map' : 'eval-cheap-module-source-map'),
       entry,
       mode,
+      target  : ['browserslist', 'web'],
 
       output: {
         chunkFilename : `${paths.out as string || 'clientlibs-footer'}/resources/chunks/[name]${flagProd ? '.[contenthash:8]' : ''}.js`,
@@ -262,7 +262,7 @@ export default (
       },
 
       performance: {
-        assetFilter       : (assetFilename) => !new RegExp(getConfigurable('assetFilters').join('|')).test(assetFilename),
+        assetFilter       : (assetFilename: string) => !new RegExp(getConfigurable('assetFilters').join('|')).test(assetFilename),
         hints             : getIfUtilsInstance().ifDev(false, 'warning'),
         maxAssetSize      : 300000,
         maxEntrypointSize : 300000,
@@ -311,10 +311,10 @@ export default (
       },
 
       optimization: {
-        moduleIds: 'deterministic',
+        chunkIds  : 'deterministic',
+        moduleIds : 'deterministic',
 
         minimizer: [
-          // TODO: Remove this when fixed
           // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
           new TerserPlugin({
             cache           : true,
@@ -336,21 +336,6 @@ export default (
               },
             },
           }),
-
-          // TODO: Remove this when fixed
-          // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
-          new OptimizeCSSAssetsPlugin({
-            canPrint     : true,
-            cssProcessor : require('cssnano'),
-
-            cssProcessorPluginOptions: {
-              preset: ['default', {
-                discardComments: {
-                  removeAll: true,
-                },
-              }],
-            },
-          }),
         ],
 
         splitChunks: {
@@ -370,6 +355,7 @@ export default (
         // dependencies which aren't anything to do with our script.
         modules: [
           relative(__dirname, resolve(process.cwd(), 'node_modules')),
+          relative(__dirname, resolve(process.cwd(), '../node_modules')), // Useful for Yarn workspaces
           'node_modules',
         ],
       },

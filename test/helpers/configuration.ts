@@ -1,3 +1,5 @@
+import _merge from 'lodash/merge'
+
 import {
   ComposeConfiguration,
   RuntimeConfiguration,
@@ -10,7 +12,7 @@ import {
 import runtime from '@/runtime'
 
 export function composeConfiguration(config: Partial<ComposeConfiguration>): Partial<ComposeConfiguration> {
-  return {
+  return _merge({
     standard: {
       mergeProjects: false,
     },
@@ -18,9 +20,7 @@ export function composeConfiguration(config: Partial<ComposeConfiguration>): Par
     webpack: {
       context: process.cwd(),
     },
-
-    ...config,
-  }
+  }, config)
 }
 
 export default (
@@ -28,7 +28,7 @@ export default (
   env: WebpackParserOptions,
 ): Required<RuntimeConfiguration> => runtime(
   configuration,
-  {
+  _merge({
     aem: {
       port: false,
     },
@@ -36,7 +36,5 @@ export default (
     clean : false,
     dev   : true,
     maven : true,
-
-    ...env,
-  },
+  }, env),
 )() as Required<RuntimeConfiguration>

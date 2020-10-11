@@ -105,11 +105,7 @@ export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: pr
  * Create an if utilities instance.
  */
 export function getIfUtilsInstance(): ComposeIfUtils {
-  if (!ifUtilsInstance) {
-    ifUtilsInstance = getIfUtils(environment, envVars) as ComposeIfUtils
-  }
-
-  return ifUtilsInstance
+  return getIfUtils(environment, envVars) as ComposeIfUtils
 }
 
 /**

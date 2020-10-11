@@ -1,6 +1,7 @@
 import path from 'path'
 import mockConsole, { RestoreConsole } from 'jest-mock-console'
 import mockFS from 'mock-fs'
+import { mockProcessExit } from 'jest-mock-process'
 import { createFsFromVolume, IFs, Volume } from 'memfs'
 import webpack from 'webpack'
 
@@ -35,12 +36,17 @@ describe('runtime', () => {
     },
   })
 
-  let memoryFileSystem: IFs
   let restoreConsoleMock: RestoreConsole
 
   beforeAll(() => {
     const mockedFileSystem = {
-      // aemdesign/compose-webpack package.json
+      // .browserslistrc
+      [resolve('.browserslistrc')]: JSON.stringify(['defaults']),
+
+      // src/runtime.ts
+      // [resolve('src/runtime.ts')]: 'webpack caching',
+
+      // @aemdesign/compose-webpack package.json
       [resolve('node_modules/@aem-design/compose-webpack/package.json')]: JSON.stringify({
         version: '0.0.0-mock.0'
       }),
@@ -65,7 +71,6 @@ describe('runtime', () => {
   })
 
   beforeEach(() => {
-    memoryFileSystem   = createFsFromVolume(new Volume)
     restoreConsoleMock = mockConsole()
   })
 
@@ -129,60 +134,118 @@ describe('runtime', () => {
       project : 'mock',
     })
 
+    expect(config.mode).toStrictEqual('production')
+
     expect(config.output.chunkFilename).toContain('[contenthash:8]')
   })
 
-  test('can compile es6 javascript entry', async (done) => {
-    const config = configuration(composeConfiguration({
-      standard: {
-        projects: {
-          'mock': {
-            entryFile  : 'basic-es6.js',
-            outputName : 'mock',
+  describe('webpack compile', () => {
+    test('can compile es6 javascript entry', async (done) => {
+      const memoryFileSystem = createFsFromVolume(new Volume)
+      const mockExit         = mockProcessExit()
+
+      const config = configuration(composeConfiguration({
+        standard: {
+          projects: {
+            'mock': {
+              entryFile  : 'basic-es6.js',
+              outputName : 'mock',
+            },
           },
         },
-      },
-    }), { project: 'mock' })
 
-    const compiler = webpack(config)
+        webpack: {
+          target: ['browserslist'],
+        },
+      }), { project: 'mock' })
 
-    // @ts-expect-error known that the webpack type and 'memory-fs' aren't compatible
-    compiler.outputFileSystem = memoryFileSystem
+      const compiler = webpack(config)
 
-    const stats = await compile(compiler)
+      // @ts-expect-error known that the webpack type and 'memfs' aren't compatible
+      compiler.outputFileSystem = memoryFileSystem
 
-    expect(stats.hasErrors()).toBe(false)
+      const stats = await compile(compiler)
 
-    const fileSystemOutput = memoryFileSystem.readdirSync('public/mock/clientlibs-footer/js')
+      expect(mockExit).toHaveBeenCalledTimes(0)
 
-    expect(fileSystemOutput).toHaveLength(1)
-    expect(fileSystemOutput).toStrictEqual(['mock.js'])
+      expect(stats.hasErrors()).toBe(false)
 
-    done()
-  })
+      const fileSystemOutput = memoryFileSystem.readdirSync('public/mock/clientlibs-footer/js')
 
-  test('error is thrown when disallowed webpack prop is set', () => {
-    const config = () => configuration({
-      ...standardComposeConfiguration,
+      expect(memoryFileSystem.readFileSync('public/mock/clientlibs-footer/js/mock.js').toString())
+        .toContain("const foo = 'bar';\\nconsole.log(foo);")
 
-      webpack: {
-        // @ts-expect-error used to prove disallowed webpack props throw an error
-        entry: 'foo',
-      },
-    }, { project: 'mock' })
+      expect(fileSystemOutput).toHaveLength(1)
+      expect(fileSystemOutput).toStrictEqual(['mock.js'])
 
-    expect(config).toThrowError('Forbidden webpack property detected (entry)')
-  })
-
-  test('error is thrown when pom configuration is invalid', () => {
-    setConfiguration(ConfigurationType.MAVEN_PROJECT, resolve('pom.invalid.xml'))
-
-    const config = () => configuration(standardComposeConfiguration, {
-      project: 'mock',
+      done()
     })
 
-    expect(config)
-      .toThrowError('Unable to continue due to missing or invalid Maven configuration values!')
+    test('can compile es6 javascript entry for production', async (done) => {
+      const memoryFileSystem = createFsFromVolume(new Volume)
+      const mockExit         = mockProcessExit()
+
+      const config = configuration(composeConfiguration({
+        standard: {
+          projects: {
+            'mock': {
+              entryFile  : 'basic-es6.js',
+              outputName : 'mock',
+            },
+          },
+        },
+
+        webpack: {
+          target: ['browserslist'],
+        },
+      }), {
+        dev     : false,
+        prod    : true,
+        project : 'mock',
+      })
+
+      const compiler = webpack(config)
+
+      // @ts-expect-error known that the webpack type and 'memfs' aren't compatible
+      compiler.outputFileSystem = memoryFileSystem
+
+      const stats = await compile(compiler)
+
+      expect(mockExit).toHaveBeenCalledTimes(0)
+
+      expect(stats.hasErrors()).toBe(false)
+
+      expect(memoryFileSystem.readFileSync('public/mock/clientlibs-footer/js/mock.js').toString())
+        .toStrictEqual('(()=>{const e=new Set;e.add("foo"),document.querySelector("body").classList.add("bar"),document.querySelector("body").innerHTML="Bar size: "+e.size})();')
+
+      done()
+    })
+  })
+
+  describe('error handling', () => {
+    test('error is thrown when disallowed webpack prop is set', () => {
+      const config = () => configuration({
+        ...standardComposeConfiguration,
+
+        webpack: {
+          // @ts-expect-error used to prove disallowed webpack props throw an error
+          devtool: 'foo',
+        },
+      }, { project: 'mock' })
+
+      expect(config).toThrowError('Forbidden webpack property detected (devtool)')
+    })
+
+    test('error is thrown when pom configuration is invalid', () => {
+      setConfiguration(ConfigurationType.MAVEN_PROJECT, resolve('pom.invalid.xml'))
+
+      const config = () => configuration(standardComposeConfiguration, {
+        project: 'mock',
+      })
+
+      expect(config)
+        .toThrowError('Unable to continue due to missing or invalid Maven configuration values!')
+    })
   })
 
   afterEach(() => {

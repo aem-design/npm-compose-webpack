@@ -31,7 +31,6 @@ export enum DependencyType {
 export enum WebpackIgnoredProps {
   'devtool',
   'devServer.contentBase',
-  'entry',
   'mode',
   'name',
   'optimization.splitChunks.cacheGroups.vue',
