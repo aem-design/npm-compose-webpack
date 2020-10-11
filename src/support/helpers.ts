@@ -134,7 +134,7 @@ export function generateConfiguration(
  */
 export function resolveConfigFile(
   filename: string,
-  fallback: string,
+  fallback: string | null,
   paths: string[] = [],
 ): string {
   for (const path of [...paths, process.cwd()]) {
@@ -145,5 +145,5 @@ export function resolveConfigFile(
     }
   }
 
-  return resolve(__dirname, '../../', fallback)
+  return resolve(__dirname, '../../', fallback ?? filename)
 }

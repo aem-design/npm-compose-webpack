@@ -63,6 +63,7 @@ import css from '@/support/css'
 import {
   generateConfiguration,
   getIfUtilsInstance,
+  resolveConfigFile,
 } from '@/support/helpers'
 
 export default (
@@ -74,9 +75,11 @@ export default (
   /**
    * Show the current version of the package and webpack for easier identification
    */
-  console.log('compose-webpack: v%s', require(
-    resolve(process.cwd(), 'node_modules/@aem-design/compose-webpack/package.json')
-  ).version)
+  console.log('compose-webpack: v%s', require(resolveConfigFile(
+    'node_modules/@aem-design/compose-webpack/package.json',
+    null,
+    [process.cwd(), resolve(process.cwd(), '../')],
+  )).version)
 
   console.log('webpack: v%s\n', webpack.version)
 
