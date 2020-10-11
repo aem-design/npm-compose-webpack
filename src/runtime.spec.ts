@@ -2,7 +2,7 @@ import path from 'path'
 import mockConsole, { RestoreConsole } from 'jest-mock-console'
 import mockFS from 'mock-fs'
 import { mockProcessExit } from 'jest-mock-process'
-import { createFsFromVolume, IFs, Volume } from 'memfs'
+import { createFsFromVolume, Volume } from 'memfs'
 import webpack from 'webpack'
 
 import { setConfiguration } from '@/config'

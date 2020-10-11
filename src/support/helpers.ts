@@ -51,8 +51,6 @@ const baseEnvironmentConfig: RuntimeEnvironment = {
   paths: {},
 } as RuntimeEnvironment
 
-let ifUtilsInstance: ComposeIfUtils | null = null
-
 /**
  * Retrieve the Maven configuration using the given `filePath`.
  *
