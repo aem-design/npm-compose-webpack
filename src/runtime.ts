@@ -78,7 +78,6 @@ export default (
   console.log('compose-webpack: v%s', require(resolveConfigFile(
     'node_modules/@aem-design/compose-webpack/package.json',
     null,
-    [process.cwd(), resolve(process.cwd(), '../')],
   )).version)
 
   console.log('webpack: v%s\n', webpack.version)
@@ -320,9 +319,7 @@ export default (
         minimizer: [
           // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
           new TerserPlugin({
-            cache           : true,
-            extractComments : false,
-            sourceMap       : false,
+            extractComments: false,
 
             terserOptions: {
               ecma     : 2015,

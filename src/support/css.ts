@@ -35,14 +35,6 @@ export default (
 
     options: {
       sourceMap: mode === 'development',
-
-      config: {
-        path: resolveConfigFile('postcss.config.js', 'configs/postcss.config.js'),
-
-        ctx: {
-          prod: mode === 'development',
-        },
-      },
     },
   },
   {
