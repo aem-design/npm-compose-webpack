@@ -137,13 +137,16 @@ export function resolveConfigFile(
   fallback: string | null,
   paths: string[] = [],
 ): string {
-  for (const path of [...paths, process.cwd()]) {
+  let resolvedPath: string | null = null
+
+  for (const path of [...paths, resolve(process.cwd(), '../'), process.cwd()]) {
     try {
-      return require.resolve(filename, { paths: [path] })
+      require(resolve(path, filename))
+      resolvedPath = resolve(path, filename)
     } catch (_) {
-      // Keep going through the paths
+      // Looks like the file couldn't be resolved (yet)
     }
   }
 
-  return resolve(__dirname, '../../', fallback ?? filename)
+  return resolvedPath ?? resolve(__dirname, '../../', fallback ?? filename)
 }

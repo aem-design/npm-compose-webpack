@@ -7,9 +7,9 @@ export enum ConfigurationType {
 }
 
 export enum Features {
-  'bootstrap',
-  'typescript',
-  'vue',
+  bootstrap = 'bootstrap',
+  typescript = 'typescript',
+  vue = 'vue',
 }
 
 export enum Hook {

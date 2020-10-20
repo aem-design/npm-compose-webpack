@@ -40,13 +40,15 @@ export default function processFeatures({ environment, features, paths, webpackC
   let status!: InstallStatus
   let updatedConfig = webpackConfig
 
-  for (const feature of features) {
+  for (const feature of Object.keys(features)) {
     try {
+      const options = features[feature]
+
       const featureInstance = FeatureMap[feature]({
         ...environment,
         paths,
         webpack: webpackConfig,
-      })
+      }, options !== true ? options : {})
 
       const featureStatus = installDependencies(featureInstance.getFeatureDependencies())
 
@@ -65,7 +67,7 @@ export default function processFeatures({ environment, features, paths, webpackC
       ) as RuntimeConfiguration
     } catch (ex) {
       console.log()
-      logger.error('Failed to install dependencies:', (ex as Error).message)
+      logger.error('Failed to install dependencies:', (ex as Error))
 
       process.exit(1)
 

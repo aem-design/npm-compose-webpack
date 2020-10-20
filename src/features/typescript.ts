@@ -20,11 +20,12 @@ import {
 import {
   ConfigurationType,
   DependencyType,
+  Features,
 } from '@/types/enums'
 
 import Feature from '@/features/feature'
 
-export default class TypeScript extends Feature {
+export default class TypeScript extends Feature<Features.typescript> {
   private readonly configFile = resolveConfigFile(
     'tsconfig.json',
     'configs/tsconfig.json',

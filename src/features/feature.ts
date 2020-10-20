@@ -1,3 +1,4 @@
+import _merge from 'lodash/merge'
 import webpack from 'webpack'
 
 import {
@@ -6,11 +7,13 @@ import {
 
 import {
   DependencyType,
+  Features,
 } from '@/types/enums'
 
 import {
   FeatureContract,
   FeatureEnvironment,
+  FeatureOptions,
 } from '@/types/feature'
 
 import type {
@@ -18,17 +21,22 @@ import type {
 } from '@/types/webpack'
 
 export {
-  FeatureContract,
   FeatureEnvironment,
 }
 
-export default class Feature extends FeatureContract {
+export default class Feature<F extends Features, O = FeatureOptions[F]> extends FeatureContract<O> {
   protected env!: FeatureEnvironment
+  protected options!: Required<O>
 
-  public constructor(env: FeatureEnvironment) {
+  public constructor(env: FeatureEnvironment, options: O) {
     super()
 
-    this.env = env
+    this.env     = env
+    this.options = _merge(this.defaultOptions, options)
+  }
+
+  protected get defaultOptions(): Required<O> {
+    return {} as Required<O>
   }
 
   public defineWebpackConfiguration(): webpack.Configuration {

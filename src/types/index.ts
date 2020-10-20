@@ -9,6 +9,10 @@ import type {
 } from '@/types/enums'
 
 import type {
+  FeatureOptions,
+} from '@/types/feature'
+
+import type {
   MavenConfig,
   MavenConfigMap,
   SavedMavenConfig,
@@ -25,9 +29,11 @@ export {
   SavedMavenConfig,
 }
 
-export interface Arguments {
-  [x: string]: unknown;
+export interface GenericOptions {
+  [key: string]: unknown;
+}
 
+export interface Arguments extends GenericOptions {
   config: string;
   dev: boolean;
   prod: boolean;
@@ -103,9 +109,11 @@ export type FileMap = Partial<Record<'header' | 'footer', string[]>>
 
 export type RuntimeForWebpack<T = Partial<WebpackConfiguration>> = ((env: RuntimeEnvironment) => T) | T
 
-export type FeatureList = (keyof typeof Features)[]
-
 export type CommandLineFlags = Partial<Pick<Environment, 'eslint' | 'stylelint'>>
+
+export type FeatureList = {
+  -readonly[F in Features]?: FeatureOptions[F] | true;
+}
 
 export interface ComposeConfiguration {
   /**
@@ -126,7 +134,13 @@ export interface ComposeConfiguration {
    *
    * @example
    * {
-   *   features: ['vue'],
+   *   features: {
+   *     typescript: true,
+   *
+   *     vue, {
+   *       version: 3,
+   *     },
+   *   }
    * }
    */
   features: FeatureList;

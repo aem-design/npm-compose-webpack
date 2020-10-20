@@ -1,13 +1,27 @@
-import Feature, { FeatureEnvironment } from '@/features/feature'
+import {
+  Features,
+} from '@/types/enums'
+
+import {
+  FeatureOptions,
+} from '@/types/feature'
+
+import Feature, {
+  FeatureEnvironment,
+} from '@/features/feature'
 
 import Bootstrap from '@/features/bootstrap'
 import TypeScript from '@/features/typescript'
 import Vue from '@/features/vue'
 
-const featureMap: Record<string, (env: FeatureEnvironment) => InstanceType<typeof Feature>> = {
-  bootstrap  : (env) => new Bootstrap(env),
-  typescript : (env) => new TypeScript(env),
-  vue        : (env) => new Vue(env),
+type FeatureCallback<T extends Features> = (env: FeatureEnvironment, options: FeatureOptions[T]) => Feature<T>
+
+function generateFeatureCallback<T extends Features>(callback: FeatureCallback<T>): FeatureCallback<T> {
+  return (env, options) => callback(env, options)
 }
 
-export default featureMap
+export default {
+  [Features.bootstrap]  : generateFeatureCallback<Features.bootstrap>((env, options) => new Bootstrap(env, options)),
+  [Features.typescript] : generateFeatureCallback<Features.typescript>((env, options) => new TypeScript(env, options)),
+  [Features.vue]        : generateFeatureCallback<Features.vue>((env, options) => new Vue(env, options)),
+}

@@ -4,11 +4,14 @@ import type {
   DependenciesMap,
 } from '@/types'
 
-import { DependencyType } from '@/types/enums'
+import {
+  DependencyType,
+  Features,
+} from '@/types/enums'
 
 import Feature from '@/features/feature'
 
-export default class Bootstrap extends Feature {
+export default class Bootstrap extends Feature<Features.bootstrap> {
   public getFeatureDependencies(): DependenciesMap {
     return {
       [DependencyType.DEV]: [
