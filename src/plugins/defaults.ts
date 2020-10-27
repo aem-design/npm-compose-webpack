@@ -120,5 +120,12 @@ export default (paths: RuntimePaths): webpack.WebpackPluginInstance[] => {
       openAnalyzer: false,
     })),
 
+    /**
+     * Enable HMR when the `hmr` flag is set to `true`.
+     *
+     * @see https://webpack.js.org/plugins/hot-module-replacement-plugin/
+     */
+    getIfUtilsInstance().ifHmr(new webpack.HotModuleReplacementPlugin()),
+
   ]) as webpack.WebpackPluginInstance[]
 }

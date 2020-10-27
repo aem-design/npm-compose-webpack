@@ -19,16 +19,9 @@ describe('css', () => {
 
     expect(loaders).toHaveProperty([2, 'options', 'sassOptions', 'sourceMap'], true)
 
-    expect(_get(loaders, '[1].options.config.path', null)).toContain('postcss.config.js')
+    expect(_get(loaders, '[1].options.sourceMap')).toBeTruthy()
 
     spy.mockRestore()
-  })
-
-  test('should return fallback PostCSS config path', () => {
-    // @ts-expect-error only part of the 'env' object is given
-    const loaders = css({ mode: 'development' })
-
-    expect(_get(loaders, '[1].options.config.path', null)).toContain('configs/postcss.config.js')
   })
 
   test('should return have correct Sass additionalData', () => {

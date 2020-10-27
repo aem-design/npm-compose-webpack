@@ -57,7 +57,7 @@ export default class Vue extends Feature<Features.vue> {
       ],
 
       [DependencyType.NON_DEV]: [
-        this.options.version === 3 ? 'vue@^3.0.0' : 'vue@^2.6.11',
+        this.options.version === 3 ? 'vue@^3.0.0' : 'vue@^2.6.12',
       ],
     }
 
@@ -99,30 +99,32 @@ export default class Vue extends Feature<Features.vue> {
           },
         },
       },
-
-      plugins: removeEmpty([
-        this.options.version === 3 ? new webpack.DefinePlugin({
-          __VUE_OPTIONS_API__   : JSON.stringify(this.options.useOptionsAPI),
-          __VUE_PROD_DEVTOOLS__ : JSON.stringify(this.options.enableDevTools ?? this.env.mode === 'development'),
-        }) : undefined,
-      ]),
     }
   }
 
   public plugins(): webpack.WebpackPluginInstance[] {
     const { VueLoaderPlugin } = require(resolveDependency('vue-loader'))
 
-    return [
+    return removeEmpty([
       new VueLoaderPlugin() as webpack.WebpackPluginInstance,
-    ]
+
+      this.options.version === 3 ? new webpack.DefinePlugin({
+        __VUE_OPTIONS_API__   : this.options.useOptionsAPI,
+        __VUE_PROD_DEVTOOLS__ : this.options.enableDevTools ?? this.env.mode === 'development',
+      }) : undefined,
+    ])
   }
 
   public rules(): webpack.RuleSetRule[] {
-    return [
+    // Set 'vue-loader' in a configurable due to a bug which causes file resolution to fail
+    setConfigurable('moduleRules', [
       {
         loader : 'vue-loader',
         test   : /\.vue$/,
       },
+    ])
+
+    return [
       {
         test: /\.(c|sc)ss$/,
 

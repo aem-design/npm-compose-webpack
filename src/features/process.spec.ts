@@ -40,7 +40,9 @@ describe('process features', () => {
 
     // @ts-expect-error part of the configuration is omitted on purpose as it isn't required
     expect(processFeatures({
-      features: ['typescript'],
+      features: {
+        typescript: true,
+      },
 
       ...featureConfig,
     })).toBeNull()
@@ -53,7 +55,9 @@ describe('process features', () => {
 
     // @ts-expect-error several other properties are missing for 'env'
     expect(processFeatures({
-      features: ['typescript'],
+      features: {
+        typescript: true,
+      },
 
       ...featureConfig,
     })).toBeNull()
@@ -69,10 +73,12 @@ describe('process features', () => {
 
     // @ts-expect-error several other properties are missing for 'env'
     expect(processFeatures({
-      features: ['vue'],
+      features: {
+        vue: true,
+      },
 
       ...featureConfig,
-    })).toHaveProperty('resolve.alias.vue$', 'vue/dist/vue.min.js')
+    })).toHaveProperty('resolve.alias.vue$', 'vue/dist/vue.esm.js')
   })
 
   test('consecutive features correct set restart status', () => {
@@ -82,7 +88,11 @@ describe('process features', () => {
 
     // @ts-expect-error several other properties are missing for 'env'
     expect(processFeatures({
-      features: ['bootstrap', 'vue', 'typescript'],
+      features: {
+        bootstrap  : true,
+        typescript : true,
+        vue        : true,
+      },
 
       ...featureConfig,
     })).toBeNull()

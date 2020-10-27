@@ -52,6 +52,7 @@ const configKeys = Object.values(ConfigurationType)
 
 const webpackConfigurables: WebpackConfigurables = {
   assetFilters      : ['fontawesome.*'],
+  moduleRules       : [],
   resolveExtensions : ['.js'],
 }
 
@@ -240,7 +241,7 @@ export function setConfigurable<T extends keyof WebpackConfigurables, R extends 
   let newValue = _get(webpackConfigurables, key)
 
   if (Array.isArray(value)) {
-    newValue = [...newValue, ...value]
+    newValue = [...newValue, ...value] as R
   } else {
     newValue = value
   }

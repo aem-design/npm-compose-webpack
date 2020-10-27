@@ -17,6 +17,7 @@ export type WebpackConfiguration = Omit<webpack.Configuration, keyof typeof Webp
 
 export interface WebpackConfigurables {
   assetFilters: string[];
+  moduleRules: webpack.RuleSetRule[];
   resolveExtensions: string[];
 }
 

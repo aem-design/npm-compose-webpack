@@ -7,10 +7,6 @@ import type {
   RuntimePaths,
 } from '@/types'
 
-import {
-  resolveConfigFile,
-} from '@/support/helpers'
-
 export default (
   { mode }: Environment & { paths: RuntimePaths },
   // eslint-disable-next-line

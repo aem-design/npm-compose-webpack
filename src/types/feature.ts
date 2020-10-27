@@ -27,7 +27,7 @@ export interface FeatureOptions {
 
   [Features.vue]: {
     /**
-     * Enable the developer tools which by default are enabled based on the webpack `mode`. Diabling
+     * Enable the developer tools which by default are enabled based on the webpack `mode`. Disabling
      * this will prevent webpack's tree shaking from removing all dead code.
      *
      * This option is only available when the Vue.js `version` is set to `3`.
@@ -64,8 +64,7 @@ export interface FeatureOptions {
     runtimeOnly?: boolean;
 
     /**
-     * Enable the Vue 2 options API along side the Vue 3 Composition API. Diabling this will prevent
-     * webpack's tree shaking from removing all dead code.
+     * Enable the Vue 2 options API along side the Vue 3 Composition API.
      *
      * This option is only available when the Vue.js `version` is set to `3`.
      *

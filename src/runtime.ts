@@ -398,6 +398,13 @@ export default (
     }
 
     /**
+     * Prepend any additional module rules
+     */
+    if (config.module?.rules) {
+      config.module.rules.unshift(...getConfigurable('moduleRules'))
+    }
+
+    /**
      * Set the resolve extensions
      */
     if (config.resolve) {

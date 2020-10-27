@@ -28,7 +28,7 @@ export default class Feature<F extends Features, O = FeatureOptions[F]> extends 
   protected env!: FeatureEnvironment
   protected options!: Required<O>
 
-  public constructor(env: FeatureEnvironment, options: O) {
+  public constructor(env: FeatureEnvironment, options?: O) {
     super()
 
     this.env     = env

@@ -3,7 +3,7 @@ import { DependencyType } from '@/types/enums'
 import Feature from '@/features/feature'
 
 describe('base feature', () => {
-  let instance: Feature
+  let instance: Feature<any, any>
 
   beforeEach(() => {
     // @ts-expect-error several other properties are missing for 'env'

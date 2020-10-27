@@ -36,6 +36,7 @@ const envVars = [
   'dev',
   'development',
   'eslint',
+  'hmr',
   'maven',
   'prod',
   'production',
@@ -72,10 +73,14 @@ export interface ComposeIfUtils extends IfUtils {
   ifNotClean: IfUtilsFn;
   ifEslint: IfUtilsFn;
   ifNotEslint: IfUtilsFn;
+  ifHmr: IfUtilsFn;
+  ifNotHmr: IfUtilsFn;
   ifMaven: IfUtilsFn;
   ifNotMaven: IfUtilsFn;
   ifStylelint: IfUtilsFn;
   ifNotStylelint: IfUtilsFn;
+  ifWatch: IfUtilsFn;
+  ifNotWatch: IfUtilsFn;
 }
 
 /**
