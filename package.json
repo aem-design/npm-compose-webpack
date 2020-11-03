@@ -102,7 +102,7 @@
     "imports-loader": "^1.2.0",
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^1.2.1",
-    "postcss": "^7.0.35",
+    "postcss": "^8.1.4",
     "postcss-loader": "^4.0.4",
     "rimraf": "^3.0.2",
     "sass": "^1.28.0",
