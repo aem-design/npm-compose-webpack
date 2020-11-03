@@ -1,4 +1,5 @@
 import mockFS from 'mock-fs'
+import normalizePath from 'normalize-path'
 
 import {
   getConfigurable,
@@ -79,13 +80,13 @@ describe('config', () => {
   })
 
   test('should return expected project paths', () => {
-    expect(getProjectPath(ConfigurationType.PATH_PUBLIC))
+    expect(normalizePath(getProjectPath(ConfigurationType.PATH_PUBLIC)))
       .toMatch(new RegExp(`/public/${environment.project}$`))
 
-    expect(getProjectPath(ConfigurationType.PATH_PUBLIC_AEM))
-      .toMatch(new RegExp(`^/${environment.project}$`))
+    expect(normalizePath(getProjectPath(ConfigurationType.PATH_PUBLIC_AEM)))
+      .toMatch(new RegExp(`${environment.project}$`))
 
-    expect(getProjectPath(ConfigurationType.PATH_SOURCE))
+    expect(normalizePath(getProjectPath(ConfigurationType.PATH_SOURCE)))
       .toMatch(new RegExp(`/src/${environment.project}$`))
   })
 

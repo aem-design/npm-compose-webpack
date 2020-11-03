@@ -3,6 +3,7 @@ import mockConsole, { RestoreConsole } from 'jest-mock-console'
 import mockFS from 'mock-fs'
 import { mockProcessExit } from 'jest-mock-process'
 import { createFsFromVolume, Volume } from 'memfs'
+import normalizePath from 'normalize-path'
 import webpack from 'webpack'
 
 import { setConfiguration } from '@/config'
@@ -99,7 +100,8 @@ describe('runtime', () => {
       resolve(path.join(fileLoaderOptions.context, 'mock/foo.css'))
     )
 
-    expect(fileLoaderPublicPath).toStrictEqual('../../..')
+    expect(normalizePath(fileLoaderPublicPath).replace(/\\\\/g, '/'))
+      .toStrictEqual(normalizePath('../../..'))
   })
 
   test('can generate a usable hmr webpack configuration', () => {
@@ -124,7 +126,8 @@ describe('runtime', () => {
       resolve(path.join(fileLoaderOptions.context, 'mock/foo/bar.css'))
     )
 
-    expect(fileLoaderPublicPath).toStrictEqual('/../../..')
+    expect(normalizePath(fileLoaderPublicPath).replace(/\\\\/g, '/'))
+      .toStrictEqual(normalizePath('/../../..'))
   })
 
   test('can generate a usable production webpack configuration', () => {

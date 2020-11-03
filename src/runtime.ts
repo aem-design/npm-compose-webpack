@@ -317,7 +317,6 @@ export default (
         moduleIds : 'deterministic',
 
         minimizer: [
-          // @ts-expect-error 'webpack-dev-server' incorrectly taking over the exported 'Plugin' type
           new TerserPlugin({
             extractComments: false,
 
