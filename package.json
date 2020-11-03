@@ -55,7 +55,7 @@
     "clean": "rm -rf dist",
     "dev": "npm run clean && npm run dev.watch",
     "dev.watch": "cross-env NODE_ENV=development ttsc --watch --declaration true --declarationDir dist/types --project tsconfig.es5.json",
-    "lint": "eslint 'src/**/*.ts'",
+    "lint": "eslint --ext ts src",
     "postbuild": "chmod +x dist/bin/cli-service.js",
     "postversion": "npm run test && git push && git push --tags",
     "prepack": "npm run build",
