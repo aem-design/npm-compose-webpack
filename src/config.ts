@@ -218,7 +218,7 @@ export function getMavenConfiguration(): MavenConfigMap {
 
     authorPort: getMavenConfigurationValueByPath<number>({
       parser : (value) => parseInt(value[0], 10),
-      path   : 'crx.port',
+      path   : 'aem.port',
       pom    : configuration[ConfigurationType.MAVEN_PARENT],
     }),
 
