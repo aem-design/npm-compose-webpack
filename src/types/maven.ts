@@ -7,7 +7,7 @@ export interface MavenConfigMap {
 export interface MavenConfig<R> {
   fallback?: R;
   parser?: (value: any) => R;
-  path: string;
+  paths: string[];
   pom?: string;
 }
 

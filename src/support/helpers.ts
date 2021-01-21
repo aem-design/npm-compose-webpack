@@ -80,7 +80,7 @@ export interface ComposeIfUtils extends IfUtils {
 /**
  * Gets the Maven configuration from the file system and returns the value requested.
  */
-export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: propPath, pom }: MavenConfig<R>): R {
+export function getMavenConfigurationValueByPath<R>({ fallback, parser, paths, pom }: MavenConfig<R>): R {
   let value!: R
 
   const file = pom ?? getConfiguration(ConfigurationType.MAVEN_PARENT)
@@ -88,16 +88,18 @@ export function getMavenConfigurationValueByPath<R>({ fallback, parser, path: pr
   xmlParser.parseString(getMavenConfigurationFromFile(file), (_: any, { project }: any) => {
     const properties = project.properties[0]
 
-    value = _get(properties, propPath, fallback)
+    for (const path of paths) {
+      value = _get(properties, path)
 
-    if (parser) {
-      value = parser(value)
-    } else {
-      value = value[0]
+      if (!value || value === undefined || !Array.isArray(value)) {
+        continue
+      }
+
+      value = typeof parser === 'function' ? parser(value) : value[0]
     }
   })
 
-  return value
+  return value || fallback as R
 }
 
 /**

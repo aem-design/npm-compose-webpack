@@ -212,18 +212,18 @@ export function getProjectPath<T extends ConfigurationType>(path: T): string {
 export function getMavenConfiguration(): MavenConfigMap {
   return {
     appsPath: getMavenConfigurationValueByPath<string>({
-      path : 'package.appsPath',
-      pom  : configuration[ConfigurationType.MAVEN_PROJECT],
+      paths : ['package.appsPath'],
+      pom   : configuration[ConfigurationType.MAVEN_PROJECT],
     }),
 
     authorPort: getMavenConfigurationValueByPath<number>({
       parser : (value) => parseInt(value[0], 10),
-      path   : 'crx.port',
+      paths  : ['aem.port', 'crx.port'],
     }),
 
     sharedAppsPath: getMavenConfigurationValueByPath<string>({
-      path : 'package.path.apps',
-      pom  : configuration[ConfigurationType.MAVEN_PROJECT],
+      paths : ['package.path.apps'],
+      pom   : configuration[ConfigurationType.MAVEN_PROJECT],
     }),
   }
 }
