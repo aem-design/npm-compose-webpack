@@ -69,11 +69,13 @@ export interface Environment extends WebpackParserOptions {
   aem: AEMEnvironment;
   clean: boolean;
   eslint: boolean;
+  eslintFix: boolean;
   hmr: boolean;
   maven: boolean;
   mode: 'development' | 'production';
   project: string;
   stylelint: boolean;
+  stylelintFix: boolean;
   watch: boolean;
 }
 
@@ -103,7 +105,7 @@ export type RuntimeForWebpack<T = WebpackConfiguration> = ((env: RuntimeEnvironm
 
 export type FeatureList = (keyof typeof Features)[]
 
-export type CommandLineFlags = Partial<Pick<Environment, 'eslint' | 'stylelint'>>
+export type CommandLineFlags = Partial<Pick<Environment, 'eslint' | 'eslintFix' | 'stylelint' | 'stylelintFix'>>
 
 export interface ComposeConfiguration {
   /**

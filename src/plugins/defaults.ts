@@ -81,6 +81,7 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
       // @ts-check
       failOnError   : false,
       files         : ['**/*.scss'],
+      fix           : environment.stylelintFix === true,
       quiet         : false,
       // @ts-ignore
       stylelintPath : resolveDependency('stylelint', true, require.resolve('stylelint')),
@@ -98,7 +99,7 @@ export default (paths: RuntimePaths): webpack.Plugin[] => {
       eslintPath  : resolveDependency('eslint', true, require.resolve('eslint')),
       failOnError : environment.mode === 'production',
       files       : ['**/*'],
-      fix         : false,
+      fix         : environment.eslintFix === true,
       quiet       : false,
     })),
 

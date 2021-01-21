@@ -47,6 +47,11 @@ const args = yargs
     description : 'Toggle ESLint validation via webpack',
     type        : 'boolean',
   })
+  .option('eslintFix', {
+    default     : true,
+    description : 'Toggle ESLint source auto fixing',
+    type        : 'boolean',
+  })
   .option('maven', {
     default     : false,
     description : 'Was the task started from within Maven?',
@@ -66,6 +71,11 @@ const args = yargs
   .option('stylelint', {
     default     : true,
     description : 'Toggle Stylelint validation via webpack',
+    type        : 'boolean',
+  })
+  .option('stylelintFix', {
+    default     : true,
+    description : 'Toggle Stylelint source auto fixing',
     type        : 'boolean',
   })
   .option('watch', {

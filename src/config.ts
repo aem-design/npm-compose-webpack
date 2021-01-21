@@ -70,15 +70,17 @@ export let environment: Environment = {
     port: false,
   },
 
-  analyzer  : false,
-  clean     : false,
-  eslint    : true,
-  hmr       : false,
-  maven     : false,
-  mode      : 'development',
-  project   : '',
-  stylelint : true,
-  watch     : false,
+  analyzer     : false,
+  clean        : false,
+  eslint       : true,
+  eslintFix    : false,
+  hmr          : false,
+  maven        : false,
+  mode         : 'development',
+  project      : '',
+  stylelint    : true,
+  stylelintFix : false,
+  watch        : false,
 }
 
 /**
