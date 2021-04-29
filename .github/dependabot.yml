@@ -1,0 +1,112 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "19:30"
+    timezone: Australia/Melbourne
+  open-pull-requests-limit: 10
+  assignees:
+  - cshawaus
+  labels:
+  - dependency
+  ignore:
+  - dependency-name: postcss
+    versions:
+    - ">= 8.a, < 9"
+  - dependency-name: "@typescript-eslint/eslint-plugin"
+    versions:
+    - 4.14.0
+    - 4.14.1
+    - 4.14.2
+    - 4.15.0
+    - 4.15.1
+    - 4.15.2
+    - 4.16.1
+    - 4.17.0
+    - 4.18.0
+    - 4.19.0
+    - 4.20.0
+    - 4.21.0
+  - dependency-name: eslint
+    versions:
+    - 7.18.0
+    - 7.19.0
+    - 7.20.0
+    - 7.21.0
+    - 7.22.0
+    - 7.23.0
+    - 7.24.0
+  - dependency-name: "@typescript-eslint/parser"
+    versions:
+    - 4.14.0
+    - 4.14.1
+    - 4.14.2
+    - 4.15.0
+    - 4.15.1
+    - 4.15.2
+    - 4.16.1
+    - 4.17.0
+    - 4.18.0
+    - 4.19.0
+    - 4.20.0
+    - 4.21.0
+  - dependency-name: webpack
+    versions:
+    - 5.17.0
+    - 5.19.0
+    - 5.21.2
+    - 5.23.0
+    - 5.24.2
+    - 5.24.3
+    - 5.25.1
+    - 5.27.1
+    - 5.28.0
+    - 5.30.0
+    - 5.31.2
+  - dependency-name: y18n
+    versions:
+    - 4.0.1
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.22
+    - 14.14.25
+    - 14.14.28
+    - 14.14.31
+    - 14.14.32
+    - 14.14.34
+    - 14.14.35
+    - 14.14.37
+  - dependency-name: "@babel/preset-env"
+    versions:
+    - 7.12.11
+    - 7.12.13
+    - 7.12.16
+    - 7.12.17
+    - 7.13.10
+    - 7.13.12
+    - 7.13.8
+    - 7.13.9
+  - dependency-name: stylelint
+    versions:
+    - 13.10.0
+    - 13.11.0
+    - 13.12.0
+    - 13.9.0
+  - dependency-name: "@types/yargs"
+    versions:
+    - 15.0.12
+    - 16.0.0
+  - dependency-name: "@types/copy-webpack-plugin"
+    versions:
+    - 6.4.0
+  - dependency-name: node-notifier
+    versions:
+    - 8.0.1
+  - dependency-name: copy-webpack-plugin
+    versions:
+    - 7.0.0
+  - dependency-name: ini
+    versions:
+    - 1.3.7
